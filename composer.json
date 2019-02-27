@@ -1,0 +1,10 @@
+{
+    "name": "harrybarnard/local_sescomplaints",
+    "description": "Moodle plugin for automatically dealing with Amazon SES complaints",
+    "author": "Harry Barnard <harry.barnard@catalyst-eu.net>",
+    "type": "project",
+    "require": {
+        "aws/aws-php-sns-message-validator": "^1.5",
+        "guzzlehttp/guzzle": "^6.3"
+    }
+}
