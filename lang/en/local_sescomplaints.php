@@ -36,3 +36,5 @@ $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';
 $string['password'] = 'Password';
 $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
+
+$string['event:notificationreceived'] = 'AWS SNS notification received';

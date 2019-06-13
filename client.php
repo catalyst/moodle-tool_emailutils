@@ -81,5 +81,12 @@ if ($client->isNotification()) {
         $record->id = $user->id;
         $record->email = $user->email . '.' . $type . '.invalid';
         $DB->update_record('user', $record);
+
+        $event = \local_sescomplaints\event\notification_received::create(array(
+            'relateduserid' => $user->id,
+            'context'  => context_system::instance(),
+            'other' => $notification->getMessageAsString(),
+        ));
+        $event->trigger();
     }
 }
