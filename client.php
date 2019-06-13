@@ -60,8 +60,26 @@ function get_password_hash()
     return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_password'), MUST_EXIST);
 }
 
-$client = new SNSClient(get_header(), get_username(), get_password());
+$client = new SNSClient(get_header(), get_username(), get_password_hash());
 if ($client->isNotification()) {
+    global $DB;
+
     $notification = $client->getNotification();
-    $notification->printLog();
+    $user = $DB->get_record_sql("SELECT id, email FROM {user} WHERE email LIKE '%" . $notification->getDestination() . "%'");
+
+    if (strpos($user->email, 'invalid') === false) {
+        if ($notification->isComplaint()) {
+            $type = 'c';
+        }  else if ($notification->isBounce()) {
+            $type = 'b';
+        } else {
+            http_response_code(400); // Invalid request
+            exit;
+        }
+
+        $record = new stdClass();
+        $record->id = $user->id;
+        $record->email = $user->email . '.' . $type . '.invalid';
+        $DB->update_record('user', $record);
+    }
 }
