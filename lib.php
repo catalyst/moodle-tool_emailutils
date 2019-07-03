@@ -35,7 +35,7 @@ function get_header()
     return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_header'), MUST_EXIST);
 }
 
-function get_username()
+function get_auth_username()
 {
     global $DB;
 
