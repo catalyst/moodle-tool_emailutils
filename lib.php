@@ -22,29 +22,3 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-/**
- * Get the Auth Header Setting
- *
- * @return string Auth Header
- */
-function get_header()
-{
-    global $DB;
-
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_header'), MUST_EXIST);
-}
-
-function get_auth_username()
-{
-    global $DB;
-
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_username'), MUST_EXIST);
-}
-
-function get_password_hash()
-{
-    global $DB;
-
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_password'), MUST_EXIST);
-}

@@ -36,5 +36,11 @@ $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';
 $string['password'] = 'Password';
 $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
+$string['incorrect_access'] = 'Incorrect access detected. For use only by AWS SNS.';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
+
+// Complaints list strings
+$string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
+$string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
+$string['complaints'] = 'For a list of complaints, search for ".c.invalid"';

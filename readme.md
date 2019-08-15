@@ -9,6 +9,10 @@ Due to changing email addresses, any SSO that relies on email address matching
 is incompatible with this plugin.
 </aside>
 
+# Soon to come
+
+The complaints list (/local/sescomplains/index.php) is not implemented yet.
+
 # Configuring AWS SES
 
 AWS Simple Email Service (SES) creates Simple Notification Service (SNS) topics
@@ -25,7 +29,7 @@ is to create subscriptions for the plug-in to this topics.
 Before you can create the subscriptions you will need to create an username and
 password on the plug-in configuration:
 
-    https://yoursite.com/settings.php?section=local_sescomplaints_optionspage
+    https://yoursite.com/admin/category.php?category=local_sescomplaints
 
 First go into the SNS Console and click on Subscriptions and then Create
 subscription, on the Topic ARN textbox you can type in the name or the ARN of

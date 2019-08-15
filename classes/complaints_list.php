@@ -15,29 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Class complaint_list
  * @package    local_sescomplaints
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Garth Williamson <garth@catalyst-eu.net>
  */
 
-use local_sescomplaints\complaints_list;
+namespace local_sescomplaints;
 
-require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
+use stdClass;
 
-// Set up the basic page variables.
-$context = context_system::instance();
-$PAGE->set_context($context);
-require_capability('moodle/site:config', $context);
-$PAGE->set_url(new moodle_url('/local/sescomplaints/index.php'));
-$title = get_string('list', 'local_sescomplaints');
-$PAGE->set_title($title);
-$PAGE->set_heading($title);
+use moodle_url;
+use renderable;
+use renderer_base;
+use templatable;
 
-echo $OUTPUT->header();
+defined('MOODLE_INTERNAL') or die;
 
-// Now for our special custom renderer.
-$complaintslist = new complaints_list();
-echo $OUTPUT->render($complaintslist);
-
-echo $OUTPUT->footer();
+/**
+ * The complaints list class is a widget that displays a list of complaints.
+ *
+ */
+class complaints_list implements renderable, templatable {
+    public function export_for_template(renderer_base $output) {
+        $list = new stdClass();
+        $list->search_url = new moodle_url('/admin/user.php');
+        return $list;
+    }
+}
