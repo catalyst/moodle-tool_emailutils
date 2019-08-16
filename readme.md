@@ -11,7 +11,7 @@ is incompatible with this plugin.
 
 # Soon to come
 
-The complaints list (/local/sescomplains/index.php) is not implemented yet.
+The complaints list (/local/sescomplaints/index.php) is not implemented yet.
 
 # Configuring AWS SES
 
