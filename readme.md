@@ -20,13 +20,13 @@ for both bounces and complaints on each domain, a SNS topic is basically a
 message channel, when you publish a message to a topic, it fans out the message
 to all subscribed endpoints.
 
-You can check the the SNS topics on a domain by going into SES Management
+You can check the SNS topics on a domain by going into SES Management
 Console, clicking on the domain name and then going into the Notification
 section, the topics can also be found on the SNS console and they would be
 called your-domain-ses-notifications and your-domain-ses-complaints, the idea
 is to create subscriptions for the plug-in to this topics.
 
-Before you can create the subscriptions you will need to create an username and
+Before you can create the subscriptions you will need to create a username and
 password on the plug-in configuration:
 
     https://yoursite.com/admin/category.php?category=local_sescomplaints

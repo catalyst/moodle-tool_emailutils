@@ -34,7 +34,7 @@ $string['header'] = 'Header';
 $string['header_help'] = 'HTTP Basic Auth Header';
 $string['username'] = 'Brukernavn';
 $string['username_help'] = 'HTTP Basic Auth brukernavn';
-$string['password'] = 'Password';
+$string['password'] = 'Passord';
 $string['password_help'] = 'HTTP Basic Auth passord - La stå tomt om du ikke endrer passord';
 $string['incorrect_access'] = 'Ugyldig tilgang oppdaget. Skal bare brukes av Amazon Simple Notification Service (Amazon SNS).';
 
