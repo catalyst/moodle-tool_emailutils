@@ -23,11 +23,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-class admin_setting_configpasswordhashed extends admin_setting
-{
+class admin_setting_configpasswordhashed extends admin_setting {
 
     public $minlength;
-    private $_is_hashed;
+    protected $is_hashed;
 
     /**
      * Constructor
@@ -37,11 +36,10 @@ class admin_setting_configpasswordhashed extends admin_setting
      * @param string $defaultsetting
      * @param integer $minlength Minimum password length
      */
-    public function __construct($name, $visiblename, $description, $defaultsetting, $minlength = 8)
-    {
+    public function __construct($name, $visiblename, $description, $defaultsetting, $minlength = 8) {
         parent::__construct($name, $visiblename, $description, $defaultsetting);
         $this->minlength = (int) $minlength;
-        $this->_is_hashed = true;
+        $this->is_hashed = true;
     }
 
     /**
@@ -49,13 +47,11 @@ class admin_setting_configpasswordhashed extends admin_setting
      *
      * @return mixed Returns config if successful else null
      */
-    public function get_setting()
-    {
+    public function get_setting() {
         return $this->config_read($this->name);
     }
 
-    public function write_setting($data)
-    {
+    public function write_setting($data) {
         // Is the password valid?
         $is_valid = $this->validate($data);
         if (!$is_valid) {
@@ -77,8 +73,7 @@ class admin_setting_configpasswordhashed extends admin_setting
      * @param string data
      * @return mixed true if ok string if error found
      */
-    public function validate($data)
-    {
+    public function validate($data) {
         if (empty($data) || (is_string($data) && (strlen($data) >= $this->minlength))) {
             return true;
         }
@@ -90,12 +85,11 @@ class admin_setting_configpasswordhashed extends admin_setting
      * Return an XHTML string for the setting
      * @return string Returns an XHTML string
      */
-    public function output_html($data, $query = '')
-    {
+    public function output_html($data, $query = '') {
         $default = $this->get_defaultsetting();
 
         // Password is hashed so don't display it.
-        if ($this->_is_hashed) {
+        if ($this->is_hashed) {
             $data = null;
         }
 

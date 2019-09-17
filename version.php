@@ -23,8 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2019081500;
+$plugin->version  = 2019081501;
 $plugin->requires = 2014051209;
 $plugin->component = 'local_sescomplaints';
 $plugin->cron      = 0;
-$plugin->release = '1.1';
+$plugin->release = '1.2';

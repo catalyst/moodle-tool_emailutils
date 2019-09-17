@@ -21,56 +21,24 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-define('AUTH_HEADER', 'WWW-Authenticate: Basic realm="SNS Client"');
-define('AUTH_USER', 'awssns');
-define('AUTH_PSWD', '8N5v7nvfbiX4xhY8');
-define('MESSAGE_LOG_PATH', '/etc/messages.log');
+use local_sescomplaints\sns_client;
+use local_sescomplaints\event\notification_received;
 
-require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
-require_once $CFG->dirroot . '/local/sescomplaints/lib/snsclient.php';
+require_once(__DIR__ . '/../../config.php');
 
-/**
- * Get the Auth Header Setting
- *
- * @return string Auth Header
- */
-function get_header()
-{
+$client = new sns_client(get_config('local_sescomplaints', 'authorisation_header'),
+    get_config('local_sescomplaints', 'authorisation_username'), get_config('local_sescomplaints', 'authorisation_password'));
+
+if ($client->is_notification()) {
     global $DB;
 
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_header'), MUST_EXIST);
-}
-
-/**
- * Get the Auth username
- *
- * @return void
- */
-function get_auth_username()
-{
-    global $DB;
-
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_username'), MUST_EXIST);
-}
-
-function get_password_hash()
-{
-    global $DB;
-
-    return $DB->get_field('config_plugins', 'value', array('plugin' => 'local_sescomplaints', 'name' => 'authorisation_password'), MUST_EXIST);
-}
-
-$client = new SNSClient(get_header(), get_auth_username(), get_password_hash());
-if ($client->isNotification()) {
-    global $DB;
-
-    $notification = $client->getNotification();
-    $user = $DB->get_record_sql("SELECT id, email FROM {user} WHERE email LIKE '%" . $notification->getDestination() . "%'");
+    $notification = $client->get_notification();
+    $user = local_sescomplaints_get_user_from_destination($notification->get_destination());
 
     if (strpos($user->email, 'invalid') === false) {
-        if ($notification->isComplaint()) {
+        if ($notification->is_complaint()) {
             $type = 'c';
-        }  else if ($notification->isBounce()) {
+        }  else if ($notification->is_bounce()) {
             $type = 'b';
         } else {
             http_response_code(400); // Invalid request
@@ -82,10 +50,10 @@ if ($client->isNotification()) {
         $record->email = $user->email . '.' . $type . '.invalid';
         $DB->update_record('user', $record);
 
-        $event = \local_sescomplaints\event\notification_received::create(array(
+        $event = notification_received::create(array(
             'relateduserid' => $user->id,
             'context'  => context_system::instance(),
-            'other' => $notification->getMessageAsString(),
+            'other' => $notification->get_messageasstring(),
         ));
         $event->trigger();
     }
