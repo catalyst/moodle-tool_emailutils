@@ -132,7 +132,7 @@ class sns_client {
         }
 
         $this->validator = new MessageValidator();
-        $this->client = new GuzzleHttp\Client();
+        $this->client = new Client();
         $this->notification = new sns_notification();
 
         // Get the message from the POST data.
