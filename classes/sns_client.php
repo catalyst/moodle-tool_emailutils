@@ -23,7 +23,6 @@
 
 namespace tool_emailses;
 
-require __DIR__ . '/../vendor/autoload.php';
 
 use Aws\Sns\Exception\InvalidSnsMessageException;
 use Aws\Sns\Message;

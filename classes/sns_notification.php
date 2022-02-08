@@ -23,8 +23,6 @@
 
 namespace tool_emailses;
 
-use tool_emailses\sns_client;
-
 /**
  * Amazon SNS Notification Class
  *
