@@ -45,10 +45,8 @@ if ($client->is_notification()) {
             exit;
         }
 
-        $record = new stdClass();
-        $record->id = $user->id;
-        $record->email = $user->email . '.' . $type . '.invalid';
-        $DB->update_record('user', $record);
+        // Increment the user preference email_bounce_count.
+        set_bounce_count($user);
 
         $event = notification_received::create(array(
             'relateduserid' => $user->id,
