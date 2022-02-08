@@ -21,9 +21,12 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
+namespace tool_emailses;
+
 defined('MOODLE_INTERNAL') || die;
 
-class admin_setting_configpasswordhashed extends admin_setting {
+
+class admin_setting_configpasswordhashed extends \admin_setting {
 
     public $minlength;
     protected $is_hashed;

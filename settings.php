@@ -23,8 +23,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once $CFG->dirroot . '/admin/tool/emailses/lib/configpasswordhashed.php';
-
 if ($hassiteconfig) {
     $ADMIN->add('tools', new admin_category(
         'tool_emailses',
@@ -71,7 +69,7 @@ if ($hassiteconfig) {
         null)
     );
     // Auth Password
-    $settings->add(new admin_setting_configpasswordhashed(
+    $settings->add(new \tool_emailses\admin_setting_configpasswordhashed(
         'tool_emailses/authorisation_password',
         new lang_string('password', 'tool_emailses'),
         new lang_string('password_help', 'tool_emailses'),
