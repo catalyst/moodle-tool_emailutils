@@ -23,7 +23,7 @@
 
 use tool_emailses\complaints_list;
 
-require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
+require_once(__DIR__ . '/../../../config.php');
 
 // Set up the basic page variables.
 $context = context_system::instance();
