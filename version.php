@@ -28,3 +28,6 @@ $plugin->requires = 2014051209;
 $plugin->component = 'tool_emailses';
 $plugin->cron      = 0;
 $plugin->release = '1.2';
+$plugin->dependencies = array(
+    'local_aws' => 2020061500
+);
