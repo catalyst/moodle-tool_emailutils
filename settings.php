@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
@@ -23,61 +23,61 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once $CFG->dirroot . '/local/sescomplaints/lib/configpasswordhashed.php';
+require_once $CFG->dirroot . '/admin/tool/emailses/lib/configpasswordhashed.php';
 
 if ($hassiteconfig) {
-    $ADMIN->add('localplugins', new admin_category(
-        'local_sescomplaints',
-        new lang_string('pluginname', 'local_sescomplaints')
+    $ADMIN->add('tools', new admin_category(
+        'tool_emailses',
+        new lang_string('pluginname', 'tool_emailses')
     ));
 
-    $ADMIN->add('local_sescomplaints', new admin_externalpage(
-        'local_sescomplaints_list',
-        new lang_string('list', 'local_sescomplaints'),
-        new moodle_url('/local/sescomplaints/index.php')
+    $ADMIN->add('tool_emailses', new admin_externalpage(
+        'tool_emailses_list',
+        new lang_string('list', 'tool_emailses'),
+        new moodle_url('/admin/tool/emailses/index.php')
     ));
 
     // Plugin Settings Page
     $settings = new admin_settingpage(
-        'local_sescomplaints_options',
-        new lang_string('settings', 'local_sescomplaints')
+        'tool_emailses_options',
+        new lang_string('settings', 'tool_emailses')
     );
 
     // Enable Endpoint
     $settings->add(new admin_setting_configcheckbox(
-        'local_sescomplaints/enabled',
-        new lang_string('enabled', 'local_sescomplaints'),
-        new lang_string('enabled_help', 'local_sescomplaints'),
+        'tool_emailses/enabled',
+        new lang_string('enabled', 'tool_emailses'),
+        new lang_string('enabled_help', 'tool_emailses'),
         1)
     );
     // Auth Settings
     $settings->add(new admin_setting_heading(
         'authorisation',
-        new lang_string('authorisationcategory', 'local_sescomplaints'),
+        new lang_string('authorisationcategory', 'tool_emailses'),
         '')
     );
     // Auth Header
     $settings->add(new admin_setting_configtext(
-        'local_sescomplaints/authorisation_header',
-        new lang_string('header', 'local_sescomplaints'),
-        new lang_string('header_help', 'local_sescomplaints'),
+        'tool_emailses/authorisation_header',
+        new lang_string('header', 'tool_emailses'),
+        new lang_string('header_help', 'tool_emailses'),
         'WWW-Authenticate: Basic realm="SNS Client"')
     );
     // Auth Username
     $settings->add(new admin_setting_configtext(
-        'local_sescomplaints/authorisation_username',
-        new lang_string('username', 'local_sescomplaints'),
-        new lang_string('username_help', 'local_sescomplaints'),
+        'tool_emailses/authorisation_username',
+        new lang_string('username', 'tool_emailses'),
+        new lang_string('username_help', 'tool_emailses'),
         null)
     );
     // Auth Password
     $settings->add(new admin_setting_configpasswordhashed(
-        'local_sescomplaints/authorisation_password',
-        new lang_string('password', 'local_sescomplaints'),
-        new lang_string('password_help', 'local_sescomplaints'),
+        'tool_emailses/authorisation_password',
+        new lang_string('password', 'tool_emailses'),
+        new lang_string('password_help', 'tool_emailses'),
         null)
     );
 
-    $ADMIN->add('local_sescomplaints', $settings);
+    $ADMIN->add('tool_emailses', $settings);
 
 }

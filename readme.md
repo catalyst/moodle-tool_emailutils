@@ -11,7 +11,7 @@ is incompatible with this plugin.
 
 # Soon to come
 
-The complaints list (/local/sescomplaints/index.php) is not implemented yet.
+The complaints list (/admin/tool/emailses/index.php) is not implemented yet.
 
 # Configuring AWS SES
 
@@ -29,7 +29,7 @@ is to create subscriptions for the plug-in to this topics.
 Before you can create the subscriptions you will need to create a username and
 password on the plug-in configuration:
 
-    https://yoursite.com/admin/category.php?category=local_sescomplaints
+    https://yoursite.com/admin/category.php?category=tool_emailses
 
 First go into the SNS Console and click on Subscriptions and then Create
 subscription, on the Topic ARN textbox you can type in the name or the ARN of
@@ -41,7 +41,7 @@ The endpoint needs to include the username and password you created earlier
 separated  by “:”  and  followed by “@” and finally the plug-in endpoint,
 something like:
 
-    https://username:password@yoursite.com/local/sescomplaints/client.php
+    https://username:password@yoursite.com/admin/tool/emailses/client.php
 
 Optional settings are fine as default, please notice that both subscriptions,
 notifications and complaints, should have the same endpoint.

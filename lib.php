@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
@@ -23,7 +23,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function local_sescomplaints_get_user_from_destination(string $destination) {
+function tool_emailses_get_user_from_destination(string $destination) {
     global $DB;
 
     return $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),

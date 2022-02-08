@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Local sescomplaints - Created classification event
+ * Tool emailses - Created classification event
  *
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Maria Sorica <maria.sorica@catalyst-eu.net>
  */
-namespace local_sescomplaints\event;
+namespace tool_emailses\event;
 
-use local_sescomplaints;
+use tool_emailses;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -46,7 +46,7 @@ class notification_received extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('event:notificationreceived', 'local_sescomplaints');
+        return get_string('event:notificationreceived', 'tool_emailses');
     }
 
     /**

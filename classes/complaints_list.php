@@ -16,13 +16,13 @@
 
 /**
  * Class complaint_list
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Garth Williamson <garth@catalyst-eu.net>
  */
 
-namespace local_sescomplaints;
+namespace tool_emailses;
 
 use stdClass;
 

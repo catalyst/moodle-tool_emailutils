@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Garth Williamson <garth@catalyst-eu.net>
  */
 
-use local_sescomplaints\complaints_list;
+use tool_emailses\complaints_list;
 
 require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 
@@ -29,8 +29,8 @@ require_once dirname(dirname(dirname(__FILE__))) . '/config.php';
 $context = context_system::instance();
 $PAGE->set_context($context);
 require_capability('moodle/site:config', $context);
-$PAGE->set_url(new moodle_url('/local/sescomplaints/index.php'));
-$title = get_string('list', 'local_sescomplaints');
+$PAGE->set_url(new moodle_url('/admin/tool/emailses/index.php'));
+$title = get_string('list', 'tool_emailses');
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 

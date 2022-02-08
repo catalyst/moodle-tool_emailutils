@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    local_sescomplaints
+ * @package    tool_emailses
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-namespace local_sescomplaints;
+namespace tool_emailses;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -91,7 +91,7 @@ class sns_client {
         // Make sure the request is POST.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405); // Method not allowed.
-            print(get_string('incorrect_access', 'local_sescomplaints'));
+            print(get_string('incorrect_access', 'tool_emailses'));
             exit;
         }
 
