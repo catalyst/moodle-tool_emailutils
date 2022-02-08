@@ -37,6 +37,7 @@ $string['username_help'] = 'HTTP Basic Auth brukernavn';
 $string['password'] = 'Passord';
 $string['password_help'] = 'HTTP Basic Auth passord - La stå tomt om du ikke endrer passord';
 $string['incorrect_access'] = 'Ugyldig tilgang oppdaget. Skal bare brukes av Amazon Simple Notification Service (Amazon SNS).';
+$string['resetbounces'] = 'Reset the number of bounces.';
 
 $string['event:notificationreceived'] = 'Amazon Simple Notification Service varsling mottatt (AWS SNS)';
 

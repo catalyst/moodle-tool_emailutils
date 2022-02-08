@@ -23,6 +23,16 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+function tool_emailses_bulk_user_actions() {
+    return [
+        'tool_ses_reset_bounces' => new action_link(
+            new moodle_url('/admin/tool/emailses/reset_bounces.php'),
+            get_string('resetbounces', 'tool_emailses')
+        ),
+    ];
+}
+
+
 function tool_emailses_get_user_from_destination(string $destination) {
     global $DB;
 
