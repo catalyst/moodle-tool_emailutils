@@ -1,13 +1,7 @@
 # AWS SES Complaints Plugin for Moodle
 
-This plugin is for use with the AWS SES service. It changes any email address
-that complaints or bounces are received for to email@example.com.c.invalid or
-email@example.com.b.invalid respectively.
+This plugin is for use with the AWS SES service.
 
-<aside class="warning">
-Due to changing email addresses, any SSO that relies on email address matching
-is incompatible with this plugin.
-</aside>
 
 # Soon to come
 
