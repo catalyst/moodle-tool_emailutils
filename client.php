@@ -33,7 +33,9 @@ if ($client->is_notification()) {
     global $DB;
 
     $notification = $client->get_notification();
-    $user = tool_emailses_get_user_from_destination($notification->get_destination());
+
+    $user = $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),
+        ['destination' => $notification->get_destination()]);
 
     if (strpos($user->email, 'invalid') === false) {
         if ($notification->is_complaint()) {

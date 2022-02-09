@@ -30,11 +30,3 @@ function tool_emailses_bulk_user_actions() {
     ];
 }
 
-
-function tool_emailses_get_user_from_destination(string $destination) {
-    global $DB;
-
-    return $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),
-        array('destination' => $destination));
-}
-
