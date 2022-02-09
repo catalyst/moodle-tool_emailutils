@@ -21,8 +21,6 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 function tool_emailses_bulk_user_actions() {
     return [
         'tool_ses_reset_bounces' => new action_link(
@@ -39,3 +37,4 @@ function tool_emailses_get_user_from_destination(string $destination) {
     return $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),
         array('destination' => $destination));
 }
+

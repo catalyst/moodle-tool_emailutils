@@ -35,40 +35,40 @@ if ($hassiteconfig) {
         new moodle_url('/admin/tool/emailses/index.php')
     ));
 
-    // Plugin Settings Page
+    // Plugin Settings Page.
     $settings = new admin_settingpage(
         'tool_emailses_options',
         new lang_string('settings', 'tool_emailses')
     );
 
-    // Enable Endpoint
+    // Enable Endpoint.
     $settings->add(new admin_setting_configcheckbox(
         'tool_emailses/enabled',
         new lang_string('enabled', 'tool_emailses'),
         new lang_string('enabled_help', 'tool_emailses'),
         1)
     );
-    // Auth Settings
+    // Auth Settings.
     $settings->add(new admin_setting_heading(
         'authorisation',
         new lang_string('authorisationcategory', 'tool_emailses'),
         '')
     );
-    // Auth Header
+    // Auth Header.
     $settings->add(new admin_setting_configtext(
         'tool_emailses/authorisation_header',
         new lang_string('header', 'tool_emailses'),
         new lang_string('header_help', 'tool_emailses'),
         'WWW-Authenticate: Basic realm="SNS Client"')
     );
-    // Auth Username
+    // Auth Username.
     $settings->add(new admin_setting_configtext(
         'tool_emailses/authorisation_username',
         new lang_string('username', 'tool_emailses'),
         new lang_string('username_help', 'tool_emailses'),
         null)
     );
-    // Auth Password
+    // Auth Password.
     $settings->add(new \tool_emailses\admin_setting_configpasswordhashed(
         'tool_emailses/authorisation_password',
         new lang_string('password', 'tool_emailses'),

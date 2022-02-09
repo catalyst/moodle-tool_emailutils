@@ -38,10 +38,10 @@ if ($client->is_notification()) {
     if (strpos($user->email, 'invalid') === false) {
         if ($notification->is_complaint()) {
             $type = 'c';
-        }  else if ($notification->is_bounce()) {
+        } else if ($notification->is_bounce()) {
             $type = 'b';
         } else {
-            http_response_code(400); // Invalid request
+            http_response_code(400); // Invalid request.
             exit;
         }
 

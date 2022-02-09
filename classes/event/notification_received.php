@@ -26,8 +26,6 @@ namespace tool_emailses\event;
 
 use tool_emailses;
 
-defined('MOODLE_INTERNAL') || die();
-
 
 class notification_received extends \core\event\base {
 

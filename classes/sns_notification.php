@@ -40,7 +40,7 @@ class sns_notification {
      * Unprocessed SNS Message
      * @var mixed
      */
-    public $message_raw;
+    public $messageraw;
 
     /**
      * Set SNS Message
@@ -48,7 +48,7 @@ class sns_notification {
      * @return sns_notification
      */
     public function set_message($message) : sns_notification {
-        $this->message_raw = $message;
+        $this->messageraw = $message;
         $this->message = json_decode($message, true);
         return $this;
     }
@@ -61,7 +61,7 @@ class sns_notification {
         if (isset($this->message)) {
             return $this->message;
         } else {
-            http_response_code(400); // Invalid request
+            http_response_code(400); // Invalid request.
             exit;
         }
     }
@@ -71,10 +71,10 @@ class sns_notification {
      * @return string Message as string
      */
     public function get_raw_message() {
-        if (isset($this->message_raw)) {
-            return $this->message_raw;
+        if (isset($this->messageraw)) {
+            return $this->messageraw;
         } else {
-            http_response_code(400); // Invalid request
+            http_response_code(400); // Invalid request.
             exit;
         }
     }
@@ -144,7 +144,7 @@ class sns_notification {
         if ($this->is_complaint() || $this->is_bounce()) {
             return $this->get_type() . ' about ' . $this->get_source_email() . ' from ' . $this->get_destination();
         } else {
-            http_response_code(400); // Invalid request
+            http_response_code(400); // Invalid request.
             exit;
         }
     }

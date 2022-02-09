@@ -23,17 +23,16 @@
 
 namespace tool_emailses;
 
-defined('MOODLE_INTERNAL') || die;
-
 
 class admin_setting_configpasswordhashed extends \admin_setting {
 
     public $minlength;
-    protected $is_hashed;
+    protected $ishashed;
 
     /**
      * Constructor
-     * @param string $name Unique ascii name, either 'mysetting' for settings that in config, or 'myplugin/mysetting' for ones in config_plugins.
+     * @param string $name Unique ascii name, either 'mysetting' for settings that in config, or
+     *                     'myplugin/mysetting' for ones in config_plugins.
      * @param string $visiblename Localised name
      * @param string $description Localised long description
      * @param string $defaultsetting
@@ -42,7 +41,7 @@ class admin_setting_configpasswordhashed extends \admin_setting {
     public function __construct($name, $visiblename, $description, $defaultsetting, $minlength = 8) {
         parent::__construct($name, $visiblename, $description, $defaultsetting);
         $this->minlength = (int) $minlength;
-        $this->is_hashed = true;
+        $this->ishashed = true;
     }
 
     /**
@@ -56,9 +55,9 @@ class admin_setting_configpasswordhashed extends \admin_setting {
 
     public function write_setting($data) {
         // Is the password valid?
-        $is_valid = $this->validate($data);
-        if (!$is_valid) {
-            return $is_valid;
+        $isvalid = $this->validate($data);
+        if (!$isvalid) {
+            return $isvalid;
         }
 
         if (empty($data)) {
@@ -92,7 +91,7 @@ class admin_setting_configpasswordhashed extends \admin_setting {
         $default = $this->get_defaultsetting();
 
         // Password is hashed so don't display it.
-        if ($this->is_hashed) {
+        if ($this->ishashed) {
             $data = null;
         }
 

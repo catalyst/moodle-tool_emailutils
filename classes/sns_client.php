@@ -94,7 +94,7 @@ class sns_client {
             exit;
         }
 
-        /**
+        /*
          * Request Authorisation
          * Note: AWS SNS sends two requests to an endpoint with basic auth. The first is without the Authorization
          * header. When it receives a 401 status it repeats the request with the Authorization header set. This
@@ -106,15 +106,15 @@ class sns_client {
             header($header);
             header('HTTP/1.0 401 Unauthorized');
             exit;
-        } elseif (isset($SERVER['PHP_AUTH_USER'])) {
+        } else if (isset($SERVER['PHP_AUTH_USER'])) {
             // Credentials supplied - check they are valid.
             if (!static::verify_username($username, $_SERVER['PHP_AUTH_USER']) &&
                 !static::verify_password($password, $_SERVER['PHP_AUTH_PW'])) {
                 // Invalid credentials!
-                http_response_code(401); // Unauthorized
+                http_response_code(401); // Unauthorized.
                 exit;
             }
-        } elseif (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
             // Some servers don't provide the credentials seperately so strip them out of the auth header.
             $headerusername = null;
             $headerpassword = null;
@@ -146,24 +146,24 @@ class sns_client {
             exit;
         }
 
-        // Process the message depending on it's type
+        // Process the message depending on it's type.
         switch ($this->message['Type']) {
             case self::SUBSCRIPTION_TYPE:
-                // This is a subscription request so get the provided URL to confirm it
+                // This is a subscription request so get the provided URL to confirm it.
                 $this->client->get($this->message['SubscribeURL']);
                 break;
             case self::UNSUBSCRIPTION_TYPE:
                 // This is an unsubscribe request. Since we probably didn't want to unsubscribe we'll
-                // resubscribe by getting the subscribe URL
+                // resubscribe by getting the subscribe URL.
                 $this->client->get($this->message['SubscribeURL']);
                 break;
             case self::NOTIFICATION_TYPE:
-                // This is a notification so set the message
+                // This is a notification so set the message.
                 $this->set_message($this->message);
                 break;
             default:
-                // We're not interested in other message types
-                http_response_code(405); // Method not allowed
+                // We're not interested in other message types.
+                http_response_code(405); // Method not allowed.
                 exit;
                 break;
         }

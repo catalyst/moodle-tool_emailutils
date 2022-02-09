@@ -31,7 +31,6 @@ use renderable;
 use renderer_base;
 use templatable;
 
-defined('MOODLE_INTERNAL') or die;
 
 /**
  * The complaints list class is a widget that displays a list of complaints.
