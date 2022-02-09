@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version  = 2019081501;
-$plugin->requires = 2014051209;
+$plugin->requires = 2020061500;
 $plugin->component = 'tool_emailses';
 $plugin->release = '1.2';
 $plugin->dependencies = array(
