@@ -45,16 +45,13 @@ if ($confirm and confirm_sesskey()) {
     list($in, $params) = $DB->get_in_or_equal($SESSION->bulk_users);
     $rs = $DB->get_recordset_select('user', "id $in", $params, '', 'id, ' . get_all_user_name_fields(true));
     foreach ($rs as $user) {
-        $notifications .= $OUTPUT->notification(get_string('usernotconfirmed', '', fullname($user, true)), 'notifysuccess');
-        echo var_dump($user);
+        // Reset the user bounce count.
+        set_bounce_count($user, true);
     }
     $rs->close();
     echo $OUTPUT->box_start('generalbox', 'notice');
-    if (!empty($notifications)) {
-        echo $notifications;
-    } else {
-        echo $OUTPUT->notification(get_string('changessaved'), 'notifysuccess');
-    }
+    echo $OUTPUT->notification(get_string('bouncesreset', 'tool_emailses'), 'notifysuccess');
+
     $continue = new single_button(new moodle_url($return), get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
     echo $OUTPUT->box_end();
