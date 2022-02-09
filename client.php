@@ -37,7 +37,7 @@ if ($client->is_notification()) {
     $user = $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),
         ['destination' => $notification->get_destination()]);
 
-    if (strpos($user->email, 'invalid') === false) {
+    if ($user) {
         if ($notification->is_complaint()) {
             $type = 'c';
         } else if ($notification->is_bounce()) {
