@@ -1,3 +1,5 @@
+![Build Status](https://github.com/catalyst/moodle-tool_emailses/actions/workflows/ci.yml/badge.svg?branch=MOODLE_39_STABLE)
+
 # AWS SES Complaints Plugin for Moodle
 
 This plugin is for use with the AWS SES service.
