@@ -24,15 +24,10 @@
 use tool_emailses\complaints_list;
 
 require_once(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
-// Set up the basic page variables.
-$context = context_system::instance();
-$PAGE->set_context($context);
-require_capability('moodle/site:config', $context);
-$PAGE->set_url(new moodle_url('/admin/tool/emailses/index.php'));
-$title = get_string('list', 'tool_emailses');
-$PAGE->set_title($title);
-$PAGE->set_heading($title);
+// Initialise page and check permissions.
+admin_externalpage_setup('tool_emailses_list');
 
 echo $OUTPUT->header();
 

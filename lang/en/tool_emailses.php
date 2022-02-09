@@ -41,7 +41,7 @@ $string['resetbounces'] = 'Reset the number of bounces.';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
 
-// Complaints list strings
+// Complaints list strings.
 $string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
 $string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
 $string['complaints'] = 'For a list of complaints, search for ".c.invalid"';

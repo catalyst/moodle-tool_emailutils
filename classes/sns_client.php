@@ -54,19 +54,19 @@ class sns_client {
 
     /**
      * SNS Message Object
-     * @var Aws\Sns\Message
+     * @var \Aws\Sns\Message
      */
     protected $message;
 
     /**
      * Guzzle HTTP Client
-     * @var GuzzleHttp\Client
+     * @var \GuzzleHttp\Client
      */
     protected $client;
 
     /**
      * SNS Message Validator
-     * @var Aws\Sns\MessageValidator
+     * @var \Aws\Sns\MessageValidator
      */
     protected $validator;
 
