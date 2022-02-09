@@ -106,7 +106,7 @@ class sns_client {
             header($header);
             header('HTTP/1.0 401 Unauthorized');
             exit;
-        } else if (isset($SERVER['PHP_AUTH_USER'])) {
+        } else if (isset($_SERVER['PHP_AUTH_USER'])) {
             // Credentials supplied - check they are valid.
             if (!static::verify_username($username, $_SERVER['PHP_AUTH_USER']) &&
                 !static::verify_password($password, $_SERVER['PHP_AUTH_PW'])) {
