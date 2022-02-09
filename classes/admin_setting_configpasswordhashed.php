@@ -88,6 +88,8 @@ class admin_setting_configpasswordhashed extends \admin_setting {
      * @return string Returns an XHTML string
      */
     public function output_html($data, $query = '') {
+        global $OUTPUT;
+
         $default = $this->get_defaultsetting();
 
         // Password is hashed so don't display it.
@@ -95,8 +97,16 @@ class admin_setting_configpasswordhashed extends \admin_setting {
             $data = null;
         }
 
+        $context = [
+            'minlength' => $this->minlength,
+            'id' => $this->get_id(),
+            'fullname' => $this->get_full_name(),
+        ];
+
+        $element = $OUTPUT->render_from_template('tool_emailses/admin_setting_configpasswordhashed', $context);
+
         return format_admin_setting($this, $this->visiblename,
-            '<div class="form-text defaultsnext"><input type="password" minlength="' . $this->minlength . '" id="' . $this->get_id() . '" name="' . $this->get_full_name() . '" value="" /></div>',
+            $element,
             $this->description, true, '', $default, $query);
     }
 }
