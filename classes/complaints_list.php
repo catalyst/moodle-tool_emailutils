@@ -24,17 +24,10 @@
 
 namespace tool_emailses;
 
-use stdClass;
-
-use moodle_url;
 use renderable;
-use renderer_base;
-use templatable;
-
 
 /**
- * The complaints list class is a widget that displays a list of complaints.
- *
+ * The complaints list class is a table which can indicate if a user has exceeded the bounce threshold.
  */
 class complaints_list extends \table_sql implements renderable  {
     /**
@@ -44,7 +37,7 @@ class complaints_list extends \table_sql implements renderable  {
      * @param \moodle_url $url url where this table is displayed.
      */
     public function __construct($uniqueid, \moodle_url $url, $perpage = 100) {
-        global $DB, $CFG;
+        global $DB;
 
         parent::__construct($uniqueid);
 
@@ -75,7 +68,7 @@ class complaints_list extends \table_sql implements renderable  {
 
         $fields = [
             "u.id, u.email, up1.name, up2.name",
-            "{$DB->sql_cast_char2int('up1.value')} AS bouncecount",
+            "{$DB->sql_cast_char2int('up1.value')} AS bouncecount", // Casting required for table sorting on numeric values.
             "{$DB->sql_cast_char2int('up2.value')} AS sendcount",
             get_all_user_name_fields(true, 'u'),
         ];
@@ -87,7 +80,7 @@ class complaints_list extends \table_sql implements renderable  {
         $wheres = [
             "up1.name = 'email_bounce_count'",
             "up2.name = 'email_send_count'",
-            "{$DB->sql_cast_char2int('up1.value')} > :bouncethreshold",
+            "{$DB->sql_cast_char2int('up1.value')} > :bouncethreshold", // Casting required for varying->int, enables > filtering.
         ];
         $params = [
             'bouncethreshold' => 1
@@ -95,6 +88,12 @@ class complaints_list extends \table_sql implements renderable  {
         $this->set_sql(implode(',', $fields), $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
     }
 
+    /**
+     * Bouncecount column. Will wrap the values in a <span class='alert alert-dangerous'> if the value is over the computed threshold.
+     *
+     * @param $data
+     * @return string
+     */
     public function col_bouncecount($data) {
         global $OUTPUT;
 
