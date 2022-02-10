@@ -23,6 +23,9 @@
 
 namespace tool_emailses;
 
+defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
 
 use Aws\Sns\Exception\InvalidSnsMessageException;
 use Aws\Sns\Message;
@@ -77,21 +80,48 @@ class sns_client {
     public $notification;
 
     /**
+     * Authorization header sent to AWS on first response.
+     * @var string
+     */
+    private $authorisationheader;
+
+    /**
+     * Stored username to validate against.
+     * @var string
+     */
+    private $authorisationusername;
+
+    /**
+     * Stored hashed password to validate against.
+     * @var string
+     */
+    private $authorisationpassword;
+
+    /**
      * Constructor
      *
-     * Creates an endpoint and reacts to posted messages
+     * Creates an endpoint and reacts to posted messages.
      *
      * @param string $header Auth header
      * @param string $username Auth username
      * @param string $password Auth password hash
      */
     public function __construct($header, $username, $password) {
+        $this->authorisationheader = $header;
+        $this->authorisationusername = $username;
+        $this->authorisationpassword = $password;
+    }
 
+    /**
+     * Determines if the request is valid.
+     *
+     * @return bool True on success
+     */
+    public function is_authorised() {
         // Make sure the request is POST.
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             http_response_code(405); // Method not allowed.
-            print(get_string('incorrect_access', 'tool_emailses'));
-            exit;
+            return false;
         }
 
         /*
@@ -103,33 +133,49 @@ class sns_client {
          */
         if (!isset($_SERVER['PHP_AUTH_USER'])) {
             // No credentials provided - ask for some!
-            header($header);
-            header('HTTP/1.0 401 Unauthorized');
-            exit;
+            header($this->authorisationheader);
+            http_response_code(401); // Unauthorized.
+            return false;
         } else if (isset($_SERVER['PHP_AUTH_USER'])) {
             // Credentials supplied - check they are valid.
-            if (!static::verify_username($username, $_SERVER['PHP_AUTH_USER']) &&
-                !static::verify_password($password, $_SERVER['PHP_AUTH_PW'])) {
-                // Invalid credentials!
-                http_response_code(401); // Unauthorized.
-                exit;
+            if (static::verify_username($this->authorisationusername, $_SERVER['PHP_AUTH_USER']) &&
+                static::verify_password($this->authorisationpassword, $_SERVER['PHP_AUTH_PW'])) {
+                // Valid!
+                return true;
             }
         } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-            // Some servers don't provide the credentials seperately so strip them out of the auth header.
+            // Some servers don't provide the credentials separately so strip them out of the auth header.
             $headerusername = null;
             $headerpassword = null;
             if (strpos(strtolower($_SERVER['HTTP_AUTHORIZATION']), 'basic') === 0) {
                 list($headerusername, $headerpassword) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
             }
 
-            if (is_null($headerusername) || (!static::verify_username($username, $_SERVER['PHP_AUTH_USER']) &&
-                !static::verify_password($password, $_SERVER['PHP_AUTH_PW']))) {
+            if (is_null($headerusername)) {
                 // Invalid credentials!
                 http_response_code(401); // Unauthorized.
-                exit;
+                return false;
+            }
+
+            if (static::verify_username($this->authorisationusername, $headerusername) &&
+                static::verify_password($this->authorisationpassword, $headerpassword)) {
+                // Valid!
+                return true;
             }
         }
 
+        // Default failure case.
+        http_response_code(401); // Unauthorized.
+        return false;
+    }
+
+    /**
+     * Validates the incoming message and sets up the sns_notification message.
+     * This accepts message types of 'Notification'.
+     *
+     * @return bool Successful validtion
+     */
+    public function process_message() {
         $this->validator = new MessageValidator();
         $this->client = new Client();
         $this->notification = new sns_notification();
@@ -137,16 +183,18 @@ class sns_client {
         // Get the message from the POST data.
         $this->message = Message::fromRawPostData();
 
+        $isvalidmessage = false;
+
         // Validate the incoming message.
         try {
             $this->validator->validate($this->message);
         } catch (InvalidSnsMessageException $e) {
             // Message not valid!
             http_response_code(400); // Bad request.
-            exit;
+            return $isvalidmessage;
         }
 
-        // Process the message depending on it's type.
+        // Process the message depending on its type.
         switch ($this->message['Type']) {
             case self::SUBSCRIPTION_TYPE:
                 // This is a subscription request so get the provided URL to confirm it.
@@ -160,15 +208,15 @@ class sns_client {
             case self::NOTIFICATION_TYPE:
                 // This is a notification so set the message.
                 $this->set_message($this->message);
+                $isvalidmessage = true;
                 break;
             default:
                 // We're not interested in other message types.
                 http_response_code(405); // Method not allowed.
-                exit;
                 break;
         }
 
-        return $this;
+        return $isvalidmessage;
     }
 
     /**
@@ -176,10 +224,10 @@ class sns_client {
      *
      * @param string $username Username from settings
      * @param string $headerusername Username given in auth header
-     * @return boolean Is verified?
+     * @return bool Is verified?
      */
-    public static function verify_username($username, $headerusername) {
-        return ($headerusername === $username ? true : false);
+    private static function verify_username($username, $headerusername): bool {
+        return $headerusername === $username;
     }
 
     /**
@@ -187,10 +235,10 @@ class sns_client {
      *
      * @param string $password Password hash
      * @param string $headerpassword Password given in auth header
-     * @return boolean Is verified?
+     * @return bool Is verified?
      */
-    public static function verify_password($password, $headerpassword) : boolean {
-        return (password_verify($headerpassword, $password) ? true : false);
+    private static function verify_password($password, $headerpassword) : bool {
+        return password_verify($headerpassword, $password);
     }
 
     /**
@@ -201,35 +249,34 @@ class sns_client {
      */
     protected function set_message(Message $message) : sns_client {
         $this->notification->set_message($message['Message']);
-
         return $this;
     }
 
     /**
      * Check if Message is of a notification type
      *
-     * @return boolean Is of notification type
+     * @return bool Is of notification type
      */
-    public function is_notification() : boolean {
-        return ($this->message['Type'] === self::NOTIFICATION_TYPE ? true : false);
+    public function is_notification() : bool {
+        return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 
     /**
      * Check if Message is of a subscription type
      *
-     * @return boolean Is of subscription type
+     * @return bool Is of subscription type
      */
-    public function is_subscription() : boolean {
-        return ($this->message['Type'] === self::NOTIFICATION_TYPE ? true : false);
+    public function is_subscription() : bool {
+        return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 
     /**
      * Check if Message is of an unsubscribe type
      *
-     * @return boolean Is of unsubscribe type
+     * @return bool Is of unsubscribe type
      */
-    public function is_unsubscription() : boolean {
-        return ($this->message['Type'] === self::NOTIFICATION_TYPE ? true : false);
+    public function is_unsubscription() : bool {
+        return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 
     /**
@@ -241,6 +288,5 @@ class sns_client {
         if (isset($this->notification)) {
             return $this->notification;
         }
-        return;
     }
 }

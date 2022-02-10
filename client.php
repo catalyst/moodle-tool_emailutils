@@ -24,18 +24,21 @@
 use tool_emailses\sns_client;
 use tool_emailses\event\notification_received;
 
-require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/../../../config.php');
 
 $client = new sns_client(get_config('tool_emailses', 'authorisation_header'),
     get_config('tool_emailses', 'authorisation_username'), get_config('tool_emailses', 'authorisation_password'));
 
-if ($client->is_notification()) {
+if (!$client->is_authorised()) {
+    exit;
+}
+
+if ($client->process_message() && $client->is_notification()) {
     global $DB;
 
     $notification = $client->get_notification();
 
-    $user = $DB->get_record_sql('SELECT id, email FROM {user} WHERE email '. $DB->sql_like('email', ':destination', false),
-        ['destination' => $notification->get_destination()]);
+    $user = $DB->get_record('user', ['email' => $notification->get_destination()], 'id, email');
 
     if ($user) {
         if ($notification->is_complaint()) {

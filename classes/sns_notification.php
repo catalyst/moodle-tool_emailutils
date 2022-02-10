@@ -115,24 +115,24 @@ class sns_notification {
      * Get the email address that complained about or bounced the source email
      * @return string Destination email address
      */
-    public function get_destination() :string {
+    public function get_destination() : string {
         return $this->message['mail']['destination'][0];
     }
 
     /**
      * Is the message about a complaint?
-     * @return boolean Is complaint?
+     * @return bool Is complaint?
      */
-    public function is_complaint() : boolean {
-        return ($this->get_type() === sns_client::COMPLAINT_TYPE ? true : false);
+    public function is_complaint() : bool {
+        return $this->get_type() === sns_client::COMPLAINT_TYPE;
     }
 
     /**
      * Is the message about a bounce?
-     * @return boolean Is bounce?
+     * @return bool Is bounce?
      */
-    public function is_bounce() : boolean {
-        return ($this->get_type() === sns_client::BOUNCE_TYPE ? true : false);
+    public function is_bounce() : bool {
+        return $this->get_type() === sns_client::BOUNCE_TYPE;
     }
 
     /**
@@ -140,24 +140,13 @@ class sns_notification {
      * Eg. "Type about x from y"
      * @return string Message as string
      */
-    public function get_messageasstring() : boolean {
+    public function get_messageasstring() : bool {
         if ($this->is_complaint() || $this->is_bounce()) {
             return $this->get_type() . ' about ' . $this->get_source_email() . ' from ' . $this->get_destination();
         } else {
             http_response_code(400); // Invalid request.
             exit;
         }
-    }
-
-    /**
-     * Log the notification message to a given file
-     * @param  string $path File path
-     * @return sns_notification
-     */
-    public function log($path) : sns_notification {
-        $file = new SplFileObject($path, 'a');
-        $file->fwrite($this->get_raw_message() . "\n");
-        return $this;
     }
 
     /**
