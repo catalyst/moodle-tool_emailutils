@@ -62,6 +62,6 @@ if ($confirm and confirm_sesskey()) {
     echo $OUTPUT->heading(get_string('confirmation', 'admin'));
     $formcontinue = new single_button(new moodle_url('reset_bounces.php', ['confirm' => 1]), get_string('yes'));
     $formcancel = new single_button(new moodle_url('/admin/user/user_bulk.php'), get_string('no'), 'get');
-    echo $OUTPUT->confirm(get_string('confirmcheckfull', '', $usernames), $formcontinue, $formcancel);
+    echo $OUTPUT->confirm(get_string('bouncecheckfull', 'tool_emailses', $usernames), $formcontinue, $formcancel);
 }
 echo $OUTPUT->footer();

@@ -39,6 +39,7 @@ $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re no
 $string['incorrect_access'] = 'Incorrect access detected. For use only by AWS SNS.';
 $string['bouncesreset'] = 'Bounces have been reset for the selected users';
 $string['resetbounces'] = 'Reset the number of bounces';
+$string['bouncecheckfull'] = 'Are you absolutely sure you want to reset the bounce count for {$a} ?';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
 
