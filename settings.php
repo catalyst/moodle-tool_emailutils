@@ -46,7 +46,7 @@ if ($hassiteconfig) {
         'tool_emailses/enabled',
         new lang_string('enabled', 'tool_emailses'),
         new lang_string('enabled_help', 'tool_emailses'),
-        1)
+        0)
     );
     // Auth Settings.
     $settings->add(new admin_setting_heading(
