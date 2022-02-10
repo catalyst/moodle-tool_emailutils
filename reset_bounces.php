@@ -41,7 +41,6 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('resetbounces', 'tool_emailses'));
 
 if ($confirm and confirm_sesskey()) {
-    $notifications = '';
     list($in, $params) = $DB->get_in_or_equal($SESSION->bulk_users);
     $rs = $DB->get_recordset_select('user', "id $in", $params, '', 'id, ' . get_all_user_name_fields(true));
     foreach ($rs as $user) {
