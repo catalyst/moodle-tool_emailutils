@@ -41,6 +41,7 @@ $string['bouncesreset'] = 'Bounces have been reset for the selected users';
 $string['resetbounces'] = 'Reset the number of bounces';
 $string['bouncecheckfull'] = 'Are you absolutely sure you want to reset the bounce count for {$a} ?';
 $string['bouncecount'] = 'Bounce count';
+$string['sendcount'] = 'Send count';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
 

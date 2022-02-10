@@ -44,18 +44,22 @@ class complaints_list extends \table_sql implements renderable  {
      * @param \moodle_url $url url where this table is displayed.
      */
     public function __construct($uniqueid, \moodle_url $url, $perpage = 100) {
+        global $DB, $CFG;
+
         parent::__construct($uniqueid);
 
         $columns = [
             'fullname',
             'email',
             'bouncecount',
+            'sendcount'
         ];
 
         $headers = [
             get_string('fullname'),
             get_string('email'),
             get_string('bouncecount', 'tool_emailses'),
+            get_string('sendcount', 'tool_emailses'),
         ];
 
         $this->set_attribute('class', 'toolemailses generaltable generalbox');
@@ -69,10 +73,24 @@ class complaints_list extends \table_sql implements renderable  {
         $this->is_downloadable(false);
         $this->define_baseurl($url);
 
-        $fields = 'u.id, u.email, up.name, up.value AS bouncecount, ' . get_all_user_name_fields(true, 'u');
-        $from = '{user} u LEFT JOIN {user_preferences} up ON u.id = up.userid';
-        $where = "up.name = 'email_bounce_count'";
+        $fields = 'u.id, u.email, up1.name, up1.value AS bouncecount, up2.name, up2.value AS sendcount, ' . get_all_user_name_fields(true, 'u');
+        $from = '{user} u ';
+        $joins = [
+            'LEFT JOIN {user_preferences} up1 ON u.id = up1.userid',
+            'LEFT JOIN {user_preferences} up2 ON u.id = up2.userid',
+        ];
+        $wheres = [
+            "up1.name = 'email_bounce_count'",
+            "up2.name = 'email_send_count'",
+            "{$DB->sql_cast_char2int('up1.value')} > 2"
+        ];
         $params = [];
-        $this->set_sql($fields, $from, $where, $params);
+        $this->set_sql($fields, $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
+    }
+
+    public function col_bouncecount($data) {
+        global $CFG;
+
+        return $data->bouncecount;
     }
 }

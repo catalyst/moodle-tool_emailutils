@@ -27,11 +27,12 @@ require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 // Initialise page and check permissions.
+$baseurl = new moodle_url('/admin/tool/emailses/index.php');
+$PAGE->set_url($baseurl);
 admin_externalpage_setup('tool_emailses_list');
 
 echo $OUTPUT->header();
 
-$baseurl = new moodle_url('/admin/tool/emailses/index.php');
 $complaintslist = new complaints_list('tool_emailses', $baseurl, 100);
 $complaintslist->out(100, false);
 
