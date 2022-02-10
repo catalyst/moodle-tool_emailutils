@@ -26,6 +26,10 @@ use tool_emailses\event\notification_received;
 
 require_once(__DIR__ . '/../../../config.php');
 
+if (!get_config('tool_emailses', 'enabled')) {
+    exit;
+}
+
 $client = new sns_client(get_config('tool_emailses', 'authorisation_header'),
     get_config('tool_emailses', 'authorisation_username'), get_config('tool_emailses', 'authorisation_password'));
 
