@@ -26,10 +26,10 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-$confirm = optional_param('confirm', 0, PARAM_BOOL);
-
 admin_externalpage_setup('userbulk');
 require_capability('moodle/user:update', context_system::instance());
+
+$confirm = optional_param('confirm', 0, PARAM_BOOL);
 
 $return = new moodle_url('/admin/user/user_bulk.php');
 
