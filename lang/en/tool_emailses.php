@@ -42,6 +42,7 @@ $string['resetbounces'] = 'Reset the number of bounces';
 $string['bouncecheckfull'] = 'Are you absolutely sure you want to reset the bounce count for {$a} ?';
 $string['bouncecount'] = 'Bounce count';
 $string['sendcount'] = 'Send count';
+$string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
 

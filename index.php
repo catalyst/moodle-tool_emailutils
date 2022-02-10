@@ -33,6 +33,10 @@ admin_externalpage_setup('tool_emailses_list');
 
 echo $OUTPUT->header();
 
+if (empty($CFG->handlebounces)) {
+    echo $OUTPUT->notification(get_string('configmissing', 'tool_emailses'));
+}
+
 $complaintslist = new complaints_list('tool_emailses', $baseurl, 100);
 $complaintslist->out(100, false);
 

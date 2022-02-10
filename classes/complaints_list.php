@@ -82,15 +82,20 @@ class complaints_list extends \table_sql implements renderable  {
         $wheres = [
             "up1.name = 'email_bounce_count'",
             "up2.name = 'email_send_count'",
-            "{$DB->sql_cast_char2int('up1.value')} > 2"
+            "{$DB->sql_cast_char2int('up1.value')} > 0"
         ];
         $params = [];
         $this->set_sql($fields, $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
     }
 
     public function col_bouncecount($data) {
-        global $CFG;
+        global $OUTPUT;
 
-        return $data->bouncecount;
+        $context = [
+            'bouncecount' => $data->bouncecount,
+            'overthreshold' => over_bounce_threshold($data),
+        ];
+
+        return $OUTPUT->render_from_template('tool_emailses/bounce_column', $context);
     }
 }
