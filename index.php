@@ -31,8 +31,8 @@ admin_externalpage_setup('tool_emailses_list');
 
 echo $OUTPUT->header();
 
-// Now for our special custom renderer.
-$complaintslist = new complaints_list();
-echo $OUTPUT->render($complaintslist);
+$baseurl = new moodle_url('/admin/tool/emailses/index.php');
+$complaintslist = new complaints_list('tool_emailses', $baseurl, 100);
+$complaintslist->out(100, false);
 
 echo $OUTPUT->footer();

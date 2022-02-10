@@ -36,10 +36,43 @@ use templatable;
  * The complaints list class is a widget that displays a list of complaints.
  *
  */
-class complaints_list implements renderable, templatable {
-    public function export_for_template(renderer_base $output) {
-        $list = new stdClass();
-        $list->search_url = new moodle_url('/admin/user.php');
-        return $list;
+class complaints_list extends \table_sql implements renderable  {
+    /**
+     * Sets up the complaints_list table parameters.
+     *
+     * @param string $uniqueid unique id of form.
+     * @param \moodle_url $url url where this table is displayed.
+     */
+    public function __construct($uniqueid, \moodle_url $url, $perpage = 100) {
+        parent::__construct($uniqueid);
+
+        $columns = [
+            'fullname',
+            'email',
+            'bouncecount',
+        ];
+
+        $headers = [
+            get_string('fullname'),
+            get_string('email'),
+            get_string('bouncecount', 'tool_emailses'),
+        ];
+
+        $this->set_attribute('class', 'toolemailses generaltable generalbox');
+        $this->define_columns($columns);
+        $this->define_headers($headers);
+
+        $this->pagesize = $perpage;
+        $this->collapsible(false);
+        $this->sortable(true);
+        $this->pageable(true);
+        $this->is_downloadable(false);
+        $this->define_baseurl($url);
+
+        $fields = 'u.id, u.email, up.name, up.value AS bouncecount, ' . get_all_user_name_fields(true, 'u');
+        $from = '{user} u LEFT JOIN {user_preferences} up ON u.id = up.userid';
+        $where = "up.name = 'email_bounce_count'";
+        $params = [];
+        $this->set_sql($fields, $from, $where, $params);
     }
 }
