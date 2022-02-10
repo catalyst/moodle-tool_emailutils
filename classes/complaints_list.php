@@ -73,7 +73,7 @@ class complaints_list extends \table_sql implements renderable  {
         $this->is_downloadable(false);
         $this->define_baseurl($url);
 
-        $fields = 'u.id, u.email, up1.name, up1.value AS bouncecount, up2.name, up2.value AS sendcount, ' . get_all_user_name_fields(true, 'u');
+        $fields = "u.id, u.email, up1.name, {$DB->sql_cast_char2int('up1.value')} AS bouncecount, up2.name, {$DB->sql_cast_char2int('up2.value')} AS sendcount, " . get_all_user_name_fields(true, 'u');
         $from = '{user} u ';
         $joins = [
             'LEFT JOIN {user_preferences} up1 ON u.id = up1.userid',
