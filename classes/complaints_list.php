@@ -73,8 +73,13 @@ class complaints_list extends \table_sql implements renderable  {
         $this->is_downloadable(false);
         $this->define_baseurl($url);
 
-        $fields = "u.id, u.email, up1.name, {$DB->sql_cast_char2int('up1.value')} AS bouncecount, up2.name, {$DB->sql_cast_char2int('up2.value')} AS sendcount, " . get_all_user_name_fields(true, 'u');
-        $from = '{user} u ';
+        $fields = [
+            "u.id, u.email, up1.name, up2.name",
+            "{$DB->sql_cast_char2int('up1.value')} AS bouncecount",
+            "{$DB->sql_cast_char2int('up2.value')} AS sendcount",
+            get_all_user_name_fields(true, 'u'),
+        ];
+        $from = '{user} u '; // Keep this trailing space.
         $joins = [
             'LEFT JOIN {user_preferences} up1 ON u.id = up1.userid',
             'LEFT JOIN {user_preferences} up2 ON u.id = up2.userid',
@@ -85,7 +90,7 @@ class complaints_list extends \table_sql implements renderable  {
             "{$DB->sql_cast_char2int('up1.value')} > 1"
         ];
         $params = [];
-        $this->set_sql($fields, $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
+        $this->set_sql(implode(',', $fields), $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
     }
 
     public function col_bouncecount($data) {
