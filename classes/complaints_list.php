@@ -82,7 +82,7 @@ class complaints_list extends \table_sql implements renderable  {
         $wheres = [
             "up1.name = 'email_bounce_count'",
             "up2.name = 'email_send_count'",
-            "{$DB->sql_cast_char2int('up1.value')} > 0"
+            "{$DB->sql_cast_char2int('up1.value')} > 1"
         ];
         $params = [];
         $this->set_sql($fields, $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
