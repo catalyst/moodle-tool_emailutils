@@ -29,7 +29,7 @@ use renderable;
 /**
  * The complaints list class is a table which can indicate if a user has exceeded the bounce threshold.
  */
-class complaints_list extends \table_sql implements renderable  {
+class complaints_list extends \table_sql implements renderable {
     /**
      * Sets up the complaints_list table parameters.
      *
