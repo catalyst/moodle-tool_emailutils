@@ -17,7 +17,7 @@
 /**
  * Page to bulk reset the email bounce count for users.
  *
- * @package     tool_emailses
+ * @package     tool_emailutils
  * @author      Nicholas Hoobin <nicholashoobin@catalyst-au.net>
  * @copyright   Catalyst IT
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -38,7 +38,7 @@ if (empty($SESSION->bulk_users)) {
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('resetbounces', 'tool_emailses'));
+echo $OUTPUT->heading(get_string('resetbounces', 'tool_emailutils'));
 
 if ($confirm and confirm_sesskey()) {
     list($in, $params) = $DB->get_in_or_equal($SESSION->bulk_users);
@@ -49,7 +49,7 @@ if ($confirm and confirm_sesskey()) {
     }
     $rs->close();
     echo $OUTPUT->box_start('generalbox', 'notice');
-    echo $OUTPUT->notification(get_string('bouncesreset', 'tool_emailses'), 'notifysuccess');
+    echo $OUTPUT->notification(get_string('bouncesreset', 'tool_emailutils'), 'notifysuccess');
 
     $continue = new single_button(new moodle_url($return), get_string('continue'), 'post');
     echo $OUTPUT->render($continue);
@@ -61,6 +61,6 @@ if ($confirm and confirm_sesskey()) {
     echo $OUTPUT->heading(get_string('confirmation', 'admin'));
     $formcontinue = new single_button(new moodle_url('reset_bounces.php', ['confirm' => 1]), get_string('yes'));
     $formcancel = new single_button(new moodle_url('/admin/user/user_bulk.php'), get_string('no'), 'get');
-    echo $OUTPUT->confirm(get_string('bouncecheckfull', 'tool_emailses', $usernames), $formcontinue, $formcancel);
+    echo $OUTPUT->confirm(get_string('bouncecheckfull', 'tool_emailutils', $usernames), $formcontinue, $formcancel);
 }
 echo $OUTPUT->footer();

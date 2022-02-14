@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version  = 2019081501;
 $plugin->requires = 2020061500;
-$plugin->component = 'tool_emailses';
+$plugin->component = 'tool_emailutils';
 $plugin->release = '1.2';
 $plugin->dependencies = array(
     'local_aws' => 2020061500

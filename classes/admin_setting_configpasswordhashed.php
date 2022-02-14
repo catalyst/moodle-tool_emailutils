@@ -15,13 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-namespace tool_emailses;
+namespace tool_emailutils;
 
 
 class admin_setting_configpasswordhashed extends \admin_setting {
@@ -103,7 +103,7 @@ class admin_setting_configpasswordhashed extends \admin_setting {
             'fullname' => $this->get_full_name(),
         ];
 
-        $element = $OUTPUT->render_from_template('tool_emailses/admin_setting_configpasswordhashed', $context);
+        $element = $OUTPUT->render_from_template('tool_emailutils/admin_setting_configpasswordhashed', $context);
 
         return format_admin_setting($this, $this->visiblename,
             $element,

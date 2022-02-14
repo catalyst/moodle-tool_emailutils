@@ -15,16 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Tool emailses - Created classification event
+ * Tool emailutils - Created classification event
  *
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Maria Sorica <maria.sorica@catalyst-eu.net>
  */
-namespace tool_emailses\event;
+namespace tool_emailutils\event;
 
-use tool_emailses;
+use tool_emailutils;
 
 
 class notification_received extends \core\event\base {
@@ -44,7 +44,7 @@ class notification_received extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('event:notificationreceived', 'tool_emailses');
+        return get_string('event:notificationreceived', 'tool_emailutils');
     }
 
     /**

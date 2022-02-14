@@ -16,13 +16,13 @@
 
 /**
  * Class complaint_list
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Garth Williamson <garth@catalyst-eu.net>
  */
 
-namespace tool_emailses;
+namespace tool_emailutils;
 
 use renderable;
 
@@ -51,11 +51,11 @@ class complaints_list extends \table_sql implements renderable  {
         $headers = [
             get_string('fullname'),
             get_string('email'),
-            get_string('bouncecount', 'tool_emailses'),
-            get_string('sendcount', 'tool_emailses'),
+            get_string('bouncecount', 'tool_emailutils'),
+            get_string('sendcount', 'tool_emailutils'),
         ];
 
-        $this->set_attribute('class', 'toolemailses generaltable generalbox');
+        $this->set_attribute('class', 'toolemailutils generaltable generalbox');
         $this->define_columns($columns);
         $this->define_headers($headers);
 
@@ -102,6 +102,6 @@ class complaints_list extends \table_sql implements renderable  {
             'overthreshold' => over_bounce_threshold($data),
         ];
 
-        return $OUTPUT->render_from_template('tool_emailses/bounce_column', $context);
+        return $OUTPUT->render_from_template('tool_emailutils/bounce_column', $context);
     }
 }

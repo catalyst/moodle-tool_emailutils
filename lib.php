@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-function tool_emailses_bulk_user_actions() {
+function tool_emailutils_bulk_user_actions() {
     return [
         'tool_ses_reset_bounces' => new action_link(
-            new moodle_url('/admin/tool/emailses/reset_bounces.php'),
-            get_string('resetbounces', 'tool_emailses')
+            new moodle_url('/admin/tool/emailutils/reset_bounces.php'),
+            get_string('resetbounces', 'tool_emailutils')
         ),
     ];
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
@@ -25,57 +25,57 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
     $ADMIN->add('tools', new admin_category(
-        'tool_emailses',
-        new lang_string('pluginname', 'tool_emailses')
+        'tool_emailutils',
+        new lang_string('pluginname', 'tool_emailutils')
     ));
 
-    $ADMIN->add('tool_emailses', new admin_externalpage(
-        'tool_emailses_list',
-        new lang_string('list', 'tool_emailses'),
-        new moodle_url('/admin/tool/emailses/index.php')
+    $ADMIN->add('tool_emailutils', new admin_externalpage(
+        'tool_emailutils_list',
+        new lang_string('list', 'tool_emailutils'),
+        new moodle_url('/admin/tool/emailutils/index.php')
     ));
 
     // Plugin Settings Page.
     $settings = new admin_settingpage(
-        'tool_emailses_options',
-        new lang_string('settings', 'tool_emailses')
+        'tool_emailutils_options',
+        new lang_string('settings', 'tool_emailutils')
     );
 
     // Enable Endpoint.
     $settings->add(new admin_setting_configcheckbox(
-        'tool_emailses/enabled',
-        new lang_string('enabled', 'tool_emailses'),
-        new lang_string('enabled_help', 'tool_emailses'),
+        'tool_emailutils/enabled',
+        new lang_string('enabled', 'tool_emailutils'),
+        new lang_string('enabled_help', 'tool_emailutils'),
         0)
     );
     // Auth Settings.
     $settings->add(new admin_setting_heading(
         'authorisation',
-        new lang_string('authorisationcategory', 'tool_emailses'),
+        new lang_string('authorisationcategory', 'tool_emailutils'),
         '')
     );
     // Auth Header.
     $settings->add(new admin_setting_configtext(
-        'tool_emailses/authorisation_header',
-        new lang_string('header', 'tool_emailses'),
-        new lang_string('header_help', 'tool_emailses'),
+        'tool_emailutils/authorisation_header',
+        new lang_string('header', 'tool_emailutils'),
+        new lang_string('header_help', 'tool_emailutils'),
         'WWW-Authenticate: Basic realm="SNS Client"')
     );
     // Auth Username.
     $settings->add(new admin_setting_configtext(
-        'tool_emailses/authorisation_username',
-        new lang_string('username', 'tool_emailses'),
-        new lang_string('username_help', 'tool_emailses'),
+        'tool_emailutils/authorisation_username',
+        new lang_string('username', 'tool_emailutils'),
+        new lang_string('username_help', 'tool_emailutils'),
         null)
     );
     // Auth Password.
-    $settings->add(new \tool_emailses\admin_setting_configpasswordhashed(
-        'tool_emailses/authorisation_password',
-        new lang_string('password', 'tool_emailses'),
-        new lang_string('password_help', 'tool_emailses'),
+    $settings->add(new \tool_emailutils\admin_setting_configpasswordhashed(
+        'tool_emailutils/authorisation_password',
+        new lang_string('password', 'tool_emailutils'),
+        new lang_string('password_help', 'tool_emailutils'),
         null)
     );
 
-    $ADMIN->add('tool_emailses', $settings);
+    $ADMIN->add('tool_emailutils', $settings);
 
 }

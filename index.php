@@ -15,29 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Garth Williamson <garth@catalyst-eu.net>
  */
 
-use tool_emailses\complaints_list;
+use tool_emailutils\complaints_list;
 
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 // Initialise page and check permissions.
-$baseurl = new moodle_url('/admin/tool/emailses/index.php');
+$baseurl = new moodle_url('/admin/tool/emailutils/index.php');
 $PAGE->set_url($baseurl);
-admin_externalpage_setup('tool_emailses_list');
+admin_externalpage_setup('tool_emailutils_list');
 
 echo $OUTPUT->header();
 
 if (empty($CFG->handlebounces)) {
-    echo $OUTPUT->notification(get_string('configmissing', 'tool_emailses'));
+    echo $OUTPUT->notification(get_string('configmissing', 'tool_emailutils'));
 }
 
-$complaintslist = new complaints_list('tool_emailses', $baseurl, 100);
+$complaintslist = new complaints_list('tool_emailutils', $baseurl, 100);
 $complaintslist->out(100, false);
 
 echo $OUTPUT->footer();

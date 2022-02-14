@@ -15,23 +15,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package    tool_emailses
+ * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-use tool_emailses\sns_client;
-use tool_emailses\event\notification_received;
+use tool_emailutils\sns_client;
+use tool_emailutils\event\notification_received;
 
 require_once(__DIR__ . '/../../../config.php');
 
-if (!get_config('tool_emailses', 'enabled')) {
+if (!get_config('tool_emailutils', 'enabled')) {
     exit;
 }
 
-$client = new sns_client(get_config('tool_emailses', 'authorisation_header'),
-    get_config('tool_emailses', 'authorisation_username'), get_config('tool_emailses', 'authorisation_password'));
+$client = new sns_client(get_config('tool_emailutils', 'authorisation_header'),
+    get_config('tool_emailutils', 'authorisation_username'), get_config('tool_emailutils', 'authorisation_password'));
 
 if (!$client->is_authorised()) {
     exit;
