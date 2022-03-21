@@ -4,12 +4,25 @@
 
 This plugin is for use with the AWS SES service.
 
+## Branches
+The following lists the supported branch to use based on your Moodle version.
 
-# Soon to come
+| Moodle version | Branch           |
+|----------------|------------------|
+| Moodle 3.9+    | MOODLE_39_STABLE |
+
+## Installation
+
+```
+git clone git@github.com:catalyst/moodle-tool_emailutils.git admin/tool/emailutils
+```
+
+
+## Soon to come
 
 The complaints list (/admin/tool/emailutils/index.php) is not implemented yet.
 
-# Configuring AWS SES
+## Configuring AWS SES
 
 AWS Simple Email Service (SES) creates Simple Notification Service (SNS) topics
 for both bounces and complaints on each domain, a SNS topic is basically a
