@@ -1,8 +1,19 @@
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/catalyst/moodle-tool_emailutils/ci/MOODLE_39_STABLE)
 
-# AWS SES Complaints Plugin for Moodle
+# Email utilities for Moodle
 
-This plugin is for use with the AWS SES service.
+This plugin is intended to become a place for a suite of semi related email utilities
+to help improve the securty, scalability, and performance of emails.
+
+Over time some of the features may be pulled into Moodle core.
+
+A rough roadmap with no set timelines:
+
+* Handle incoming email complaints via AWS SES Complaints
+* Manage DKIM keys
+* Email round trip monitoring, eg sends an email to itself and asserts it arrives and in the right shape
+* DMARC email processing and reporting
+
 
 ## Branches
 The following lists the supported branch to use based on your Moodle version.
@@ -18,11 +29,13 @@ git clone git@github.com:catalyst/moodle-tool_emailutils.git admin/tool/emailuti
 ```
 
 
-## Soon to come
+## AWS SES Complaints Plugin for Moodle
+
+This plugin is for use with the AWS SES service.
 
 The complaints list (/admin/tool/emailutils/index.php) is not implemented yet.
 
-## Configuring AWS SES
+### Configuring AWS SES
 
 AWS Simple Email Service (SES) creates Simple Notification Service (SNS) topics
 for both bounces and complaints on each domain, a SNS topic is basically a
