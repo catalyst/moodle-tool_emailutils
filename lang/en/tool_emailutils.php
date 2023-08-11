@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Lang pack
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -45,6 +47,35 @@ $string['sendcount'] = 'Send count';
 $string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
 
 $string['event:notificationreceived'] = 'AWS SNS notification received';
+
+$string['dkimmanager'] = 'DKIM manager';
+$string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
+<ol>
+<li>First decide and set the <code>$CFG->noreply</code> email as the domain of this is email is tied to the signing.
+<li>Create a new private and public key pair using a selector of your choice. The selector is arbitrary but a rough date format is a good convention.
+<li>Save the DNS record shown in this tool into your DNS server
+<li>Confirm that the DNS is in the correct shape using the MXtoolbox links
+<li>Now activate the selector you have chosen
+<li>Use the test email tool to send a real email and confirm the DKIM headers have been sent
+<li>Also confirm the DKIM headers validate using a 3rd party tools built into gmail, and most email clients
+</ol>
+';
+
+$string['domaindefaultnoreply'] = 'Default noreply';
+
+$string['mxtoolbox'] = 'MXtoolbox';
+$string['selectoractive'] = 'Active selector';
+$string['selectoractivate'] = 'Activate selector';
+$string['selectoractivated'] = 'Selector was activated';
+$string['selectoractivateconfirm'] = 'This will set $CFG->emaildkimselector to this selector and it will be used for signing outgoing emails.';
+$string['selectorcreate'] = 'Create a new domain:selector certificate pair';
+$string['selectorcreatesubmit'] = 'Create new selector';
+$string['selectorcreated'] = 'A new certificate pair has been created';
+$string['selectordefault'] = '%Y-%m';
+$string['selectormissing'] = 'No DKIM selector certificates found';
+$string['selectordelete'] = 'Delete inactive selector';
+$string['selectordeleted'] = 'Inactive selector has been deleted';
+$string['selectordeleteconfirm'] = 'This will permanently delete this selector\'s private and public keys and is irreversable.';
 
 // Complaints list strings.
 $string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';

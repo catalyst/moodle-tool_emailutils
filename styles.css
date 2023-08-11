@@ -1,0 +1,11 @@
+
+.path-admin-tool-emailutils .dnsrecord {
+    background: #eee;
+    font: 75% monospace;
+    max-width: 50em;
+    overflow-wrap: anywhere;
+    padding: 0.5em;
+    text-wrap: wrap;
+    user-select: all;
+}
+
