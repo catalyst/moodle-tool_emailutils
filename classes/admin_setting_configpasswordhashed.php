@@ -74,6 +74,11 @@ class admin_setting_configpasswordhashed extends \admin_setting {
         if (empty($data)) {
             // Password field is empty so just reuse existing hash.
             $password = $this->config_read($this->name);
+
+            // If it is null then it is a fresh install so save an empty string.
+            if ($password === null) {
+                $password = '';
+            }
         } else {
             // Hash new password.
             $password = password_hash($data, PASSWORD_DEFAULT);
@@ -87,6 +92,9 @@ class admin_setting_configpasswordhashed extends \admin_setting {
      * @return mixed true if ok string if error found
      */
     public function validate($data) {
+        if ($data === '') {
+            return true;
+        }
         if (empty($data) || (is_string($data) && (strlen($data) >= $this->minlength))) {
             return true;
         }
