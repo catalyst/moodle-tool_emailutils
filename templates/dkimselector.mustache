@@ -1,0 +1,83 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tool_emailutils/dkimselector
+
+    This template renders a DKIM selector table row
+
+    Context variables required for this template:
+    * selectoractive If this selector is the one in use
+
+    Example context (json):
+    {
+        "welcomemessage": "welcomemessage",
+        "selectoractive": true
+    }
+}}
+<tr>
+    <td>
+        <code>{{selector}}</code>
+        {{#selectoractive}}
+            <br><span class='badge badge-success'>{{#str}} selectoractive, tool_emailutils{{/str}}</span>
+        {{/selectoractive}}
+    </td>
+    <td>
+        <div class="container">
+            <div class="row">
+                <div>
+                    <ul class="nav nav-tabs" role="tablist">
+                       <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#simple{{id}}" role="tab" aria-selected="true">DKIM</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#chunked{{id}}" role="tab" aria-selected="false">Chunked</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#escaped{{id}}" role="tab" aria-selected="false">Escaped</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-3">
+                        <div class="tab-pane active" id="simple{{id}}" role="tabpanel">
+                            <code>{{dnskey}}</code>
+                            <p>This is the full raw txt of the DNS value:</p>
+                            <p class="dnsrecord">{{dnsvalue}}</p>
+                        </div>
+                        <div class="tab-pane" id="chunked{{id}}" role="tabpanel">
+                            <code>{{dnskey}}</code>
+                            <p>This is the DNS record value broken into quoted chunks of max 256 chars:</p>
+                            <p class="dnsrecord">{{dnsvaluechunked}}</p>
+                        </div>
+                        <div class="tab-pane" id="escaped{{id}}" role="tabpanel">
+                            <code>{{dnskey}}</code>
+                            <p>This is an escaped record value which is needed for some DNS systems:</p>
+                            <p class="dnsrecord">{{dnsvalueescaped}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </td>
+    <td>
+        {{#str}} mxtoolbox, tool_emailutils{{/str}}
+        <ul>
+            <li><a href='{{dkimurl}}' target='_blank'>DKIM</a>
+            <li><a href='{{dkimrawurl}}' target='_blank'>Raw TXT</a>
+        </ul>
+        <p>{{{selectordelete}}}</p>
+        <p>{{{selectoractivate}}}</p>
+    </td>
+</tr>

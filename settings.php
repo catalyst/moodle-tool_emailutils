@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Add admin settings
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,6 +29,12 @@ if ($hassiteconfig) {
     $ADMIN->add('tools', new admin_category(
         'tool_emailutils',
         new lang_string('pluginname', 'tool_emailutils')
+    ));
+
+    $ADMIN->add('email', new admin_externalpage(
+        'tool_emailutils_dkim',
+        new lang_string('dkimmanager', 'tool_emailutils'),
+        new moodle_url('/admin/tool/emailutils/dkim.php')
     ));
 
     $ADMIN->add('tool_emailutils', new admin_externalpage(
