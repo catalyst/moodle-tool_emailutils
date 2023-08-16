@@ -1,4 +1,4 @@
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/catalyst/moodle-tool_emailutils/ci/MOODLE_39_STABLE)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-tool_emailutils/ci.yml?label=ci&branch=MOODLE_39_STABLE)
 
 # Email utilities for Moodle
 
