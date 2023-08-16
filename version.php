@@ -32,3 +32,5 @@ $plugin->component = 'tool_emailutils';
 $plugin->dependencies = [
     'local_aws' => 2020061500
 ];
+$plugin->maturity  = MATURITY_STABLE;
+$plugin->supported = [39, 401];
