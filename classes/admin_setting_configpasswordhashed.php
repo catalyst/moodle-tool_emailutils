@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Hashed password formlib form element
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -23,10 +25,15 @@
 
 namespace tool_emailutils;
 
-
+/**
+ * Hashed password formlib form element
+ */
 class admin_setting_configpasswordhashed extends \admin_setting {
 
+    /** @var Min length of password */
     public $minlength;
+
+    /** @var Is the password hashed */
     protected $ishashed;
 
     /**
@@ -53,6 +60,10 @@ class admin_setting_configpasswordhashed extends \admin_setting {
         return $this->config_read($this->name);
     }
 
+    /**
+     * Writes the settings
+     * @param mixed $data data
+     */
     public function write_setting($data) {
         // Is the password valid?
         $isvalid = $this->validate($data);
@@ -72,7 +83,7 @@ class admin_setting_configpasswordhashed extends \admin_setting {
 
     /**
      * Validate data before storage
-     * @param string data
+     * @param string $data data
      * @return mixed true if ok string if error found
      */
     public function validate($data) {
@@ -85,6 +96,9 @@ class admin_setting_configpasswordhashed extends \admin_setting {
 
     /**
      * Return an XHTML string for the setting
+     *
+     * @param string $data data
+     * @param string $query
      * @return string Returns an XHTML string
      */
     public function output_html($data, $query = '') {
