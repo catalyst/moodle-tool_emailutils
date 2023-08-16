@@ -30,6 +30,8 @@
 use tool_emailutils\sns_client;
 use tool_emailutils\event\notification_received;
 
+define('NO_MOODLE_COOKIES', true);
+
 require_once(__DIR__ . '/../../../config.php');
 
 if (!get_config('tool_emailutils', 'enabled')) {

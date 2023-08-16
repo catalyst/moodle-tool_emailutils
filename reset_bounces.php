@@ -40,7 +40,7 @@ if (empty($SESSION->bulk_users)) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('resetbounces', 'tool_emailutils'));
 
-if ($confirm and confirm_sesskey()) {
+if ($confirm && confirm_sesskey()) {
     list($in, $params) = $DB->get_in_or_equal($SESSION->bulk_users);
     $rs = $DB->get_recordset_select('user', "id $in", $params, '', 'id, ' . get_all_user_name_fields(true));
     foreach ($rs as $user) {
