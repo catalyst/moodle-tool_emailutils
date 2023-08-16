@@ -16,6 +16,7 @@
 
 /**
  * Class complaint_list
+ *
  * @package    tool_emailutils
  * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -27,6 +28,8 @@ namespace tool_emailutils;
 use renderable;
 
 /**
+ * Class complaint_list
+ *
  * The complaints list class is a table which can indicate if a user has exceeded the bounce threshold.
  */
 class complaints_list extends \table_sql implements renderable {
@@ -35,6 +38,7 @@ class complaints_list extends \table_sql implements renderable {
      *
      * @param string $uniqueid unique id of form.
      * @param \moodle_url $url url where this table is displayed.
+     * @param int $perpage how many items per page
      */
     public function __construct($uniqueid, \moodle_url $url, $perpage = 100) {
         global $DB;
@@ -91,7 +95,7 @@ class complaints_list extends \table_sql implements renderable {
     /**
      * Bouncecount column. Will wrap the values in a <span class='alert alert-dangerous'> if the value is over the computed threshold.
      *
-     * @param $data
+     * @param mixed $data
      * @return string
      */
     public function col_bouncecount($data) {
