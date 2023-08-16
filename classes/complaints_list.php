@@ -93,7 +93,8 @@ class complaints_list extends \table_sql implements renderable {
     }
 
     /**
-     * Bouncecount column. Will wrap the values in a <span class='alert alert-dangerous'> if the value is over the computed threshold.
+     * Bouncecount column. Will wrap the values in a <span class='alert alert-dangerous'>
+     * if the value is over the computed threshold.
      *
      * @param mixed $data
      * @return string
