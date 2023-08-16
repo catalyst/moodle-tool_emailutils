@@ -15,6 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * An email bounce complaint handler webhook
+ *
+ * This is the endpoint that AWS notifies when it receives a complaint.
+ * This handles the complaint by incrementing the users bounce level and
+ * emiting a Moodle event.
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

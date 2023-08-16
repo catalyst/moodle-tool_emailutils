@@ -26,7 +26,9 @@ namespace tool_emailutils\event;
 
 use tool_emailutils;
 
-
+/**
+ * Event
+ */
 class notification_received extends \core\event\base {
 
     /**

@@ -15,12 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Lib
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
+/**
+ * This adds a new bulk user action to reset a persons bounce count
+ */
 function tool_emailutils_bulk_user_actions() {
     return [
         'tool_ses_reset_bounces' => new action_link(
