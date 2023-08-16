@@ -10,7 +10,6 @@ Over time some of the features may be pulled into Moodle core.
 A rough roadmap with no set timelines:
 
 * Handle incoming email complaints via AWS SES Complaints
-* Manage DKIM keys
 * Email round trip monitoring, eg sends an email to itself and asserts it arrives and in the right shape
 * DMARC email processing and reporting
 
@@ -27,6 +26,13 @@ The following lists the supported branch to use based on your Moodle version.
 ```
 git clone git@github.com:catalyst/moodle-tool_emailutils.git admin/tool/emailutils
 ```
+
+## DKIM Manager
+
+In the admin settings there is a new admin page for creating and managing DKIM
+certificate pairs, showing the DNS records, validating, activating and testing them.
+
+Admin > Server > Email > DKIM manager
 
 
 ## AWS SES Complaints Plugin for Moodle
