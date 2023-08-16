@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Amazon SNS Client Interface
+ *
  * @package    tool_emailutils
  * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -45,14 +47,19 @@ use GuzzleHttp\Client;
  */
 class sns_client {
 
+    /** Subscribe */
     const SUBSCRIPTION_TYPE = 'SubscriptionConfirmation';
 
+    /** Unsubscribe */
     const UNSUBSCRIPTION_TYPE = 'UnsubscribeConfirmation';
 
+    /** Notify */
     const NOTIFICATION_TYPE = 'Notification';
 
+    /** Complaint */
     const COMPLAINT_TYPE = 'Complaint';
 
+    /** Bounce */
     const BOUNCE_TYPE = 'Bounce';
 
     /**
