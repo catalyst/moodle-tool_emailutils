@@ -179,7 +179,9 @@ if ($domaincount == 0) {
     echo $OUTPUT->notification(get_string('selectormissing', 'tool_emailutils'),  \core\notification::ERROR);
 }
 
-print html_writer::tag('div', get_string('dkimmanagerhelp', 'tool_emailutils'), ['class' => 'crap', 'style' => 'max-width: 40em']);
+print html_writer::tag('div',
+    get_string('dkimmanagerhelp', 'tool_emailutils', ['emailtest' => (new moodle_url('/admin/testoutgoingmailconf.php'))->out()]),
+    ['class' => 'crap', 'style' => 'max-width: 40em']);
 
 $form->display();
 

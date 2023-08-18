@@ -56,7 +56,7 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 <li>Save the DNS record shown in this tool into your DNS server
 <li>Confirm that the DNS is in the correct shape using the MXtoolbox links
 <li>Now activate the selector you have chosen
-<li>Use the test email tool to send a real email and confirm the DKIM headers have been sent
+<li>Use the <a href="{$a->emailtest}">test email tool</a> to send a real email and confirm the DKIM headers have been sent
 <li>Also confirm the DKIM headers validate using a 3rd party tools built into gmail, and most email clients
 </ol>
 ';
