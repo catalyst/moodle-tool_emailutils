@@ -25,10 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2019081501;
+$plugin->version  = 2023081801;
+$plugin->release  = 2023081801;
 $plugin->requires = 2020061500;
 $plugin->component = 'tool_emailutils';
-$plugin->release = '1.2';
-$plugin->dependencies = array(
+$plugin->dependencies = [
     'local_aws' => 2020061500
-);
+];
