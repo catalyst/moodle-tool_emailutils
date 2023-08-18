@@ -51,13 +51,13 @@ $string['event:notificationreceived'] = 'AWS SNS notification received';
 $string['dkimmanager'] = 'DKIM manager';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
-<li>First decide and set the <code>$CFG->noreply</code> email as the domain of this is email is tied to the signing.
+<li>First decide and set the <code>$CFG->noreply</code> email as the domain of the reply email is tied to the signing.
 <li>Create a new private and public key pair using a selector of your choice. The selector is arbitrary but a rough date format is a good convention.
 <li>Save the DNS record shown in this tool into your DNS server
 <li>Confirm that the DNS is in the correct shape using the MXtoolbox links
 <li>Now activate the selector you have chosen
 <li>Use the <a href="{$a->emailtest}">test email tool</a> to send a real email and confirm the DKIM headers have been sent
-<li>Also confirm the DKIM headers validate using a 3rd party tools built into gmail, and most email clients
+<li>Also confirm the DKIM headers validate using a 3rd party tool, such as those provided by Gmail and most email clients
 </ol>
 ';
 
