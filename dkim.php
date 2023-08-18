@@ -40,7 +40,7 @@ if ($action == 'delete') {
     $selector = required_param('selector', PARAM_TEXT);
     $manager = new dkim_manager($domain, $selector);
     $manager->delete_selector();
-    redirect($baseurl, get_string('selectordeleted', 'tool_emailutils'), null, \core\output\notification::NOTIFY_SUCCESS);
+    redirect($baseurl, get_string('selectordeleted', 'tool_emailutils'), null, \core\output\notification::NOTIFY_WARNING);
 }
 
 if ($action == 'activate') {
