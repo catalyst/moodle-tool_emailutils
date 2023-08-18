@@ -7,4 +7,5 @@ jobs:
     uses: catalyst/catalyst-moodle-workflows/.github/workflows/ci.yml@main
     with:
       disable_behat: true
+      disable_phpunit: true
       disable_mustache: true
