@@ -1,4 +1,4 @@
-<a href="https://github.com/catalyst/moodle-tool_emailutils/actions">
+<a href="https://github.com/catalyst/moodle-tool_emailutils/actions?query=branch%3AMOODLE_39_STABLE">
 <img src="https://github.com/catalyst/moodle-tool_emailutils/actions/workflows/ci.yml/badge.svg?branch=MOODLE_39_STABLE" >
 </a>
 
