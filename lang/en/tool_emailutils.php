@@ -65,15 +65,19 @@ $string['domaindefaultnoreply'] = 'Default noreply';
 
 $string['mxtoolbox'] = 'MXtoolbox links';
 $string['selectoractive'] = 'Active selector';
-$string['selectoractivate'] = 'Activate selector';
+$string['selectoractiveactions'] = 'You cannot';
+$string['selectoractivate'] = 'Activate key pair';
 $string['selectoractivated'] = 'Selector was activated';
 $string['selectoractivateconfirm'] = 'This will set $CFG->emaildkimselector to this selector and it will be used for signing outgoing emails.';
 $string['selectorcreate'] = 'Create a new domain:selector certificate pair';
 $string['selectorcreatesubmit'] = 'Create new selector';
 $string['selectorcreated'] = 'A new certificate pair has been created';
 $string['selectordefault'] = '%Y-%m';
+$string['selectordeactivate'] = 'Deactivate key pair';
+$string['selectordeactivated'] = 'Email signing has been turned off';
+$string['selectordeactivateconfirm'] = 'This will unset $CFG->emaildkimselector so emails will no longer be signed.';
 $string['selectormissing'] = 'No DKIM selector certificates found';
-$string['selectordelete'] = 'Delete inactive selector';
+$string['selectordelete'] = 'Delete key pair';
 $string['selectordeleted'] = 'Inactive selector has been deleted';
 $string['selectordeleteconfirm'] = 'This will permanently delete this selector\'s private and public keys and is irreversable.';
 

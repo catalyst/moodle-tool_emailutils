@@ -51,6 +51,14 @@ if ($action == 'activate') {
     redirect($baseurl, get_string('selectoractivated', 'tool_emailutils'), null, \core\output\notification::NOTIFY_SUCCESS);
 }
 
+if ($action == 'deactivate') {
+    require_sesskey();
+    $selector = required_param('selector', PARAM_TEXT);
+    add_to_config_log('emaildkimselector', $CFG->emaildkimselector, '', '');
+    set_config('emaildkimselector', '');
+    redirect($baseurl, get_string('selectordeactivated', 'tool_emailutils'), null, \core\output\notification::NOTIFY_WARNING);
+}
+
 $form = new \tool_emailutils\form\create_dkim();
 if ($form->is_cancelled()) {
     redirect($prevurl);
@@ -63,7 +71,7 @@ if ($form->is_cancelled()) {
 }
 
 $dkimdir = $CFG->dataroot . '/dkim/';
-$domains = scandir($dkimdir);
+$domains = scandir($dkimdir, SCANDIR_SORT_DESCENDING);
 $domaincount = 0;
 $noreplydomain = substr($CFG->noreplyaddress, strpos($CFG->noreplyaddress, '@') + 1);
 
@@ -106,6 +114,11 @@ foreach ($domains as $domain) {
 
 
     $selectors = scandir($dkimdir . $domain);
+
+    // We want newer date based selectors to be at the top.
+    natsort($selectors);
+    $selectors = array_reverse($selectors);
+
     $selectorcount = 0;
 
     foreach ($selectors as $file) {
@@ -135,24 +148,42 @@ foreach ($domains as $domain) {
             $context['selectoractive'] = true;
         }
 
-        if ($CFG->emaildkimselector !== $selector) {
-            // Only give the option to delete if it is not being used.
-            $confirmation = new \confirm_action(
-                get_string('selectordeleteconfirm', 'tool_emailutils'),
-                null,
-                get_string('selectordelete', 'tool_emailutils')
-            );
-            $context['selectordelete'] = $OUTPUT->action_link(
-                new moodle_url('/admin/tool/emailutils/dkim.php', [
-                        'domain'    => $domain,
-                        'selector'  => $selector,
-                        'action'    => 'delete',
-                        'sesskey'   => sesskey()]),
-                    get_string('selectordelete', 'tool_emailutils'),
-                    $confirmation,
-                    ['class' => 'btn btn-secondary btn-sm'],
-                    new pix_icon('i/delete', ''));
+        $isactive = $CFG->emaildkimselector == $selector;
 
+        // Only give the option to delete if it is not being used.
+        $confirmation = new \confirm_action(
+            get_string('selectordeleteconfirm', 'tool_emailutils'),
+            null,
+            get_string('selectordelete', 'tool_emailutils')
+        );
+        $context['selectordelete'] = $OUTPUT->action_link(
+            new moodle_url('/admin/tool/emailutils/dkim.php', [
+                    'domain'    => $domain,
+                    'selector'  => $selector,
+                    'action'    => 'delete',
+                    'sesskey'   => sesskey()]),
+                get_string('selectordelete', 'tool_emailutils'),
+                $confirmation,
+                [ 'class' => 'btn btn-sm ' . ($isactive ? 'btn-secondary disabled' : 'btn-outline-danger') ],
+                new pix_icon('i/delete', ''));
+
+        if ($isactive) {
+            // Only give the option to make it the active select if it is not being used.
+            $confirmation = new \confirm_action(
+                get_string('selectordeactivateconfirm', 'tool_emailutils'),
+                null,
+                get_string('selectordeactivate', 'tool_emailutils')
+            );
+            $context['selectordeactivate'] = $OUTPUT->action_link(
+                new moodle_url('/admin/tool/emailutils/dkim.php', [
+                        'selector'  => $selector,
+                        'action'    => 'deactivate',
+                        'sesskey'   => sesskey()]),
+                    get_string('selectordeactivate', 'tool_emailutils'),
+                    $confirmation,
+                    [ 'class' => 'btn btn-sm btn-secondary' ],
+                    new pix_icon('i/show', ''));
+        } else {
             // Only give the option to make it the active select if it is not being used.
             $confirmation = new \confirm_action(
                 get_string('selectoractivateconfirm', 'tool_emailutils'),
@@ -166,8 +197,8 @@ foreach ($domains as $domain) {
                         'sesskey'   => sesskey()]),
                     get_string('selectoractivate', 'tool_emailutils'),
                     $confirmation,
-                    ['class' => 'btn btn-secondary btn-sm'],
-                    new pix_icon('i/star', ''));
+                    [ 'class' => 'btn btn-sm btn-primary' ],
+                    new pix_icon('t/hide', ''));
         }
 
         print $OUTPUT->render_from_template('tool_emailutils/dkimselector', $context);
