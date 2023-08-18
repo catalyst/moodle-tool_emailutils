@@ -63,7 +63,7 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 
 $string['domaindefaultnoreply'] = 'Default noreply';
 
-$string['mxtoolbox'] = 'MXtoolbox';
+$string['mxtoolbox'] = 'MXtoolbox links';
 $string['selectoractive'] = 'Active selector';
 $string['selectoractivate'] = 'Activate selector';
 $string['selectoractivated'] = 'Selector was activated';
