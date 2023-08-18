@@ -52,17 +52,17 @@
                     </ul>
                     <div class="tab-content mt-3">
                         <div class="tab-pane active" id="simple{{id}}" role="tabpanel">
-                            <code>{{dnskey}}</code>
+                            <code class="dnsrecord">{{dnskey}}</code>
                             <p>This is the full raw txt of the DNS value:</p>
                             <p class="dnsrecord">{{dnsvalue}}</p>
                         </div>
                         <div class="tab-pane" id="chunked{{id}}" role="tabpanel">
-                            <code>{{dnskey}}</code>
+                            <code class="dnsrecord">{{dnskey}}</code>
                             <p>This is the DNS record value broken into quoted chunks of max 256 chars:</p>
                             <p class="dnsrecord">{{dnsvaluechunked}}</p>
                         </div>
                         <div class="tab-pane" id="escaped{{id}}" role="tabpanel">
-                            <code>{{dnskey}}</code>
+                            <code class="dnsrecord">{{dnskey}}</code>
                             <p>This is an escaped record value which is needed for some DNS systems:</p>
                             <p class="dnsrecord">{{dnsvalueescaped}}</p>
                         </div>
