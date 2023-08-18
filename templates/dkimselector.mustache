@@ -77,7 +77,11 @@
             <li><a href='{{dkimurl}}' target='_blank'>DKIM</a>
             <li><a href='{{dkimrawurl}}' target='_blank'>Raw TXT</a>
         </ul>
-        <p>{{{selectordelete}}}</p>
+        {{#selectoractive}}
+            {{#str}} selectoractiveactions, tool_emailutils {{/str}}
+        {{/selectoractive}}
         <p>{{{selectoractivate}}}</p>
+        <p>{{{selectordeactivate}}}</p>
+        <p>{{{selectordelete}}}</p>
     </td>
 </tr>
