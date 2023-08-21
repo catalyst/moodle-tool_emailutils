@@ -36,6 +36,9 @@ certificate pairs, showing the DNS records, validating, activating and testing t
 
 Admin > Server > Email > DKIM manager
 
+Note that DKIM support should work in Totara if you have backported MDL-69513
+
+https://tracker.moodle.org/browse/MDL-69513
 
 ## AWS SES Complaints Plugin for Moodle
 
