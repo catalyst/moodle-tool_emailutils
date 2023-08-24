@@ -54,7 +54,6 @@ $string['mxtoolbox'] = 'MXtoolbox links';
 $string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
 $string['password'] = 'Password';
 $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
-//$string['privacy:metadata'] = 'The tool emailutils plugin does not store any personal data.';
 $string['privacy:metadata:tool_emailutils_list'] = 'Information.';
 $string['privacy:metadata:tool_emailutils_list:userid'] = 'The ID of the user.';
 $string['privacy:metadata:tool_emailutils_list:updateid'] = 'The ID of updated user.';
