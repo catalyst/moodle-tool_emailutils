@@ -23,31 +23,13 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
-$string['pluginname'] = 'Amazon SES Complaints';
-
-$string['list'] = 'Complaints List';
-$string['settings'] = 'Settings';
-
-$string['enabled'] = 'Enabled';
-$string['enabled_help'] = 'Allow the plugin to process incoming messages';
-
 $string['authorisationcategory'] = 'Authorisation Settings';
-$string['header'] = 'Header';
-$string['header_help'] = 'HTTP Basic Auth Header';
-$string['username'] = 'Username';
-$string['username_help'] = 'HTTP Basic Auth Username';
-$string['password'] = 'Password';
-$string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
-$string['incorrect_access'] = 'Incorrect access detected. For use only by AWS SNS.';
-$string['bouncesreset'] = 'Bounces have been reset for the selected users';
-$string['resetbounces'] = 'Reset the number of bounces';
 $string['bouncecheckfull'] = 'Are you absolutely sure you want to reset the bounce count for {$a} ?';
 $string['bouncecount'] = 'Bounce count';
-$string['sendcount'] = 'Send count';
+$string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
+$string['bouncesreset'] = 'Bounces have been reset for the selected users';
 $string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
-
-$string['event:notificationreceived'] = 'AWS SNS notification received';
-
+$string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
 $string['dkimmanager'] = 'DKIM manager';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
@@ -60,10 +42,22 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 <li>Also confirm the DKIM headers validate using a 3rd party tool, such as those provided by Gmail and most email clients
 </ol>
 ';
-
 $string['domaindefaultnoreply'] = 'Default noreply';
-
+$string['enabled'] = 'Enabled';
+$string['enabled_help'] = 'Allow the plugin to process incoming messages';
+$string['event:notificationreceived'] = 'AWS SNS notification received';
+$string['header'] = 'Header';
+$string['header_help'] = 'HTTP Basic Auth Header';
+$string['incorrect_access'] = 'Incorrect access detected. For use only by AWS SNS.';
+$string['list'] = 'Complaints List';
 $string['mxtoolbox'] = 'MXtoolbox links';
+$string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
+$string['password'] = 'Password';
+$string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
+$string['privacy:metadata'] = 'The tool emailutils plugin does not store any personal data.';
+$string['pluginname'] = 'Amazon SES Complaints';
+$string['resetbounces'] = 'Reset the number of bounces';
+$string['sendcount'] = 'Send count';
 $string['selectoractive'] = 'Active selector';
 $string['selectoractivate'] = 'Activate key pair';
 $string['selectoractivated'] = 'Selector was activated';
@@ -79,8 +73,6 @@ $string['selectormissing'] = 'No DKIM selector certificates found';
 $string['selectordelete'] = 'Delete key pair';
 $string['selectordeleted'] = 'Key pair has been deleted';
 $string['selectordeleteconfirm'] = 'This will permanently delete this selector\'s private and public keys and is irreversable.';
-
-// Complaints list strings.
-$string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
-$string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
-$string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
+$string['settings'] = 'Settings';
+$string['username'] = 'Username';
+$string['username_help'] = 'HTTP Basic Auth Username';
