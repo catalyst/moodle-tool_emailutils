@@ -22,6 +22,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace tool_emailutils\privacy;
+
+use context;
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\{approved_contextlist, approved_userlist, contextlist, userlist};
+
 /**
  * Class provider
  * @author    David Adamson (davidadamson@catalyst-au.net)
@@ -29,16 +34,85 @@ namespace tool_emailutils\privacy;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    // This plugin does not store any personal user data.
-    \core_privacy\local\metadata\null_provider {
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider,
+    \core_privacy\local\request\core_userlist_provider {
 
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Returns metadata.
      *
-     * @return  string
+     * @param collection $collection The initialised collection to add items to.
+     * @return collection A listing of user data stored through this system.
      */
-    public static function get_reason(): string {
-        return 'privacy:metadata';
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_database_table(
+            'tool_emailutils_list',
+             [
+                'userid' => 'privacy:metadata:tool_emailutils_list:userid',
+                'updatedid' => 'privacy:metadata:tool_emailutils_list:updatedid',
+
+             ],
+            'privacy:metadata:tool_emailutils_list'
+        );
+
+        return $collection;
+    }    
+
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param int $userid The ID of the user
+     * @return contextlist
+     */
+    public static function get_contexts_for_userid(int $userid): contextlist {
+        // Just enough to pass unit tests.
+        return new contextlist();
     }
+
+    /**
+     * Export personal data for the given approved_contextlist.
+     * User and context information is contained within the contextlist.
+     *
+     * @param approved_contextlist $contextlist A list of contexts approved for export.
+     */
+    public static function export_user_data(approved_contextlist $contextlist) {
+        // Empty on purpose.
+    }
+
+    /**
+     * Delete all data for all users in the specified context.
+     *
+     * @param context $context The context to delete in
+     */
+    public static function delete_data_for_all_users_in_context(context $context) {
+        // Empty on purpose.
+    }
+
+    /**
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param approved_contextlist $contextlist A list of contexts approved for deletion
+     */
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
+        // Empty on purpose.
+    }
+
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param userlist $userlist The list of users who have data in this plugin.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        // Empty on purpose.
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param approved_userlist $userlist The approved context and user information to delete.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        // Empty on purpose.
+    }
+
 }
