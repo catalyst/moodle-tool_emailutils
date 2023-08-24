@@ -17,29 +17,28 @@
  * Privacy provider.
  *
  * @package   tool_emailutils
- * @author    Ilya Tregubov (ilyatregubov@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @author    David Adamson (davidadamson@catalyst-au.net)
+ * @copyright 2023 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace tool_emailutils\privacy;
-
-use core_privacy\local\metadata\null_provider;
-use core_privacy\local\legacy_polyfill;
 /**
  * Class provider
- * @author    Ilya Tregubov (ilyatregubov@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @author    David Adamson (davidadamson@catalyst-au.net)
+ * @copyright 2023 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements null_provider {
-    use legacy_polyfill;
+class provider implements
+    // This plugin does not store any personal user data.
+    \core_privacy\local\metadata\null_provider {
+
     /**
      * Get the language string identifier with the component's language
      * file to explain why this plugin stores no data.
      *
      * @return  string
      */
-    public static function _get_reason() {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }
