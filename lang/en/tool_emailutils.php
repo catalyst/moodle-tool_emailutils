@@ -84,3 +84,5 @@ $string['selectordeleteconfirm'] = 'This will permanently delete this selector\'
 $string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
 $string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
 $string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
+
+$string['privacy:metadata'] = 'The tool emailutils plugin does not store any personal data.';
