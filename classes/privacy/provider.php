@@ -56,7 +56,7 @@ class provider implements
         );
 
         return $collection;
-    }    
+    }
 
     /**
      * Get the list of contexts that contain user information for the specified user.
