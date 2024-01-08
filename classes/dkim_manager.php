@@ -101,7 +101,7 @@ class dkim_manager {
     public function get_base_path($create = false) {
         $certdir = $this->get_domain_path();
         if ($create) {
-            mkdir($certdir, 0777, true);
+            @mkdir($certdir, 0777, true);
         }
         return $certdir . '/' . $this->selector;
     }
@@ -182,6 +182,7 @@ class dkim_manager {
      */
     public function get_dns_value_chunked() {
 
+        $dnsvalue = '';
         $rawvalue = $this->get_dns_value();
 
         // Split into chunks.
