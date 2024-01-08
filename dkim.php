@@ -71,9 +71,16 @@ if ($form->is_cancelled()) {
 }
 
 $dkimdir = $CFG->dataroot . '/dkim/';
-$domains = scandir($dkimdir, SCANDIR_SORT_DESCENDING);
+$domains = [];
+if (is_dir($dkimdir)) {
+    $domains = scandir($dkimdir, SCANDIR_SORT_DESCENDING);
+}
+
 $domaincount = 0;
 $noreplydomain = substr($CFG->noreplyaddress, strpos($CFG->noreplyaddress, '@') + 1);
+
+// Always make sure the noreply domain is included even if nothing has been setup yet.
+$domains = array_unique(array_merge($domains, [$noreplydomain]));
 
 print $OUTPUT->header();
 print $OUTPUT->heading(get_string('dkimmanager', 'tool_emailutils'));
@@ -85,7 +92,7 @@ foreach ($domains as $domain) {
     if (substr($domain, 0, 1) == '.') {
         continue;
     }
-    if (!is_dir($dkimdir . $domain)) {
+    if (!is_dir($dkimdir . $domain) && $domain != $noreplydomain) {
         continue;
     }
 
@@ -110,10 +117,20 @@ foreach ($domains as $domain) {
     $url = new moodle_url('https://mxtoolbox.com/SuperTool.aspx', ['action' => "txt:$domain"]);
     print "<li><a href='$url' target='_blank'>Raw TXT</a>";
 
+    $url = new moodle_url('https://mxtoolbox.com/SuperTool.aspx', ['action' => "dmarc:$domain", 'run' => 'toolpage']);
+    print "<li><a href='$url' target='_blank'>DMARC</a>";
+
+    $url = new moodle_url('https://mxtoolbox.com/SuperTool.aspx', ['action' => "txt:_dmarc.$domain"]);
+    print "<li><a href='$url' target='_blank'>DARMC TXT</a>";
+
     print '</th></tr>';
 
 
-    $selectors = scandir($dkimdir . $domain);
+    $selectors = [];
+    $selectordir = $dkimdir . $domain;
+    if (is_dir($selectordir)) {
+        $selectors = scandir($selectordir);
+    }
 
     // We want newer date based selectors to be at the top.
     natsort($selectors);
