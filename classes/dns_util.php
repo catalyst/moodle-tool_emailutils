@@ -17,7 +17,7 @@
 /**
  * SPF utils
  *
- * @package    tool_heartbeat
+ * @package    tool_emailutils
  * @copyright  Catalyst IT 2024
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  2023 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
@@ -29,7 +29,7 @@ namespace tool_emailutils;
 /**
  * SPF utils
  *
- * @package    tool_heartbeat
+ * @package    tool_emailutils
  * @copyright  Catalyst IT 2024
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  2023 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
@@ -65,7 +65,10 @@ class dns_util {
     public function get_spf_record() {
 
         $domain = $this->get_noreply_domain();
-        $records = dns_get_record($domain, DNS_TXT);
+        $records = @dns_get_record($domain, DNS_TXT);
+        if (empty($records)) {
+            return '';
+        }
         foreach ($records as $record) {
             $txt = $record['txt'];
             if (substr($txt, 0, 6) == 'v=spf1') {
@@ -103,6 +106,39 @@ class dns_util {
         }
 
         return '';
+    }
+
+    /**
+     * Get DKIM selector
+     * @return string txt record
+     */
+    public function get_dkim_selector() {
+        global $CFG;
+        return $CFG->emaildkimselector;
+    }
+
+    /**
+     * Get DKIM txt record contents
+     * @return string txt record
+     */
+    public function get_dkim_dns_domain($selector, $domain) {
+        return "$selector._domainkey.$domain";
+    }
+
+    /**
+     * Get DKIM txt record contents
+     * @return string txt record
+     */
+    public function get_dkim_record($selector) {
+
+        $domain = $this->get_noreply_domain();
+        $dns = $this->get_dkim_dns_domain($selector, $domain);
+
+        $records = @dns_get_record($dns, DNS_TXT);
+        if (empty($records)) {
+            return '';
+        }
+        return $records[0]['txt'];
     }
 
 }

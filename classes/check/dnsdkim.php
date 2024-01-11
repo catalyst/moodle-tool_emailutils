@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * DNS Email SPF check.
+ * DNS Email DKIM check.
  *
  * @package    tool_emailutils
  * @author     Brendan Heywood <brendan@catalyst-au.net>
@@ -29,14 +29,14 @@ use core\check\result;
 use tool_emailutils\dns_util;
 
 /**
- * DNS Email SPF check.
+ * DNS Email DKIM check.
  *
  * @package    tool_emailutils
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class dnsspf extends check {
+class dnsdkim extends check {
 
     /**
      * A link to a place to action this
@@ -72,30 +72,28 @@ class dnsspf extends check {
         $noreplydomain = $dns->get_noreply_domain();
         $details .= "<p>No reply domain: <code>$noreplydomain</code></p>";
 
-        $spf = $dns->get_spf_record();
+        $selector = $dns->get_dkim_selector();
 
-        // Does it have an SPF record at all?
-        if (empty($spf)) {
-            $summary = 'Missing SPF record';
-            $details .= "<p>$domain does not have an SPF record</p>";
+        // Does it have an DKIM record at all?
+        if (empty($selector)) {
+            $summary = 'Missing DKIM selector';
+            $details .= "<p>$domain does not have an DKIM selector set in \$CFG->emaildkimselector.</p>";
             return new result(result::ERROR, $summary, $details);
         }
 
-        $details .= "<p>SPF record:<br><code>$spf</code></p>";
-        $status = result::OK;
-        $summary = 'SPF record exists';
+        $dkimdomain = $dns->get_dkim_dns_domain($selector, $noreplydomain);
+        $details .= "<p>DKIM domain: <code>$dkimdomain</code></p>";
 
-        $include = get_config('tool_emailutils', 'dnsspfinclude');
-        if (!empty($include)) {
-            $present = $dns->include_present($include);
-            if ($present) {
-                $summary = "SPF record exists and has '$present' include";
-                $details .= "<p>Expecting include: <code>$include</code> and matched on <code>$present</code></p>";
-            } else {
-                $status = result::ERROR;
-                $summary = "SPF record exists but is missing '$include' include";
-                $details .= "<p>Expecting include is missing: <code>$include</code></p>";
-            }
+        $dkim = $dns->get_dkim_record($selector);
+
+        if (empty($dkim)) {
+            $details .= "<p>DKIM record is missing with selector '$selector'</p>";
+            $status = result::ERROR;
+            $summary = "DKIM DNS record missing for selector '$selector'";
+        } else {
+            $details .= "<p>DKI record:<br><code>$dkim</code></p>";
+            $status = result::OK;
+            $summary = "DKIM record exists with selector '$selector'";
         }
 
 

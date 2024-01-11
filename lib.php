@@ -43,6 +43,7 @@ function tool_emailutils_bulk_user_actions() {
 function tool_emailutils_security_checks() {
     return [
         new \tool_emailutils\check\dnsspf(),
+        new \tool_emailutils\check\dnsdkim(),
     ];
 }
 
