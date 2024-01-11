@@ -35,3 +35,14 @@ function tool_emailutils_bulk_user_actions() {
     ];
 }
 
+/**
+ * Security checks.
+ *
+ * @return array
+ */
+function tool_emailutils_security_checks() {
+    return [
+        new \tool_emailutils\check\dnsspf(),
+    ];
+}
+
