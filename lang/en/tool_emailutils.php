@@ -30,7 +30,8 @@ $string['bounces'] = 'For a list of bounces, visit {$a} and search for emails en
 $string['bouncesreset'] = 'Bounces have been reset for the selected users';
 $string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
 $string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
-$string['dkimmanager'] = 'DKIM manager';
+$string['dkimmanager'] = 'SPF & DKIM manager';
+$string['checkdnsspf'] = 'DNS Email SPF check';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
 <li>First decide and set the <code>$CFG->noreply</code> email as the domain of the reply email is tied to the signing.
@@ -41,6 +42,11 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 <li>Use the <a href="{$a->emailtest}">test email tool</a> to send a real email and confirm the DKIM headers have been sent
 <li>Also confirm the DKIM headers validate using a 3rd party tool, such as those provided by Gmail and most email clients
 </ol>
+';
+$string['dnssettings'] = 'SPF / DKIM / DMARC DNS settings';
+$string['dnsspfinclude'] = 'SPF include';
+$string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.ache.org -all</code>.</p>
+<p>The * char can be used as a wildcard eg <code>*acme.org</code> would also match.</p>
 ';
 $string['domaindefaultnoreply'] = 'Default noreply';
 $string['enabled'] = 'Enabled';
@@ -57,7 +63,7 @@ $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re no
 $string['privacy:metadata:tool_emailutils_list'] = 'Information.';
 $string['privacy:metadata:tool_emailutils_list:userid'] = 'The ID of the user.';
 $string['privacy:metadata:tool_emailutils_list:updatedid'] = 'The ID of updated user.';
-$string['pluginname'] = 'Amazon SES Complaints';
+$string['pluginname'] = 'Email utilities';
 $string['resetbounces'] = 'Reset the number of bounces';
 $string['sendcount'] = 'Send count';
 $string['selectoractive'] = 'Active selector';
@@ -75,6 +81,6 @@ $string['selectormissing'] = 'No DKIM selector certificates found';
 $string['selectordelete'] = 'Delete key pair';
 $string['selectordeleted'] = 'Key pair has been deleted';
 $string['selectordeleteconfirm'] = 'This will permanently delete this selector\'s private and public keys and is irreversable.';
-$string['settings'] = 'Settings';
+$string['settings'] = 'AWS SES settings';
 $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';

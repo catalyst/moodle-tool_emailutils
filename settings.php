@@ -43,6 +43,20 @@ if ($hassiteconfig) {
         new moodle_url('/admin/tool/emailutils/index.php')
     ));
 
+    // DNS check settings.
+    $settings = new admin_settingpage(
+        'tool_emailutils_dns',
+        new lang_string('dnssettings', 'tool_emailutils')
+    );
+
+    $settings->add(new admin_setting_configtext(
+        'tool_emailutils/dnsspfinclude',
+        new lang_string('dnsspfinclude', 'tool_emailutils'),
+        new lang_string('dnsspfinclude_help', 'tool_emailutils'),
+        '')
+    );
+    $ADMIN->add('tool_emailutils', $settings);
+
     // Plugin Settings Page.
     $settings = new admin_settingpage(
         'tool_emailutils_options',
