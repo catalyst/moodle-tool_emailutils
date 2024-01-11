@@ -141,5 +141,26 @@ class dns_util {
         return $records[0]['txt'];
     }
 
+    /**
+     * Get DKIM txt record contents
+     * @return string txt record
+     */
+    public function get_dmarc_dns_record() {
+        $domain = $this->get_noreply_domain();
+
+        while ($domain) {
+            $dmarcdomain = '_dmarc.' . $domain;
+            $records = @dns_get_record($dmarcdomain, DNS_TXT);
+            if (!empty($records)) {
+                return [$dmarcdomain, $records[0]['txt']];
+            }
+
+            $parts = explode('.', $domain);
+            $domain = join('.', array_slice($parts, 1));
+
+        }
+        return ['', ''];
+    }
+
 }
 

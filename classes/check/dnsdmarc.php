@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * DNS Email SPF check.
+ * DNS Email DMARC check.
  *
  * @package    tool_emailutils
  * @author     Brendan Heywood <brendan@catalyst-au.net>
@@ -29,14 +29,14 @@ use core\check\result;
 use tool_emailutils\dns_util;
 
 /**
- * DNS Email SPF check.
+ * DNS Email DKIM check.
  *
  * @package    tool_emailutils
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class dnsspf extends check {
+class dnsdmarc extends check {
 
     /**
      * A link to a place to action this
@@ -70,32 +70,18 @@ class dnsspf extends check {
         $details .= "<p>No reply email: <code>$noreply</code></p>";
 
         $noreplydomain = $dns->get_noreply_domain();
-        $details .= "<p>No reply domain: <code>$noreplydomain</code></p>";
+        $details .= "<p>Start looking in domain: <code>$noreplydomain</code></p>";
 
-        $spf = $dns->get_spf_record();
+        [$dmarcdomain, $dmarc] = $dns->get_dmarc_dns_record();
 
-        // Does it have an SPF record at all?
-        if (empty($spf)) {
-            $summary = 'Missing SPF record';
-            $details .= "<p>$domain does not have an SPF record</p>";
-            return new result(result::ERROR, $summary, $details);
-        }
-
-        $details .= "<p>SPF record:<br><code>$spf</code></p>";
-        $status = result::OK;
-        $summary = 'SPF record exists';
-
-        $include = get_config('tool_emailutils', 'dnsspfinclude');
-        if (!empty($include)) {
-            $present = $dns->include_present($include);
-            if ($present) {
-                $summary = "SPF record exists and has '$present' include";
-                $details .= "<p>Expecting include: <code>$include</code> and matched on <code>$present</code></p>";
-            } else {
-                $status = result::ERROR;
-                $summary = "SPF record exists but is missing '$include' include";
-                $details .= "<p>Expecting include is missing: <code>$include</code></p>";
-            }
+        if (empty($dmarc)) {
+            $details .= "<p>DMARC record is missing</p>";
+            $status = result::ERROR;
+            $summary = "DMARC DNS record missing";
+        } else {
+            $details .= "<p>DMARC record found on domain <code>$dmarcdomain</code><br><code>$dmarc</code></p>";
+            $status = result::OK;
+            $summary = "DMARC record exists";
         }
 
         return new result($status, $summary, $details);
