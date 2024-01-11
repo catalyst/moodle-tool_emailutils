@@ -32,6 +32,7 @@ $string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) ple
 $string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
 $string['dkimmanager'] = 'SPF & DKIM manager';
 $string['checkdnsspf'] = 'DNS Email SPF check';
+$string['checkdnsdkim'] = 'DNS Email DKIM check';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
 <li>First decide and set the <code>$CFG->noreply</code> email as the domain of the reply email is tied to the signing.
