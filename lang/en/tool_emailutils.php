@@ -33,6 +33,7 @@ $string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
 $string['dkimmanager'] = 'SPF & DKIM manager';
 $string['checkdnsspf'] = 'DNS Email SPF check';
 $string['checkdnsdkim'] = 'DNS Email DKIM check';
+$string['checkdnsdmarc'] = 'DNS Email DMARC check';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
 <li>First decide and set the <code>$CFG->noreply</code> email as the domain of the reply email is tied to the signing.
@@ -46,7 +47,7 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 ';
 $string['dnssettings'] = 'SPF / DKIM / DMARC DNS settings';
 $string['dnsspfinclude'] = 'SPF include';
-$string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.ache.org -all</code>.</p>
+$string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.acme.org -all</code>.</p>
 <p>The * char can be used as a wildcard eg <code>*acme.org</code> would also match.</p>
 ';
 $string['domaindefaultnoreply'] = 'Default noreply';

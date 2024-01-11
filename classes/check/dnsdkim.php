@@ -96,7 +96,6 @@ class dnsdkim extends check {
             $summary = "DKIM record exists with selector '$selector'";
         }
 
-
         return new result($status, $summary, $details);
     }
 
