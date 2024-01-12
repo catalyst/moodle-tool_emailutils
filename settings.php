@@ -88,14 +88,14 @@ if ($hassiteconfig) {
         'tool_emailutils/authorisation_username',
         new lang_string('username', 'tool_emailutils'),
         new lang_string('username_help', 'tool_emailutils'),
-        null)
+        '')
     );
     // Auth Password.
     $settings->add(new \tool_emailutils\admin_setting_configpasswordhashed(
         'tool_emailutils/authorisation_password',
         new lang_string('password', 'tool_emailutils'),
         new lang_string('password_help', 'tool_emailutils'),
-        null)
+        '')
     );
 
     $ADMIN->add('tool_emailutils', $settings);
