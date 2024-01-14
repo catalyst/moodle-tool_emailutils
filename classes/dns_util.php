@@ -162,5 +162,23 @@ class dns_util {
         return ['', ''];
     }
 
+    /**
+     * Get MX record contents
+     * @return string txt record
+     */
+    public function get_mx_record($domain) {
+
+        $records = @dns_get_record($domain, DNS_MX);
+        if (empty($records)) {
+            return;
+        }
+        usort($records, function($a, $b) {
+            if ($a['pri'] == $b['pri']) {
+                return $a['target'] <=> $b['target'];
+            }
+            return $a['pri'] <=> $b['pri'];
+        });
+        return $records;
+    }
 }
 
