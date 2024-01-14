@@ -72,7 +72,7 @@ class dnsdmarc extends check {
         $noreplydomain = $dns->get_noreply_domain();
         $details .= "<p>Start looking in domain: <code>$noreplydomain</code></p>";
 
-        [$dmarcdomain, $dmarc] = $dns->get_dmarc_dns_record();
+        [$dmarcdomain, $dmarc, $policy] = $dns->get_dmarc_dns_record();
 
         if (empty($dmarc)) {
             $details .= "<p>DMARC record is missing</p>";
@@ -81,7 +81,7 @@ class dnsdmarc extends check {
         } else {
             $details .= "<p>DMARC record found on domain <code>$dmarcdomain</code><br><code>$dmarc</code></p>";
             $status = result::OK;
-            $summary = "DMARC record exists";
+            $summary = "DMARC record exists with policy '$policy'";
         }
 
         return new result($status, $summary, $details);

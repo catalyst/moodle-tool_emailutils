@@ -152,7 +152,14 @@ class dns_util {
             $dmarcdomain = '_dmarc.' . $domain;
             $records = @dns_get_record($dmarcdomain, DNS_TXT);
             if (!empty($records)) {
-                return [$dmarcdomain, $records[0]['txt']];
+                $record = $records[0]['txt'];
+                preg_match('/p\=(.*?);/', $record, $matches);
+
+                return [
+                    $dmarcdomain,
+                    $record,
+                    $matches[1]
+                ];
             }
 
             $parts = explode('.', $domain);
