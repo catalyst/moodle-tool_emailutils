@@ -55,6 +55,14 @@ if ($hassiteconfig) {
         new lang_string('dnsspfinclude_help', 'tool_emailutils'),
         '')
     );
+
+    $settings->add(new admin_setting_configtext(
+        'tool_emailutils/postmastergoogletoken',
+        new lang_string('postmastergoogletoken', 'tool_emailutils'),
+        new lang_string('postmastergoogletoken_help', 'tool_emailutils'),
+        '', PARAM_RAW, 70)
+    );
+
     $ADMIN->add('tool_emailutils', $settings);
 
     // Plugin Settings Page.

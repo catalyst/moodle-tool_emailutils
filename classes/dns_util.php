@@ -187,5 +187,23 @@ class dns_util {
         });
         return $records;
     }
+
+    /**
+     * Get matching record contents
+     * @return string txt record
+     */
+    public function get_matching_dns_record($domain, $match) {
+
+        $records = @dns_get_record($domain, DNS_TXT);
+        if (empty($records)) {
+            return '';
+        }
+        foreach ($records as $record) {
+            if ($record['txt'] == $match) {
+                return $match;
+            }
+        }
+        return '';
+    }
 }
 
