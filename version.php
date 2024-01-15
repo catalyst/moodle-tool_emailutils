@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2023082301;
-$plugin->release  = 2023081802;
+$plugin->version  = 2024011500;
+$plugin->release  = 2024011500;
 $plugin->requires = 2020061500;
 $plugin->component = 'tool_emailutils';
 $plugin->dependencies = [
