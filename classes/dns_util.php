@@ -62,15 +62,21 @@ class dns_util {
      * Get spf txt record contents
      * @return string txt record
      */
-    public function get_spf_record() {
+    public function get_spf_record($domain = '') {
 
-        $domain = $this->get_noreply_domain();
+        if (empty($domain)) {
+            $domain = $this->get_noreply_domain();
+        }
+
         $records = @dns_get_record($domain, DNS_TXT);
         if (empty($records)) {
             return '';
         }
         foreach ($records as $record) {
             $txt = $record['txt'];
+            if (preg_match('/v=spf1 redirect=(\S*)/', $txt, $matches)) {
+                return $this->get_spf_record($matches[1]);
+            }
             if (substr($txt, 0, 6) == 'v=spf1') {
                 return $txt;
             }
