@@ -106,7 +106,7 @@ class dns_util {
 
         // Allow a * wildcard match.
         $escaped = str_replace('\*', '\S*', $escaped);
-        $regex = "/include:($escaped)/U";
+        $regex = "/include:($escaped)\s/U";
         if (preg_match($regex, $txt, $matches)) {
             return $matches[1];
         }
