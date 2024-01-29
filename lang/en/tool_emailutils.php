@@ -91,3 +91,4 @@ $string['selectormissing'] = 'No DKIM selector certificates found';
 $string['settings'] = 'AWS SES settings';
 $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';
+$string['selectornotblank'] = 'Selector cannot be empty';
