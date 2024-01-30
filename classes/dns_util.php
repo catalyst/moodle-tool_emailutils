@@ -98,6 +98,7 @@ class dns_util {
 
     /**
      * Get spf txt record contents
+     * @param string $domain specify a different domain
      * @return string txt record
      */
     public function get_spf_record($domain = '') {
@@ -134,7 +135,7 @@ class dns_util {
      * Returns the include if matched
      *
      * The include can have a wildcard and this will return the actual matched value.
-     * @param string include domain
+     * @param string $include include domain
      * @return string matched include
      */
     public function include_present(string $include) {
@@ -163,6 +164,8 @@ class dns_util {
 
     /**
      * Get DKIM txt record contents
+     * @param string $selector DKIM selector
+     * @param string $domain DKIM domain
      * @return string txt record
      */
     public function get_dkim_dns_domain($selector, $domain) {
@@ -171,6 +174,7 @@ class dns_util {
 
     /**
      * Get DKIM txt record contents
+     * @param string $selector DKIM selector
      * @return string txt record
      */
     public function get_dkim_record($selector) {
@@ -187,7 +191,7 @@ class dns_util {
 
     /**
      * Get DKIM txt record contents
-     * @return string txt record
+     * @return array txt record
      */
     public function get_dmarc_dns_record() {
         $domain = $this->get_noreply_domain();
@@ -215,13 +219,14 @@ class dns_util {
 
     /**
      * Get MX record contents
-     * @return string txt record
+     * @param string $domain domain to check
+     * @return array txt record
      */
     public function get_mx_record($domain) {
 
         $records = @dns_get_record($domain, DNS_MX);
         if (empty($records)) {
-            return;
+            return [];
         }
         usort($records, function($a, $b) {
             if ($a['pri'] == $b['pri']) {
@@ -234,6 +239,8 @@ class dns_util {
 
     /**
      * Get matching record contents
+     * @param string $domain domain to check
+     * @param string $match search for specific match
      * @return string txt record
      */
     public function get_matching_dns_record($domain, $match) {
