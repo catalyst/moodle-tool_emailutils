@@ -47,6 +47,7 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 </ol>
 ';
 $string['checkdnsmx'] = 'DNS Email MX check';
+$string['checkdnsnoreply'] = 'DNS Email noreply shape check';
 $string['dnssettings'] = 'SPF / DKIM / DMARC DNS settings';
 $string['dnsspfinclude'] = 'SPF include';
 $string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.acme.org -all</code>.</p>

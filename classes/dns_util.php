@@ -59,6 +59,44 @@ class dns_util {
     }
 
     /**
+     * Attempts to extract the primary domain from a domain
+     *
+     * This may not always be clear, if there is any confusion return the full domain.
+     * @param string $domain domain to check
+     * @return string primary domain
+     */
+    public function get_primary_domain($domain) {
+        $originaldomain = $domain;
+
+        // Checks for the first domain that has a NS record.
+        while ($domain) {
+            $records = @dns_get_record($domain, DNS_NS);
+            if (!empty($records)) {
+                return $domain;
+            }
+            $parts = explode('.', $domain);
+            // A domain should always have more than 1 part.
+            if (count($parts) >= 2) {
+                break;
+            }
+            $domain = join('.', array_slice($parts, 1));
+        }
+        return $originaldomain;
+    }
+
+    /**
+     * Attempts to extract the subdomains from a domain
+     *
+     * This may not always be clear, if there is any confusion return known subdomains or a blank string.
+     * @param string $domain domain to check
+     * @return string subdomains
+     */
+    public function get_subdomains($domain) {
+        $primarydomain = $this->get_primary_domain($domain);
+        return rtrim(strstr($domain, $primarydomain, true), '.');
+    }
+
+    /**
      * Get spf txt record contents
      * @return string txt record
      */
