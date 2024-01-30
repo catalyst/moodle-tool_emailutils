@@ -249,5 +249,48 @@ class dns_util {
         }
         return '';
     }
+
+    /**
+     * Gets the selector suffix
+     * @param string $domain check specific domain
+     * @return string suffix
+     */
+    public function get_selector_suffix($domain = '') {
+        GLOBAL $CFG;
+
+        if (empty($domain)) {
+            $url = new \moodle_url($CFG->wwwroot);
+            $domain = $url->get_host();
+        }
+
+        // Determine the suffix based on the LMS domain and noreply domain.
+        $primarydomain = $this->get_primary_domain($domain);
+        $noreplydomain = $this->get_noreply_domain();
+        if ($primarydomain == $noreplydomain) {
+            // Noreply domain is same as primary domain, add all LMS subdomains.
+            $suffix = $this->get_subdomains($domain);
+        } else if (str_contains($domain, '.' . $noreplydomain)) {
+            // Noreply domain includes part of the LMS subdomain, only add different subdomains.
+            $suffix = str_replace('.' . $noreplydomain, '', $domain);
+        } else if (str_contains($noreplydomain, '.' . $domain)) {
+            // Noreply domain is a subdomain of LMS, domain already has all info.
+            $suffix = '';
+        } else if (str_contains($noreplydomain, '.' . $primarydomain)) {
+            // Noreply domain is a different subdomain of primary domain, add all LMS subdomains.
+            $suffix = $this->get_subdomains($domain);
+        } else {
+            // Noreply domain shares nothing in common with LMS, add entire LMS domain.
+            $suffix = $domain;
+        }
+
+        // Clean the suffix to remove www and foreign language chars, and convert '.' to '-'.
+        // Email filter is enough because domains don't contain the other allowed chars.
+        $suffix = ltrim($suffix, 'www.');
+        $suffix = trim(filter_var($suffix, FILTER_SANITIZE_EMAIL), '.');
+        $suffix = str_replace('.', '-', $suffix);
+
+        return $suffix;
+    }
+
 }
 

@@ -53,7 +53,7 @@ class create_dkim extends \moodleform {
 
         $group[] =& $mform->createElement('text', 'selector', array("size" => 20));
 
-        $selector = \userdate(time(), get_string('selectordefault', 'tool_emailutils'));
+        $selector = $this->get_default_selector();
         $mform->setDefault("selector", $selector);
         $mform->setType('selector', PARAM_HOST);
 
@@ -74,4 +74,22 @@ class create_dkim extends \moodleform {
         $errors = parent::validation($data, $files);
         return $errors;
     }
+
+    /**
+     * Gets a selector value to use as a default
+     *
+     * @return string default selector
+     */
+    private function get_default_selector() {
+        // Add date to default.
+        $selector = \userdate(time(), get_string('selectordefault', 'tool_emailutils'));
+
+        // Add suffix.
+        $dns = new \tool_emailutils\dns_util();
+        if ($suffix = $dns->get_selector_suffix()) {
+            $selector .= '-' . $suffix;
+        }
+        return $selector;
+    }
+
 }
