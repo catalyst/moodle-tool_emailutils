@@ -46,6 +46,7 @@ function tool_emailutils_security_checks() {
         new \tool_emailutils\check\dnsdkim(),
         new \tool_emailutils\check\dnsdmarc(),
         new \tool_emailutils\check\dnsmx(),
+        new \tool_emailutils\check\dnsnoreply(),
         new \tool_emailutils\check\dnspostmastertools(),
     ];
 }
