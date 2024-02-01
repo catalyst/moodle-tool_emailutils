@@ -79,13 +79,13 @@ class dnsnoreply extends check {
         if ($noreplydomain == $domain) {
             $status = result::OK;
             $summary = "LMS is same as noreply domain";
-        } else if (str_contains($domain, '.' . $noreplydomain)) {
+        } else if (strpos($domain, '.' . $noreplydomain) !== false) {
             $status = result::OK;
             $summary = "LMS is a subdomain of noreply domain";
-        } else if (str_contains($noreplydomain, '.' . $domain)) {
+        } else if (strpos($noreplydomain, '.' . $domain) !== false) {
             $status = result::OK;
             $summary = "Noreply domain is a subdomain of LMS";
-        } else if ($noreply == $primarydomain || str_contains($noreplydomain, '.' . $primarydomain)) {
+        } else if ($noreply == $primarydomain || strpos($noreplydomain, '.' . $primarydomain) !== false) {
             $summary = "LMS and noreply domain have a shared domain";
         } else {
             $summary = "LMS and noreply domain have nothing in common";
