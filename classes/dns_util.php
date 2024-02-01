@@ -276,13 +276,13 @@ class dns_util {
         if ($primarydomain == $noreplydomain) {
             // Noreply domain is same as primary domain, add all LMS subdomains.
             $suffix = $this->get_subdomains($domain);
-        } else if (str_contains($domain, '.' . $noreplydomain)) {
+        } else if (strpos($domain, '.' . $noreplydomain) !== false) {
             // Noreply domain includes part of the LMS subdomain, only add different subdomains.
             $suffix = str_replace('.' . $noreplydomain, '', $domain);
-        } else if (str_contains($noreplydomain, '.' . $domain)) {
+        } else if (strpos($noreplydomain, '.' . $domain) !== false) {
             // Noreply domain is a subdomain of LMS, domain already has all info.
             $suffix = '';
-        } else if (str_contains($noreplydomain, '.' . $primarydomain)) {
+        } else if (strpos($noreplydomain, '.' . $primarydomain) !== false) {
             // Noreply domain is a different subdomain of primary domain, add all LMS subdomains.
             $suffix = $this->get_subdomains($domain);
         } else {
