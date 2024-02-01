@@ -57,8 +57,8 @@ class create_dkim extends \moodleform {
         $mform->setDefault("selector", $selector);
         $mform->setType('selector', PARAM_HOST);
 
-        $mform->addGroup($group, 'selector',  get_string('selectorcreate', 'tool_emailutils'), '', false);
-        $mform->addGroupRule('selector', get_string('selectornotblank', 'tool_emailutils'), 'required');
+        $mform->addGroup($group, 'selectorgroup',  get_string('selectorcreate', 'tool_emailutils'), '', false);
+        $mform->addGroupRule('selectorgroup', get_string('selectornotblank', 'tool_emailutils'), 'required');
 
         $this->add_action_buttons(true, get_string('selectorcreatesubmit', 'tool_emailutils'));
     }
