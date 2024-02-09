@@ -47,11 +47,11 @@ class create_dkim extends \moodleform {
 
         $group = [];
 
-        $group[] =& $mform->createElement('text', 'domain', '', array("size" => 20));
+        $group[] =& $mform->createElement('text', 'domain', '', ["size" => 20]);
         $mform->setDefault("domain", $noreplydomain);
         $mform->setType('domain', PARAM_HOST);
 
-        $group[] =& $mform->createElement('text', 'selector', '', array("size" => 20));
+        $group[] =& $mform->createElement('text', 'selector', '', ["size" => 20]);
 
         $selector = $this->get_default_selector();
         $mform->setDefault("selector", $selector);
