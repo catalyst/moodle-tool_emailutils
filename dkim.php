@@ -121,7 +121,7 @@ foreach ($domains as $domain) {
     print "<li><a href='$url' target='_blank'>DMARC</a>";
 
     $url = new moodle_url('https://mxtoolbox.com/SuperTool.aspx', ['action' => "txt:_dmarc.$domain"]);
-    print "<li><a href='$url' target='_blank'>DARMC TXT</a>";
+    print "<li><a href='$url' target='_blank'>DMARC TXT</a>";
 
     print '</th></tr>';
 
