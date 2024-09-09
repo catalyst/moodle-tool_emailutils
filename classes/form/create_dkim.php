@@ -91,5 +91,4 @@ class create_dkim extends \moodleform {
         }
         return $selector;
     }
-
 }

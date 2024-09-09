@@ -130,7 +130,6 @@ class dns_util {
     public function get_mxtoolbox_spf_url() {
     }
 
-
     /**
      * Returns the include if matched
      *
@@ -206,13 +205,12 @@ class dns_util {
                 return [
                     $dmarcdomain,
                     $record,
-                    $matches[1]
+                    $matches[1],
                 ];
             }
 
             $parts = explode('.', $domain);
             $domain = join('.', array_slice($parts, 1));
-
         }
         return ['', ''];
     }
@@ -228,7 +226,7 @@ class dns_util {
         if (empty($records)) {
             return [];
         }
-        usort($records, function($a, $b) {
+        usort($records, function ($a, $b) {
             if ($a['pri'] == $b['pri']) {
                 return $a['target'] <=> $b['target'];
             }
@@ -298,6 +296,5 @@ class dns_util {
 
         return $suffix;
     }
-
 }
 

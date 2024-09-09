@@ -49,7 +49,7 @@ class sns_notification {
      * @param mixed $message SNS Message
      * @return sns_notification
      */
-    public function set_message($message) : sns_notification {
+    public function set_message($message): sns_notification {
         $this->messageraw = $message;
         $this->message = json_decode($message, true);
         return $this;
@@ -85,7 +85,7 @@ class sns_notification {
      * Get SNS Message Type
      * @return string SNS Message Type
      */
-    public function get_type() : string {
+    public function get_type(): string {
         return $this->message['notificationType'];
     }
 
@@ -93,7 +93,7 @@ class sns_notification {
      * Get the email address that sent out the offending email
      * @return string Source email address
      */
-    public function get_source_email() : string {
+    public function get_source_email(): string {
         return $this->message['mail']['source'];
     }
 
@@ -101,7 +101,7 @@ class sns_notification {
      * Get the IP address of the server that sent out the offending email
      * @return string Source IP address
      */
-    public function get_source_ip() : string {
+    public function get_source_ip(): string {
         return $this->message['mail']['sourceIp'];
     }
 
@@ -109,7 +109,7 @@ class sns_notification {
      * Get the Amazon Resource Name that sent out the offending email
      * @return string Source ARN
      */
-    public function get_source_arn() : string {
+    public function get_source_arn(): string {
         return $this->message['mail']['sourceArn'];
     }
 
@@ -117,7 +117,7 @@ class sns_notification {
      * Get the email address that complained about or bounced the source email
      * @return string Destination email address
      */
-    public function get_destination() : string {
+    public function get_destination(): string {
         return $this->message['mail']['destination'][0];
     }
 
@@ -125,7 +125,7 @@ class sns_notification {
      * Is the message about a complaint?
      * @return bool Is complaint?
      */
-    public function is_complaint() : bool {
+    public function is_complaint(): bool {
         return $this->get_type() === sns_client::COMPLAINT_TYPE;
     }
 
@@ -133,7 +133,7 @@ class sns_notification {
      * Is the message about a bounce?
      * @return bool Is bounce?
      */
-    public function is_bounce() : bool {
+    public function is_bounce(): bool {
         return $this->get_type() === sns_client::BOUNCE_TYPE;
     }
 
@@ -142,7 +142,7 @@ class sns_notification {
      * Eg. "Type about x from y"
      * @return string Message as string
      */
-    public function get_messageasstring() : bool {
+    public function get_messageasstring(): bool {
         if ($this->is_complaint() || $this->is_bounce()) {
             return $this->get_type() . ' about ' . $this->get_source_email() . ' from ' . $this->get_destination();
         } else {
@@ -155,7 +155,7 @@ class sns_notification {
      * Print the message string
      * @return sns_notification
      */
-    public function print_log() : sns_notification {
+    public function print_log(): sns_notification {
         echo $this->get_messageasstring() . "\n";
         return $this;
     }

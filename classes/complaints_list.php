@@ -33,6 +33,7 @@ use renderable;
  * The complaints list class is a table which can indicate if a user has exceeded the bounce threshold.
  */
 class complaints_list extends \table_sql implements renderable {
+
     /**
      * Sets up the complaints_list table parameters.
      *
@@ -49,7 +50,7 @@ class complaints_list extends \table_sql implements renderable {
             'fullname',
             'email',
             'bouncecount',
-            'sendcount'
+            'sendcount',
         ];
 
         $headers = [
@@ -86,9 +87,7 @@ class complaints_list extends \table_sql implements renderable {
             "up2.name = 'email_send_count'",
             "{$DB->sql_cast_char2int('up1.value')} > :bouncethreshold", // Casting required for varying->int, enables > filtering.
         ];
-        $params = [
-            'bouncethreshold' => 1
-        ];
+        $params = ['bouncethreshold' => 1];
         $this->set_sql(implode(',', $fields), $from . implode(' ', $joins), implode(' AND ', $wheres), $params);
     }
 

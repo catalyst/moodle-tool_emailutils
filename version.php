@@ -29,8 +29,6 @@ $plugin->version  = 2024011502;
 $plugin->release  = 2024011502;
 $plugin->requires = 2020061500;
 $plugin->component = 'tool_emailutils';
-$plugin->dependencies = [
-    'local_aws' => 2020061500
-];
+$plugin->dependencies = ['local_aws' => 2020061500];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->supported = [39, 403];
