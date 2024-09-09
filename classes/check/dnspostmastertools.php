@@ -20,7 +20,6 @@
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
 
 namespace tool_emailutils\check;
@@ -54,7 +53,7 @@ class dnspostmastertools extends check {
      *
      * @return result
      */
-    public function get_result() : result {
+    public function get_result(): result {
         global $DB, $CFG;
 
         $url = new \moodle_url($CFG->wwwroot);
@@ -80,7 +79,6 @@ class dnspostmastertools extends check {
         $status = result::INFO;
 
         foreach ($vendors as $vendor) {
-
             $token = get_config('tool_emailutils', 'postmaster' . $vendor . 'token');
             $record = $dns->get_matching_dns_record($noreplydomain, $token);
 
@@ -103,5 +101,4 @@ class dnspostmastertools extends check {
 
         return new result($status, $summary, $details);
     }
-
 }

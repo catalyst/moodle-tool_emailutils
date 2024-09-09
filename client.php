@@ -65,11 +65,11 @@ if ($client->process_message() && $client->is_notification()) {
         // Increment the user preference email_bounce_count.
         set_bounce_count($user);
 
-        $event = notification_received::create(array(
+        $event = notification_received::create([
             'relateduserid' => $user->id,
             'context'  => context_system::instance(),
             'other' => $notification->get_messageasstring(),
-        ));
+        ]);
         $event->trigger();
     }
 }

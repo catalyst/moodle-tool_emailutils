@@ -20,7 +20,6 @@
  * @author     Brendan Heywood <brendan@catalyst-au.net>
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
 
 namespace tool_emailutils\check;
@@ -54,7 +53,7 @@ class dnsmx extends check {
      *
      * @return result
      */
-    public function get_result() : result {
+    public function get_result(): result {
         global $DB, $CFG;
 
         $url = new \moodle_url($CFG->wwwroot);
@@ -79,7 +78,7 @@ class dnsmx extends check {
             $status = result::ERROR;
             $summary = "MX DNS record missing";
         } else {
-            $allmxdomains = join('<br>', array_map(function($x) {
+            $allmxdomains = join('<br>', array_map(function ($x) {
                 return $x['target'] . ' (' . $x['pri'] . ')';
             }, $mxdomains));
             $details .= "<p>MX record found on domain <code>$noreplydomain</code> pointing to<br><code>$allmxdomains</code></p>";
@@ -89,5 +88,4 @@ class dnsmx extends check {
 
         return new result($status, $summary, $details);
     }
-
 }

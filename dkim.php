@@ -63,7 +63,6 @@ $form = new \tool_emailutils\form\create_dkim();
 if ($form->is_cancelled()) {
     redirect($prevurl);
 } else if ($fromform = $form->get_data()) {
-
     $domain = $fromform->domain;
     $selector = $fromform->selector;
     $manager = new dkim_manager($domain, $selector, true);
@@ -88,7 +87,6 @@ print $OUTPUT->heading(get_string('dkimmanager', 'tool_emailutils'));
 print "<table class='table table-sm w-auto table-bordered'>";
 print '<tr><th colspan=2>Domains / selectors</th><th>Actions</th></tr>';
 foreach ($domains as $domain) {
-
     if (substr($domain, 0, 1) == '.') {
         continue;
     }
@@ -125,7 +123,6 @@ foreach ($domains as $domain) {
 
     print '</th></tr>';
 
-
     $selectors = [];
     $selectordir = $dkimdir . $domain;
     if (is_dir($selectordir)) {
@@ -139,7 +136,6 @@ foreach ($domains as $domain) {
     $selectorcount = 0;
 
     foreach ($selectors as $file) {
-
         if (substr($file, -8, 8) !== '.private') {
             continue;
         }
@@ -174,15 +170,20 @@ foreach ($domains as $domain) {
             get_string('selectordelete', 'tool_emailutils')
         );
         $context['selectordelete'] = $OUTPUT->action_link(
-            new moodle_url('/admin/tool/emailutils/dkim.php', [
+            new moodle_url(
+                '/admin/tool/emailutils/dkim.php',
+                [
                     'domain'    => $domain,
                     'selector'  => $selector,
                     'action'    => 'delete',
-                    'sesskey'   => sesskey()]),
-                get_string('selectordelete', 'tool_emailutils'),
-                $confirmation,
-                [ 'class' => 'btn btn-sm ' . ($isactive ? 'btn-secondary disabled' : 'btn-outline-danger') ],
-                new pix_icon('i/delete', ''));
+                    'sesskey'   => sesskey(),
+                ]
+            ),
+            get_string('selectordelete', 'tool_emailutils'),
+            $confirmation,
+            ['class' => 'btn btn-sm ' . ($isactive ? 'btn-secondary disabled' : 'btn-outline-danger')],
+            new pix_icon('i/delete', '')
+        );
 
         if ($isactive) {
             // Only give the option to make it the active select if it is not being used.
@@ -193,12 +194,13 @@ foreach ($domains as $domain) {
             );
             $context['selectordeactivate'] = $OUTPUT->action_link(
                 new moodle_url('/admin/tool/emailutils/dkim.php', [
-                        'selector'  => $selector,
-                        'action'    => 'deactivate',
-                        'sesskey'   => sesskey()]),
+                    'selector'  => $selector,
+                    'action'    => 'deactivate',
+                    'sesskey'   => sesskey(),
+                ]),
                     get_string('selectordeactivate', 'tool_emailutils'),
                     $confirmation,
-                    [ 'class' => 'btn btn-sm btn-secondary' ],
+                    ['class' => 'btn btn-sm btn-secondary'],
                     new pix_icon('i/show', ''));
         } else {
             // Only give the option to make it the active select if it is not being used.
@@ -209,12 +211,13 @@ foreach ($domains as $domain) {
             );
             $context['selectoractivate'] = $OUTPUT->action_link(
                 new moodle_url('/admin/tool/emailutils/dkim.php', [
-                        'selector'  => $selector,
-                        'action'    => 'activate',
-                        'sesskey'   => sesskey()]),
+                    'selector'  => $selector,
+                    'action'    => 'activate',
+                    'sesskey'   => sesskey(),
+                ]),
                     get_string('selectoractivate', 'tool_emailutils'),
                     $confirmation,
-                    [ 'class' => 'btn btn-sm btn-primary' ],
+                    ['class' => 'btn btn-sm btn-primary'],
                     new pix_icon('t/hide', ''));
         }
 

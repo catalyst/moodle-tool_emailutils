@@ -48,8 +48,8 @@ class provider implements
         $collection->add_database_table(
             'tool_emailutils_list',
              [
-                'userid' => 'privacy:metadata:tool_emailutils_list:userid',
-                'updatedid' => 'privacy:metadata:tool_emailutils_list:updatedid',
+                 'userid' => 'privacy:metadata:tool_emailutils_list:userid',
+                 'updatedid' => 'privacy:metadata:tool_emailutils_list:updatedid',
 
              ],
             'privacy:metadata:tool_emailutils_list'
@@ -114,5 +114,4 @@ class provider implements
     public static function delete_data_for_users(approved_userlist $userlist) {
         // Empty on purpose.
     }
-
 }

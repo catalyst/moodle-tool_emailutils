@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_emailutils;
+
 /**
  * Tests for DKIM default suffix.
  *
@@ -21,16 +23,8 @@
  * @author     Benjamin Walker <benjaminwalker@catalyst-au.net>
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
-
-/**
- * Tests for DKIM default suffix.
- *
- * @copyright  Catalyst IT 2024
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-class tool_emailutils_suffix_test extends advanced_testcase {
+class suffix_test extends advanced_testcase {
 
     /**
      * Test suffix.
@@ -40,6 +34,9 @@ class tool_emailutils_suffix_test extends advanced_testcase {
      * @param string $primarydomain primary domain
      * @param string $selectorsuffix selector suffix
      * @dataProvider dns_comparisons
+     * @covers \tool_emailutils\dns_util::get_selector_suffix
+     * @covers \tool_emailutils\dns_util::get_primary_domain
+     * @covers \tool_emailutils\dns_util::get_noreply_domain
      */
     public function test_suffix(string $lmsdomain, string $noreplydomain, string $primarydomain, string $selectorsuffix) {
         $this->resetAfterTest();
@@ -64,7 +61,7 @@ class tool_emailutils_suffix_test extends advanced_testcase {
      *
      * @return array
      */
-    public function dns_comparisons() {
+    public static function dns_comparisons(): array {
         return [
             'no subdomain' => [
                 'client.com',
@@ -146,5 +143,4 @@ class tool_emailutils_suffix_test extends advanced_testcase {
             ],
         ];
     }
-
 }

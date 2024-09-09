@@ -65,7 +65,6 @@ class dkim_manager {
         $publickeyfile  = $this->get_public_key_path();
 
         if (!file_exists($privatekeyfile) && $autocreate) {
-
             $this->get_base_path(true);
             // Create a 2048-bit RSA key with an SHA256 digest.
             $pk = openssl_pkey_new(
@@ -195,6 +194,7 @@ class dkim_manager {
         return $dnsvalue;
 
     }
+
     /**
      * Get the alternate escaped version of the DKIM record
      *
@@ -222,5 +222,4 @@ class dkim_manager {
         @unlink($dnsrecordfile);
         @rmdir($domaindir);
     }
-
 }

@@ -244,7 +244,7 @@ class sns_client {
      * @param string $headerpassword Password given in auth header
      * @return bool Is verified?
      */
-    private static function verify_password($password, $headerpassword) : bool {
+    private static function verify_password($password, $headerpassword): bool {
         return password_verify($headerpassword, $password);
     }
 
@@ -254,7 +254,7 @@ class sns_client {
      * @param  Message $message Aws\Sns\Message
      * @return void
      */
-    protected function set_message(Message $message) : sns_client {
+    protected function set_message(Message $message): sns_client {
         $this->notification->set_message($message['Message']);
         return $this;
     }
@@ -264,7 +264,7 @@ class sns_client {
      *
      * @return bool Is of notification type
      */
-    public function is_notification() : bool {
+    public function is_notification(): bool {
         return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 
@@ -273,7 +273,7 @@ class sns_client {
      *
      * @return bool Is of subscription type
      */
-    public function is_subscription() : bool {
+    public function is_subscription(): bool {
         return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 
@@ -282,7 +282,7 @@ class sns_client {
      *
      * @return bool Is of unsubscribe type
      */
-    public function is_unsubscription() : bool {
+    public function is_unsubscription(): bool {
         return $this->message['Type'] === self::NOTIFICATION_TYPE;
     }
 

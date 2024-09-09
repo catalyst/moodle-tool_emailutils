@@ -107,5 +107,4 @@ if ($hassiteconfig) {
     );
 
     $ADMIN->add('tool_emailutils', $settings);
-
 }
