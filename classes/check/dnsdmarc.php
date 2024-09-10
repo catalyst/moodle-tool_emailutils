@@ -75,7 +75,7 @@ class dnsdmarc extends check {
 
         if (empty($dmarc)) {
             $details .= "<p>DMARC record is missing</p>";
-            $status = result::ERROR;
+            $status = result::WARNING;
             $summary = "DMARC DNS record missing";
         } else {
             $details .= "<p>DMARC record found on domain <code>$dmarcdomain</code><br><code>$dmarc</code></p>";

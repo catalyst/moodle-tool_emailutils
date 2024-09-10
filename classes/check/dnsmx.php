@@ -75,7 +75,7 @@ class dnsmx extends check {
 
         if (empty($mxdomains)) {
             $details .= "<p>MX record is missing</p>";
-            $status = result::ERROR;
+            $status = result::WARNING;
             $summary = "MX DNS record missing";
         } else {
             $allmxdomains = join('<br>', array_map(function ($x) {
