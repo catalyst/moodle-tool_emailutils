@@ -15,20 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version
+ * Definition of Email utils scheduled tasks.
  *
  * @package    tool_emailutils
- * @copyright  2018 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
+ * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
+ * @author     Waleed ul hassan <waleed.hassan@catalyst-eu.net>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2024100101;
-$plugin->release  = 2024011502;
-$plugin->requires = 2020061500;
-$plugin->component = 'tool_emailutils';
-$plugin->dependencies = ['local_aws' => 2020061500];
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->supported = [39, 404];
+$tasks = [
+    [
+        'classname' => 'tool_emailutils\task\update_suppression_list',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '3',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+];

@@ -106,5 +106,28 @@ if ($hassiteconfig) {
         '')
     );
 
+    $ADMIN->add('tool_emailutils', new admin_externalpage(
+        'toolemailutilssuppressionlist',
+        new lang_string('suppressionlist', 'tool_emailutils'),
+        new moodle_url('/admin/tool/emailutils/suppression_list.php')
+    ));
+
+    // Add AWS credentials settings.
+
+    $settings->add(new admin_setting_configtext('tool_emailutils/aws_region',
+        get_string('aws_region', 'tool_emailutils'),
+        get_string('aws_region_desc', 'tool_emailutils'),
+        '', PARAM_TEXT));
+
+    $settings->add(new admin_setting_configtext('tool_emailutils/aws_key',
+        get_string('aws_key', 'tool_emailutils'),
+        get_string('aws_key_desc', 'tool_emailutils'),
+        '', PARAM_TEXT));
+
+    $settings->add(new admin_setting_configpasswordunmask('tool_emailutils/aws_secret',
+        get_string('aws_secret', 'tool_emailutils'),
+        get_string('aws_secret_desc', 'tool_emailutils'),
+        ''));
+
     $ADMIN->add('tool_emailutils', $settings);
 }
