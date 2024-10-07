@@ -18,7 +18,7 @@
  * Definition of Email utils scheduled tasks.
  *
  * @package    tool_emailutils
- * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
+ * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Waleed ul hassan <waleed.hassan@catalyst-eu.net>
  */
@@ -29,7 +29,7 @@ $tasks = [
     [
         'classname' => 'tool_emailutils\task\update_suppression_list',
         'blocking' => 0,
-        'minute' => '0',
+        'minute' => 'R',
         'hour' => '3',
         'day' => '*',
         'month' => '*',

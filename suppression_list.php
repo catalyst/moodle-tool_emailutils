@@ -18,7 +18,7 @@
  * Email suppression list download page.
  *
  * @package    tool_emailutils
- * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
+ * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Waleed ul hassan <waleed.hassan@catalyst-eu.net>
  */
@@ -26,15 +26,23 @@
 require_once(__DIR__ . '/../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-admin_externalpage_setup('toolemailutilssuppressionlist');
+// Ensure the user is logged in and has the necessary permissions.
+require_login();
+require_capability('moodle/site:config', context_system::instance());
 
 $action = optional_param('action', '', PARAM_ALPHA);
 
 if ($action === 'download') {
-    // Generate and download CSV file.
-    generate_suppression_list_csv();
+    $content = \tool_emailutils\suppression_list::generate_csv();
+    $filename = 'email_suppression_list_' . date('Y-m-d') . '.csv';
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Content-Length: ' . strlen($content));
+    echo $content;
+    exit;
 } else {
     // Display the download page.
+    admin_externalpage_setup('toolemailutilssuppressionlist');
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('suppressionlist', 'tool_emailutils'));
 
@@ -49,34 +57,3 @@ if ($action === 'download') {
 
     echo $OUTPUT->footer();
 }
-
-/**
- * Generate and download the suppression list CSV file.
- */
-function generate_suppression_list_csv() {
-    global $CFG, $DB;
-    require_once($CFG->libdir . '/csvlib.class.php');
-
-    $filename = 'email_suppression_list_' . date('Y-m-d') . '.csv';
-    $csvexport = new csv_export_writer();
-    $csvexport->set_filename($filename);
-
-    // Add CSV headers.
-    $csvexport->add_data(['Email', 'Reason', 'Created At']);
-
-    // Fetch suppression list from database.
-    $suppressionlist = $DB->get_records('tool_emailutils_suppression');
-
-    // Add suppression list data to CSV.
-    foreach ($suppressionlist as $item) {
-        $csvexport->add_data([
-            $item->email,
-            $item->reason,
-            $item->created_at,
-        ]);
-    }
-
-    $csvexport->download_file();
-    exit;
-}
-

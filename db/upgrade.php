@@ -18,13 +18,22 @@
  * Email utils plugin upgrade code.
  *
  * @package    tool_emailutils
- * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
+ * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author     Waleed ul hassan <waleed.hassan@catalyst-eu.net>
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Upgrade script for the email utilities tool plugin.
+ *
+ * This function is executed during the plugin upgrade process.
+ * It checks the current version of the plugin and applies
+ * necessary upgrades, such as creating new database tables
+ * or modifying existing structures.
+ *
+ * @param int $oldversion The version we are upgrading from.
+ * @return bool Always returns true.
+ */
 function xmldb_tool_emailutils_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
@@ -44,9 +53,6 @@ function xmldb_tool_emailutils_upgrade($oldversion) {
 
         // Adding keys to table tool_emailutils_suppression.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
-
-        // Adding indexes to table tool_emailutils_suppression.
-        $table->add_index('email', XMLDB_INDEX_UNIQUE, ['email']);
 
         // Conditionally launch create table for tool_emailutils_suppression.
         if (!$dbman->table_exists($table)) {

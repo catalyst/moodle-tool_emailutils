@@ -14,161 +14,106 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Unit tests for suppression list functionality.
- *
- * @package    tool_emailutils
- * @copyright  2019 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Waleed ul hassan <waleed.hassan@catalyst-eu.net>
- */
-
+namespace tool_emailutils;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/admin/tool/emailutils/classes/task/update_suppression_list.php');
+
+if (!class_exists('\Aws\SesV2\SesV2Client')) {
+    if (file_exists($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php')) {
+        require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
+    }
+}
 
 /**
- * Test cases for suppression list functionality.
+ * Test case for suppression list functionality.
+ *
+ * @package    tool_emailutils
+ * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class suppressionlist_test extends advanced_testcase {
+final class suppressionlist_test extends \advanced_testcase {
 
     /**
-     * Test the creation and retrieval of suppression list entries.
+     * Test the update of the suppression list and the generation of the CSV file.
      *
-     * This test covers the basic CRUD (Create, Read, Update, Delete) operations
-     * for the suppression list database table.
+     * This test checks the following:
+     * 1. The suppression list is properly updated in the database from the mock AWS SES response.
+     * 2. The correct number of records (2 in this case) is added to the suppression table.
+     * 3. Each record has the correct email and reason as per the mock data.
+     * 4. A CSV file is generated with the correct headers and content matching the database.
      *
+     * @covers \tool_emailutils\task\update_suppression_list::execute
+     * @covers \tool_emailutils\suppression_list::generate_csv
+     *
+     * @return void
      */
-    public function test_suppression_list_crud() {
+    public function test_suppression_list_update_and_export(): void {
         global $DB;
 
         $this->resetAfterTest(true);
 
-        // Create some test data.
-        $testdata = [
-            ['email' => 'test1@example.com', 'reason' => 'Bounce', 'created_at' => '2024-03-01 10:00:00'],
-            ['email' => 'test2@example.com', 'reason' => 'Complaint', 'created_at' => '2024-03-02 11:00:00'],
-        ];
+        // Set up a user with necessary permissions.
+        $this->setAdminUser();
 
-        // Insert test data.
-        foreach ($testdata as $data) {
-            $record = new stdClass();
-            $record->email = $data['email'];
-            $record->reason = $data['reason'];
-            $record->created_at = $data['created_at'];
-            $record->timecreated = time();
-            $record->timemodified = time();
+        // Create a mock command result.
+        $mockresult = new \Aws\Result([
+            'SuppressedDestinationSummaries' => [
+                [
+                    'EmailAddress' => 'test1@example.com',
+                    'Reason' => 'BOUNCE',
+                    'LastUpdateTime' => new \DateTime('2024-03-01 10:00:00'),
+                ],
+                [
+                    'EmailAddress' => 'test2@example.com',
+                    'Reason' => 'COMPLAINT',
+                    'LastUpdateTime' => new \DateTime('2024-03-02 11:00:00'),
+                ],
+            ],
+            'NextToken' => null,
+        ]);
 
-            $DB->insert_record('tool_emailutils_suppression', $record);
-        }
+        // Create a mock SES client.
+        $mockclient = $this->createMock(\Aws\SesV2\SesV2Client::class);
+        $mockclient->method('__call')
+            ->with($this->equalTo('listSuppressedDestinations'), $this->anything())
+            ->willReturn($mockresult);
 
-        // Test retrieval.
+        // Create the task and set the mock client.
+        $task = new \tool_emailutils\task\update_suppression_list();
+        $task->set_ses_client($mockclient);
+
+        // Execute the task.
+        $task->execute();
+
+        // Verify that the suppression list was updated in the database.
         $records = $DB->get_records('tool_emailutils_suppression');
         $this->assertCount(2, $records);
 
-        // Test specific record retrieval.
-        $record = $DB->get_record('tool_emailutils_suppression', ['email' => 'test1@example.com']);
-        $this->assertEquals('Bounce', $record->reason);
-
-        // Test update.
-        $record->reason = 'Updated Reason';
-        $DB->update_record('tool_emailutils_suppression', $record);
-        $updatedrecord = $DB->get_record('tool_emailutils_suppression', ['email' => 'test1@example.com']);
-        $this->assertEquals('Updated Reason', $updatedrecord->reason);
-
-        // Test delete.
-        $DB->delete_records('tool_emailutils_suppression', ['email' => 'test2@example.com']);
-        $remainingrecords = $DB->get_records('tool_emailutils_suppression');
-        $this->assertCount(1, $remainingrecords);
-    }
-
-    /**
-     * Test the scheduled task for updating the suppression list.
-     *
-     * This test creates a mock task that overrides the AWS SES client
-     * to return predefined test data. It then executes the task and
-     * verifies that the suppression list in the database is updated correctly.
-     *
-     * @return void
-     * @covers \tool_emailutils\task\update_suppression_list::execute
-     * @covers \tool_emailutils\task\update_suppression_list::fetch_aws_ses_suppression_list
-     * @throws dml_exception
-     */
-    public function test_update_suppression_list_task(): void {
-        global $DB;
-        $this->resetAfterTest(true);
-
-        // Set up mock AWS credentials (these won't be used, but let's set them anyway).
-        set_config('aws_region', 'eu-west-2', 'tool_emailutils');
-        set_config('aws_key', 'testkey', 'tool_emailutils');
-        set_config('aws_secret', 'testsecret', 'tool_emailutils');
-
-        $mocktask = new class extends \tool_emailutils\task\update_suppression_list {
-            /**
-             * Override the execute method to use our mocked data.
-             *
-             * @return void
-             */
-            public function execute(): void {
-                global $DB;
-                $suppressionlist = $this->fetch_aws_ses_suppression_list();
-                $DB->delete_records('tool_emailutils_suppression');
-                foreach ($suppressionlist as $item) {
-                    $record = new \stdClass();
-                    $record->email = $item['email'];
-                    $record->reason = $item['reason'];
-                    $record->created_at = $item['created_at'];
-                    $record->timecreated = time();
-                    $record->timemodified = time();
-                    $DB->insert_record('tool_emailutils_suppression', $record);
-                }
+        // Check if the records exist and have the correct data.
+        $foundtest1 = false;
+        $foundtest2 = false;
+        foreach ($records as $record) {
+            if ($record->email === 'test1@example.com') {
+                $this->assertEquals('BOUNCE', $record->reason);
+                $foundtest1 = true;
+            } else if ($record->email === 'test2@example.com') {
+                $this->assertEquals('COMPLAINT', $record->reason);
+                $foundtest2 = true;
             }
+        }
+        $this->assertTrue($foundtest1, 'test1@example.com not found in the database');
+        $this->assertTrue($foundtest2, 'test2@example.com not found in the database');
 
-            /**
-             * Override the fetch method to return mock data.
-             *
-             * @return array Mock suppression list data.
-             */
-            protected function fetch_aws_ses_suppression_list(): array {
-                return [
-                    [
-                        'email' => 'suppressed@example.com',
-                        'reason' => 'BOUNCE',
-                        'created_at' => '2024-03-03 12:00:00',
-                    ],
-                ];
-            }
-        };
+        // Now test the CSV file generation.
+        $csvcontent = \tool_emailutils\suppression_list::generate_csv();
 
-        // Execute the mock task.
-        $mocktask->execute();
-
-        // Check if the suppression list was updated in the database.
-        $record = $DB->get_record('tool_emailutils_suppression', ['email' => 'suppressed@example.com']);
-        $this->assertNotFalse($record);
-        $this->assertEquals('BOUNCE', $record->reason);
-        $this->assertEquals('2024-03-03 12:00:00', $record->created_at);
-    }
-
-    /**
-     * Test AWS credentials configuration.
-     *
-     * This test verifies that AWS credentials can be correctly set and retrieved
-     * from the Moodle configuration.
-     *
-     */
-    public function test_aws_credentials_config() {
-        $this->resetAfterTest(true);
-
-        // Set test configuration.
-        set_config('aws_region', 'eu-west-2', 'tool_emailutils');
-        set_config('aws_key', 'testkey', 'tool_emailutils');
-        set_config('aws_secret', 'testsecret', 'tool_emailutils');
-
-        // Verify the configuration.
-        $this->assertEquals('eu-west-2', get_config('tool_emailutils', 'aws_region'));
-        $this->assertEquals('testkey', get_config('tool_emailutils', 'aws_key'));
-        $this->assertEquals('testsecret', get_config('tool_emailutils', 'aws_secret'));
+        // Verify the CSV content.
+        $lines = explode("\n", trim($csvcontent));
+        $this->assertEquals('Email,Reason,"Created At"', $lines[0]);
+        $this->assertStringContainsString('test1@example.com', $lines[1]);
+        $this->assertStringContainsString('BOUNCE', $lines[1]);
+        $this->assertStringContainsString('test2@example.com', $lines[2]);
+        $this->assertStringContainsString('COMPLAINT', $lines[2]);
     }
 }
