@@ -97,6 +97,25 @@ class dns_util {
     }
 
     /**
+     * Gets the most common user email domains from the database.
+     * @param int $number limits the number of domains
+     * @return array
+     */
+    public function get_user_domains(int $number = 0): array {
+        global $DB;
+
+        $domainsql = $DB->sql_substr('LOWER(email)', $DB->sql_position("'@'", 'email') . ' + 1');
+        $validemail = $DB->sql_like('email', ':pattern');
+        $params = ['pattern' => '%@%.%'];
+        $sql = "SELECT $domainsql AS domain, count(*) AS count
+                  FROM {user}
+                 WHERE $validemail AND suspended = 0 AND deleted = 0
+              GROUP BY $domainsql
+              ORDER BY count DESC";
+        return $DB->get_records_sql($sql, $params, 0, $number);
+    }
+
+    /**
      * Get spf txt record contents
      * @param string $domain specify a different domain
      * @return string txt record
@@ -233,6 +252,17 @@ class dns_util {
             return $a['pri'] <=> $b['pri'];
         });
         return $records;
+    }
+
+    /**
+     * Formats MX records to display in checks
+     * @param array $mxrecords
+     * @return string
+     */
+    public function format_mx_records(array $mxrecords): string {
+        return join('<br>', array_map(function ($x) {
+            return $x['target'] . ' (' . $x['pri'] . ')';
+        }, $mxrecords));
     }
 
     /**

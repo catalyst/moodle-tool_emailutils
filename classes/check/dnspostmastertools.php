@@ -54,21 +54,14 @@ class dnspostmastertools extends check {
      * @return result
      */
     public function get_result(): result {
-        global $DB, $CFG;
+        global $OUTPUT;
 
-        $url = new \moodle_url($CFG->wwwroot);
-        $domain = $url->get_host();
-
-        $details = '<table class="admintable generaltable table-sm w-auto">';
-        $details .= '<tr><th>Vendor</th><th>Token</th><th>Confirmed</th><th>Url</th></tr>';
         $status = result::INFO;
         $summary = '';
 
         $dns = new dns_util();
 
         $noreply = $dns->get_noreply();
-        $details .= "<p>No reply email: <code>$noreply</code></p>";
-
         $noreplydomain = $dns->get_noreply_domain();
 
         // Later intend to support other email providers.
@@ -76,28 +69,67 @@ class dnspostmastertools extends check {
         $vendornames = join(', ', $vendors);
         $summary = "Post master tools setup for $vendornames ";
 
-        $status = result::INFO;
+        // Check the most common user domains.
+        $userdomains = $dns->get_user_domains(10);
+        $userdomaininfo = [];
+        foreach ($userdomains as $domain) {
+            $mxrecords = $dns->get_mx_record($domain->domain);
+            $allmxdomains = $dns->format_mx_records($mxrecords);
+            $domainvendors = array_filter($vendors, function($vendor) use ($mxrecords) {
+                foreach ($mxrecords as $mxrecord) {
+                    if (strpos($mxrecord['target'], $vendor) !== false) {
+                        return true;
+                    }
+                }
+            });
+            $userdomaininfo[] = (object) [
+                'domain' => '@' . $domain->domain,
+                'count' => $domain->count,
+                'mxrecords' => $allmxdomains,
+                'vendors' => implode(',', $domainvendors),
+            ];
+        }
 
+        $status = result::INFO;
+        $vendorinfo = [];
         foreach ($vendors as $vendor) {
             $token = get_config('tool_emailutils', 'postmaster' . $vendor . 'token');
             $record = $dns->get_matching_dns_record($noreplydomain, $token);
+            $usevendor = !empty(array_filter($userdomaininfo, function($row) use ($vendor) {
+                return strpos($row->vendors, $vendor) !== false;
+            }));
 
-            if (empty($token)) {
+            if (empty($token) && !$usevendor) {
+                $summary = "Post master tools not required for $vendor";
+                $status = result::NA;
+                $confirmed = 'N/A';
+            } else if (empty($token)) {
                 $summary = "Post master tools not setup with $vendor";
-                $status = result::WARNING;
+                $status = result::INFO;
                 $confirmed = 'N/A';
             } else if (empty($record)) {
                 $confirmed = 'No';
                 $details .= "<p>$token was not found in TXT records</p>";
-                $status = result::ERROR;
+                $status = result::WARNING;
                 $summary = "Post master tools not verified with $vendor";
             } else {
                 $confirmed = 'Yes';
                 $status = result::OK;
             }
-            $details .= "<tr><td>$vendor</td><td>$token</td><td>$confirmed</td></tr>";
+
+            $vendorinfo = (object) [
+                'vendor' => $vendor,
+                'token' => $token,
+                'confirmed' => $confirmed,
+                'url' => '',
+            ];
         }
-        $details .= '</table>';
+
+        $details = $OUTPUT->render_from_template('tool_emailutils/postmaster', [
+            'noreply' => $noreply,
+            'userdomains' => $userdomaininfo,
+            'vendorinfo' => $vendorinfo,
+        ]);
 
         return new result($status, $summary, $details);
     }

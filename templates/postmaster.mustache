@@ -1,0 +1,83 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tool_emailutils/postmaster
+
+    Example context (json):
+    {
+        "noreply": "noreply@example.com",
+        "userdomains": [
+            {
+                "domain": "@gmail.com",
+                "count": 100,
+                "mxrecords": "string",
+                "vendor": "google",
+            }
+        ],
+        "vendorinfo": [
+            {
+                "vendors": "google",
+                "token": "token",
+                "confirmed": "N/A",
+                "url": "https://example.com",
+            }
+        ],
+    }
+}}
+<p>{{#str}} noreplyemail, tool_emailutils, {{ noreply }} {{/str}}</p>
+<table class="admintable generaltable table-sm w-auto">
+    <thead>
+    <tr>
+        <th>{{#str}} vendor, tool_emailutils {{/str}}</th>
+        <th>{{#str}} token, core_webservice {{/str}}</th>
+        <th>{{#str}} confirmed, core_admin {{/str}}</th>
+        <th>{{#str}} url {{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#vendorinfo}}
+        <tr>
+            <td>{{ vendor }}</td>
+            <td>{{ token }}</td>
+            <td>{{ confirmed }}</td>
+            <td>{{ url }}</td>
+        </tr>
+    {{/vendorinfo}}
+    </tbody>
+</table>
+
+<h5>{{#str}} userdomains, tool_emailutils {{/str}}</h5>
+<table class="admintable generaltable table-sm w-auto">
+    <thead>
+    <tr>
+        <th>{{#str}} domain, tool_emailutils {{/str}}</th>
+        <th>{{#str}} users {{/str}}</th>
+        <th>{{#str}} mxrecords, tool_emailutils {{/str}}</th>
+        <th>{{#str}} vendor, tool_emailutils {{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#userdomains}}
+        <tr>
+            <td>{{ domain }}</td>
+            <td>{{ count }}</td>
+            <td><code>{{{ mxrecords }}}</code>
+            <td>{{ vendors }}</td>
+        </tr>
+    {{/userdomains}}
+    </tbody>
+</table>

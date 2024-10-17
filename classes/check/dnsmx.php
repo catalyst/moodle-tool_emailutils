@@ -78,9 +78,7 @@ class dnsmx extends check {
             $status = result::WARNING;
             $summary = "MX DNS record missing";
         } else {
-            $allmxdomains = join('<br>', array_map(function ($x) {
-                return $x['target'] . ' (' . $x['pri'] . ')';
-            }, $mxdomains));
+            $allmxdomains = $dns->format_mx_records($mxdomains);
             $details .= "<p>MX record found on domain <code>$noreplydomain</code> pointing to<br><code>$allmxdomains</code></p>";
             $status = result::OK;
             $summary = "MX record points to " . $mxdomains[0]['target'];
