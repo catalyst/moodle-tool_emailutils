@@ -53,6 +53,7 @@ $string['dnsspfinclude'] = 'SPF include';
 $string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.acme.org -all</code>.</p>
 <p>The * char can be used as a wildcard eg <code>*acme.org</code> would also match.</p>
 ';
+$string['domain'] = 'Domain';
 $string['domaindefaultnoreply'] = 'Default noreply';
 $string['enabled'] = 'Enabled';
 $string['enabled_help'] = 'Allow the plugin to process incoming messages';
@@ -61,6 +62,8 @@ $string['header'] = 'Header';
 $string['header_help'] = 'HTTP Basic Auth Header';
 $string['incorrect_access'] = 'Incorrect access detected. For use only by AWS SNS.';
 $string['list'] = 'Complaints List';
+$string['noreplyemail'] = 'No reply email: <code>{$a}</code>';
+$string['mxrecords'] = 'MX records';
 $string['mxtoolbox'] = 'MXtoolbox links';
 $string['not_implemented'] = 'Not implemented yet. Search the user report for emails ending with ".b.invalid" and ".c.invalid".';
 $string['password'] = 'Password';
@@ -92,4 +95,6 @@ $string['selectormissing'] = 'No DKIM selector certificates found';
 $string['settings'] = 'AWS SES settings';
 $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';
+$string['userdomains'] = 'Most common user email domains';
+$string['vendor'] = 'Vendor';
 $string['selectornotblank'] = 'Selector cannot be empty';
