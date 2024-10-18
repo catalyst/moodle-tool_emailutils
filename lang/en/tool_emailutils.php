@@ -24,17 +24,25 @@
  */
 
 $string['authorisationcategory'] = 'Authorisation Settings';
+$string['aws_key'] = 'AWS Access Key';
+$string['aws_key_desc'] = 'Your AWS Access Key ID';
+$string['aws_region'] = 'AWS Region';
+$string['aws_region_desc'] = 'The AWS region for your SES service';
+$string['aws_secret'] = 'AWS Secret Key';
+$string['aws_secret_desc'] = 'Your AWS Secret Access Key';
 $string['bouncecheckfull'] = 'Are you absolutely sure you want to reset the bounce count for {$a} ?';
 $string['bouncecount'] = 'Bounce count';
 $string['bounces'] = 'For a list of bounces, visit {$a} and search for emails ending with ".b.invalid."';
 $string['bouncesreset'] = 'Bounces have been reset for the selected users';
-$string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
-$string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
-$string['dkimmanager'] = 'SPF & DKIM manager';
-$string['checkdnsspf'] = 'DNS Email SPF check';
 $string['checkdnsdkim'] = 'DNS Email DKIM check';
 $string['checkdnsdmarc'] = 'DNS Email DMARC check';
+$string['checkdnsmx'] = 'DNS Email MX check';
+$string['checkdnsnoreply'] = 'DNS Email noreply shape check';
 $string['checkdnspostmastertools'] = 'Check Post master tools';
+$string['checkdnsspf'] = 'DNS Email SPF check';
+$string['complaints'] = 'For a list of complaints, search for ".c.invalid"';
+$string['configmissing'] = 'Missing config.php setting ($CFG->handlebounces) please review config-dist.php for more information.';
+$string['dkimmanager'] = 'SPF & DKIM manager';
 $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors available for email signing, including those made by this admin tool or put in place by external tools such as open-dkim. For most systems this is the end to end setup:</p>
 <ol>
 <li>First decide and set the <code>$CFG->noreply</code> email as the domain of the reply email is tied to the signing.
@@ -46,14 +54,13 @@ $string['dkimmanagerhelp'] = '<p>This shows all DKIM key pairs / selectors avail
 <li>Also confirm the DKIM headers validate using a 3rd party tool, such as those provided by Gmail and most email clients
 </ol>
 ';
-$string['checkdnsmx'] = 'DNS Email MX check';
-$string['checkdnsnoreply'] = 'DNS Email noreply shape check';
 $string['dnssettings'] = 'SPF / DKIM / DMARC DNS settings';
 $string['dnsspfinclude'] = 'SPF include';
 $string['dnsspfinclude_help'] = '<p>This is an SPF include domain which is expected to be present in the record. For example if this was set to <code>spf.acme.org</code> then the SPF security check would pass if the SPF record was <code>v=spf1 include:spf.acme.org -all</code>.</p>
 <p>The * char can be used as a wildcard eg <code>*acme.org</code> would also match.</p>
 ';
 $string['domaindefaultnoreply'] = 'Default noreply';
+$string['downloadsuppressionlist'] = 'Download Suppression List';
 $string['enabled'] = 'Enabled';
 $string['enabled_help'] = 'Allow the plugin to process incoming messages';
 $string['event:notificationreceived'] = 'AWS SNS notification received';
@@ -66,17 +73,16 @@ $string['not_implemented'] = 'Not implemented yet. Search the user report for em
 $string['password'] = 'Password';
 $string['password_help'] = 'HTTP Basic Auth Password - Leave empty if you\'re not changing the password';
 $string['pluginname'] = 'Email utilities';
-$string['postmastertools'] = 'Post master tools';
 $string['postmastergoogletoken'] = 'Post master tools google-site-verification';
 $string['postmastergoogletoken_help'] = 'This is the entire TXT DNS record and looks similar to <code>google-site-verification=abcdef123456789abcdef</code>';
+$string['postmastertools'] = 'Post master tools';
 $string['privacy:metadata:tool_emailutils_list'] = 'Information.';
 $string['privacy:metadata:tool_emailutils_list:updatedid'] = 'The ID of updated user.';
 $string['privacy:metadata:tool_emailutils_list:userid'] = 'The ID of the user.';
 $string['resetbounces'] = 'Reset the number of bounces';
-$string['selectoractive'] = 'Active selector';
-$string['sendcount'] = 'Send count';
 $string['selectoractivate'] = 'Activate key pair';
 $string['selectoractivateconfirm'] = 'This will set $CFG->emaildkimselector to this selector and it will be used for signing outgoing emails.';
+$string['selectoractive'] = 'Active selector';
 $string['selectoractivated'] = 'Selector was activated';
 $string['selectorcreate'] = 'Create a new domain:selector certificate pair';
 $string['selectorcreated'] = 'A new certificate pair has been created';
@@ -89,7 +95,11 @@ $string['selectordelete'] = 'Delete key pair';
 $string['selectordeleteconfirm'] = 'This will permanently delete this selector\'s private and public keys and is irreversable.';
 $string['selectordeleted'] = 'Key pair has been deleted';
 $string['selectormissing'] = 'No DKIM selector certificates found';
+$string['selectornotblank'] = 'Selector cannot be empty';
+$string['sendcount'] = 'Send count';
 $string['settings'] = 'AWS SES settings';
+$string['suppressionlist'] = 'Email Suppression List';
+$string['suppressionlistdesc'] = 'Download the email suppression list from AWS SES for your account.';
+$string['task_update_suppression_list'] = 'Update email suppression list';
 $string['username'] = 'Username';
 $string['username_help'] = 'HTTP Basic Auth Username';
-$string['selectornotblank'] = 'Selector cannot be empty';
