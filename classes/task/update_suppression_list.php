@@ -30,8 +30,6 @@ defined('MOODLE_INTERNAL') || die();
 if (!class_exists('\Aws\SesV2\SesV2Client')) {
     if (file_exists($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php')) {
         require_once($CFG->dirroot . '/local/aws/sdk/aws-autoloader.php');
-    } else {
-        throw new \Exception('AWS SDK not found.');
     }
 }
 
@@ -61,11 +59,84 @@ class update_suppression_list extends \core\task\scheduled_task {
      * the local database with the fetched information.
      *
      * @return void
+     * @throws \dml_exception
      */
     public function execute(): void {
-        global $DB;
+        if (!$this->is_feature_enabled()) {
+            return;
+        }
+
+        if (!$this->check_connection()) {
+            debugging('Unable to connect to AWS SES. Suppression list update skipped.');
+            return;
+        }
 
         $suppressionlist = $this->fetch_aws_ses_suppression_list();
+        $this->update_local_suppression_list($suppressionlist);
+    }
+
+    /**
+     * Check if the email suppression list feature is enabled.
+     *
+     * @return bool True if the feature is enabled, false otherwise.
+     * @throws \dml_exception
+     */
+    protected function is_feature_enabled(): bool {
+        return (bool)get_config('tool_emailutils', 'enable_suppression_list');
+    }
+
+    /**
+     * Check the connection to AWS SES.
+     *
+     * @return bool True if the connection is successful, false otherwise.
+     */
+    protected function check_connection(): bool {
+        try {
+            $client = $this->get_ses_client();
+            $client->listSuppressedDestinations(['MaxItems' => 1]);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Fetch the suppression list from AWS SES.
+     *
+     * @return array The fetched suppression list.
+     */
+    protected function fetch_aws_ses_suppression_list(): array {
+        try {
+            $suppressionlist = [];
+            $params = ['MaxItems' => 100];
+
+            do {
+                $result = $this->get_ses_client()->listSuppressedDestinations($params);
+                foreach ($result['SuppressedDestinationSummaries'] as $item) {
+                    $suppressionlist[] = [
+                        'email' => $item['EmailAddress'],
+                        'reason' => $item['Reason'],
+                        'created_at' => $item['LastUpdateTime']->format('Y-m-d H:i:s'),
+                    ];
+                }
+                $params['NextToken'] = $result['NextToken'] ?? null;
+            } while ($params['NextToken']);
+
+            return $suppressionlist;
+        } catch (\Exception $e) {
+            debugging('Error fetching suppression list: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Update the local suppression list with the fetched data.
+     *
+     * @param array $suppressionlist The fetched suppression list.
+     * @throws \dml_exception
+     */
+    protected function update_local_suppression_list(array $suppressionlist): void {
+        global $DB;
 
         $DB->delete_records('tool_emailutils_suppression');
 
@@ -79,89 +150,42 @@ class update_suppression_list extends \core\task\scheduled_task {
 
             $DB->insert_record('tool_emailutils_suppression', $record);
         }
+
+        mtrace('Suppression list updated successfully.');
     }
 
     /**
-     * Fetch the suppression list from AWS SES.
+     * Get or create the SES client.
      *
-     * This method connects to AWS SES, retrieves the suppression list,
-     * and formats it for local storage. It includes error handling and
-     * retries for rate limiting.
-     *
-     * @return array The fetched suppression list.
+     * @return \Aws\SesV2\SesV2Client|null
+     * @throws \dml_exception
      */
-    protected function fetch_aws_ses_suppression_list(): array {
+    protected function get_ses_client(): ?\Aws\SesV2\SesV2Client {
         if (!$this->sesclient) {
-            $this->sesclient = $this->create_ses_client();
+            $awsregion = get_config('tool_emailutils', 'aws_region');
+            $awskey = get_config('tool_emailutils', 'aws_key');
+            $awssecret = get_config('tool_emailutils', 'aws_secret');
+
+            if (empty($awsregion) || empty($awskey) || empty($awssecret)) {
+                debugging('AWS credentials are not configured.');
+                return null;
+            }
+
+            $this->sesclient = new \Aws\SesV2\SesV2Client([
+                'version' => 'latest',
+                'region'  => $awsregion,
+                'credentials' => [
+                    'key'    => $awskey,
+                    'secret' => $awssecret,
+                ],
+                'retries' => [
+                    'mode' => 'adaptive',
+                    'max_attempts' => 10,
+                ],
+            ]);
         }
 
-        try {
-            $suppressionlist = [];
-            $params = ['MaxItems' => 100];
-
-            do {
-                $result = $this->sesclient->listSuppressedDestinations($params);
-                foreach ($result['SuppressedDestinationSummaries'] as $item) {
-                    $suppressionlist[] = [
-                        'email' => $item['EmailAddress'],
-                        'reason' => $item['Reason'],
-                        'created_at' => $item['LastUpdateTime']->format('Y-m-d H:i:s'),
-                    ];
-                }
-                $params['NextToken'] = $result['NextToken'] ?? null;
-            } while ($params['NextToken']);
-
-            return $suppressionlist;
-        } catch (\Exception $e) {
-            $this->log_error('Error fetching suppression list: ' . $e->getMessage());
-            return [];
-        }
-    }
-
-    /**
-     * Create an SES client instance.
-     *
-     * @return \Aws\SesV2\SesV2Client
-     */
-    protected function create_ses_client(): \Aws\SesV2\SesV2Client {
-        global $CFG;
-
-        $awsregion = get_config('tool_emailutils', 'aws_region');
-        $awskey = get_config('tool_emailutils', 'aws_key');
-        $awssecret = get_config('tool_emailutils', 'aws_secret');
-
-        if (empty($awsregion) || empty($awskey) || empty($awssecret)) {
-            throw new \Exception('AWS credentials are not configured.');
-        }
-
-        return new \Aws\SesV2\SesV2Client([
-            'version' => 'latest',
-            'region'  => $awsregion,
-            'credentials' => [
-                'key'    => $awskey,
-                'secret' => $awssecret,
-            ],
-            'retries' => [
-                'mode' => 'adaptive',
-                'max_attempts' => 10,
-            ],
-        ]);
-    }
-
-    /**
-     * Log an error message, printing to console if running via CLI.
-     *
-     * This method logs error messages, ensuring they are visible both in
-     * the Moodle error log and on the console when run via CLI.
-     *
-     * @param string $message The error message to log.
-     * @return void
-     */
-    private function log_error(string $message): void {
-        if (CLI_SCRIPT) {
-            mtrace($message);
-        }
-        debugging($message);
+        return $this->sesclient;
     }
 
     /**

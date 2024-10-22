@@ -78,6 +78,15 @@ if ($hassiteconfig) {
         new lang_string('enabled_help', 'tool_emailutils'),
         0)
     );
+
+    // Add the enable_suppression_list setting.
+    $settings->add(new admin_setting_configcheckbox(
+        'tool_emailutils/enable_suppression_list',
+        new lang_string('enable_suppression_list', 'tool_emailutils'),
+        new lang_string('enable_suppression_list_desc', 'tool_emailutils'),
+        0)  // Default to disabled
+    );
+
     // Auth Settings.
     $settings->add(new admin_setting_heading(
         'authorisation',

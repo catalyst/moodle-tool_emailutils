@@ -35,23 +35,16 @@ if (!class_exists('\Aws\SesV2\SesV2Client')) {
 final class suppressionlist_test extends \advanced_testcase {
 
     /**
-     * Test the update of the suppression list and the generation of the CSV file.
+     * Set up the test environment and return a configured task.
      *
-     * This test checks the following:
-     * 1. The suppression list is properly updated in the database from the mock AWS SES response.
-     * 2. The correct number of records (2 in this case) is added to the suppression table.
-     * 3. Each record has the correct email and reason as per the mock data.
-     * 4. A CSV file is generated with the correct headers and content matching the database.
-     *
-     * @covers \tool_emailutils\task\update_suppression_list::execute
-     * @covers \tool_emailutils\suppression_list::generate_csv
-     *
-     * @return void
+     * @param bool $enablefeature Whether to enable the suppression list feature.
+     * @return \tool_emailutils\task\update_suppression_list
      */
-    public function test_suppression_list_update_and_export(): void {
-        global $DB;
-
+    protected function setup_test_environment(bool $enablefeature): \tool_emailutils\task\update_suppression_list {
         $this->resetAfterTest(true);
+
+        // Set the suppression list feature configuration.
+        set_config('enable_suppression_list', $enablefeature ? 1 : 0, 'tool_emailutils');
 
         // Set up a user with necessary permissions.
         $this->setAdminUser();
@@ -83,8 +76,36 @@ final class suppressionlist_test extends \advanced_testcase {
         $task = new \tool_emailutils\task\update_suppression_list();
         $task->set_ses_client($mockclient);
 
-        // Execute the task.
+        return $task;
+    }
+
+    /**
+     * Test the update of the suppression list and the generation of the CSV file.
+     *
+     * This test checks the following:
+     * 1. The suppression list is properly updated in the database from the mock AWS SES response.
+     * 2. The correct number of records (2 in this case) is added to the suppression table.
+     * 3. Each record has the correct email and reason as per the mock data.
+     * 4. A CSV file is generated with the correct headers and content matching the database.
+     *
+     * @covers \tool_emailutils\task\update_suppression_list::execute
+     * @covers \tool_emailutils\suppression_list::generate_csv
+     *
+     * @return void
+     * @throws \dml_exception
+     */
+    public function test_suppression_list_update_and_export(): void {
+        global $DB;
+
+        $task = $this->setup_test_environment(true);
+
+        // Capture the output.
+        ob_start();
         $task->execute();
+        $output = ob_get_clean();
+
+        // Assert that the expected string is in the output.
+        $this->assertStringContainsString('Suppression list updated successfully.', $output);
 
         // Verify that the suppression list was updated in the database.
         $records = $DB->get_records('tool_emailutils_suppression');
@@ -115,5 +136,33 @@ final class suppressionlist_test extends \advanced_testcase {
         $this->assertStringContainsString('BOUNCE', $lines[1]);
         $this->assertStringContainsString('test2@example.com', $lines[2]);
         $this->assertStringContainsString('COMPLAINT', $lines[2]);
+    }
+
+    /**
+     * Test the update of the suppression list when the feature is disabled.
+     *
+     * This test checks the following:
+     * 1. The suppression list is not updated in the database.
+     * 2. The suppression list table is empty.
+     *
+     * @return void
+     * @throws \dml_exception
+     */
+    public function test_suppression_list_update_when_disabled(): void {
+        global $DB;
+
+        $task = $this->setup_test_environment(false);
+
+        // Capture the output.
+        ob_start();
+        $task->execute();
+        $output = ob_get_clean();
+
+        // Assert that there is no output.
+        $this->assertEmpty($output);
+
+        // Verify that the suppression list table is empty.
+        $records = $DB->get_records('tool_emailutils_suppression');
+        $this->assertEmpty($records);
     }
 }
