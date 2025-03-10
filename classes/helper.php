@@ -146,7 +146,7 @@ class helper {
     public static function get_bounce_config(): array {
         global $CFG;
         return [
-            $CFG->handlebounces,
+            $CFG->handlebounces ?? null,
             self::get_min_bounces(),
             self::get_bounce_ratio(),
         ];
