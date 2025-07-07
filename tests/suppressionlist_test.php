@@ -34,7 +34,7 @@ final class suppressionlist_test extends \advanced_testcase {
      * @param bool $enablefeature Whether to enable the suppression list feature.
      * @return \tool_emailutils\task\update_suppression_list
      */
-    protected function setup_test_environment(bool $enablefeature): \tool_emailutils\task\update_suppression_list {
+    protected function prepare_test_environment(bool $enablefeature): \tool_emailutils\task\update_suppression_list {
         $this->resetAfterTest(true);
 
         // Set the suppression list feature configuration.
@@ -90,7 +90,7 @@ final class suppressionlist_test extends \advanced_testcase {
     public function test_suppression_list_update_and_export(): void {
         global $DB;
 
-        $task = $this->setup_test_environment(true);
+        $task = $this->prepare_test_environment(true);
 
         // Capture the output.
         ob_start();
@@ -133,7 +133,7 @@ final class suppressionlist_test extends \advanced_testcase {
     public function test_suppression_list_update_when_disabled(): void {
         global $DB;
 
-        $task = $this->setup_test_environment(false);
+        $task = $this->prepare_test_environment(false);
 
         // Capture the output.
         ob_start();
