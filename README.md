@@ -21,6 +21,9 @@ The following lists the supported branch to use based on your Moodle version.
 |----------------|-------------------|
 | Moodle 3.9-4.3 | MOODLE_39_STABLE  |
 | Moodle 4.4+    | MOODLE_404_STABLE |
+| Totara 19+     | TOTARA_19         |
+
+Partial support for Totara in MOODLE_39_STABLE and TOTARA_19 branches.
 
 ## Installation
 
