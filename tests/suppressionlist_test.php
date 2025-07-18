@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_emailutils;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -32,7 +31,7 @@ if (!class_exists('\Aws\SesV2\SesV2Client')) {
  * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class suppressionlist_test extends \core_phpunit\testcase {
+final class tool_emailutils_suppressionlist_test extends \core_phpunit\testcase {
 
     /**
      * Set up the test environment and return a configured task.
