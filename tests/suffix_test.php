@@ -39,7 +39,7 @@ class tool_emailutils_suffix_test extends \core_phpunit\testcase {
     public function test_suffix(string $lmsdomain, string $noreplydomain, string $primarydomain, string $selectorsuffix) {
         $this->resetAfterTest();
         $mock = $this->getMockBuilder('\tool_emailutils\dns_util')
-            ->setMethods(['get_primary_domain', 'get_noreply_domain'])
+            ->onlyMethods(['get_primary_domain', 'get_noreply_domain'])
             ->getMock();
 
         $mock->expects($this->any())
