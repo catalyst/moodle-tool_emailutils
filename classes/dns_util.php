@@ -177,7 +177,7 @@ class dns_util {
      */
     public function get_dkim_selector() {
         global $CFG;
-        return $CFG->emaildkimselector;
+        return $CFG->emaildkimselector ?? '';
     }
 
     /**
