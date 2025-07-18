@@ -32,7 +32,7 @@ if (!class_exists('\Aws\SesV2\SesV2Client')) {
  * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final class suppressionlist_test extends \advanced_testcase {
+final class suppressionlist_test extends \core_phpunit\testcase {
 
     /**
      * Set up the test environment and return a configured task.
