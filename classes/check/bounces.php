@@ -61,7 +61,7 @@ class bounces extends check {
 
         [$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
         if (empty($handlebounces)) {
-            $status = result::OK;
+            $status = result::NA;
             $summary = get_string('check:bounces:disabled', 'tool_emailutils');
             $details = $summary;
         } else {

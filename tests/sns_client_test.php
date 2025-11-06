@@ -214,9 +214,9 @@ class sns_client_test extends \advanced_testcase {
 
         // Setup config and users.
         $this->resetAfterTest();
-        $CFG->handlebounces = true;
-        $CFG->minbounces = 3;
-        $CFG->bounceratio = -1;
+        set_config('enable_bounce_processing', true, 'tool_emailutils');
+        set_config('minbounces', 3, 'tool_emailutils');
+        set_config('bounceratio', -1, 'tool_emailutils');
         $CFG->allowaccountssameemail = true;
 
         $user1 = $this->getDataGenerator()->create_user(['email' => self::TEST_EMAIL]);
@@ -259,9 +259,9 @@ class sns_client_test extends \advanced_testcase {
 
         // Setup config and users.
         $this->resetAfterTest();
-        $CFG->handlebounces = true;
-        $CFG->minbounces = 3;
-        $CFG->bounceratio = -1;
+        set_config('enable_bounce_processing', true, 'tool_emailutils');
+        set_config('minbounces', 3, 'tool_emailutils');
+        set_config('bounceratio', -1, 'tool_emailutils');
         $CFG->allowaccountssameemail = true;
 
         $user1 = $this->getDataGenerator()->create_user(['email' => self::TEST_EMAIL]);

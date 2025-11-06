@@ -35,7 +35,7 @@
  * @return bool Always returns true.
  */
 function xmldb_tool_emailutils_upgrade($oldversion) {
-    global $DB;
+    global $DB, $CFG;
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2024100101) {
@@ -100,6 +100,26 @@ function xmldb_tool_emailutils_upgrade($oldversion) {
 
         // Emailutils savepoint reached.
         upgrade_plugin_savepoint(true, 2024112801, 'tool', 'emailutils');
+    }
+
+    if ($oldversion < 2025110601) {
+        // Copy old 'enabled' config to 'enable_bounce_processing'.
+        // This setting still does the same thing, it was just renamed.
+        $enabled = get_config('tool_emailutils', 'enabled');
+        set_config('enable_bounce_processing', $enabled, 'tool_emailutils');
+
+        // Copy $CFG->minbounces to new plugin-specific config (if set).
+        if (!empty($CFG->minbounces)) {
+            set_config('minbounces', $CFG->minbounces, 'tool_emailutils');
+        }
+
+        // Copy $CFG->bounceratio to new plugin-specific config (if set).
+        if (!empty($CFG->bounceratio)) {
+            set_config('minbounces', $CFG->bounceratio, 'tool_emailutils');
+        }
+
+        // Emailutils savepoint reached.
+        upgrade_plugin_savepoint(true, 2025110601, 'tool', 'emailutils');
     }
 
     return true;

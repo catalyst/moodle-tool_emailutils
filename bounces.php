@@ -41,7 +41,7 @@ echo $OUTPUT->heading(get_string('reportbounces', 'tool_emailutils'));
 // Render config used for calculating bounce threshold.
 [$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
 if (empty($handlebounces)) {
-    echo $OUTPUT->notification(get_string('configmissing', 'tool_emailutils'));
+    echo $OUTPUT->notification(get_string('bouncehandlingnotenabled', 'tool_emailutils'));
 } else {
     echo $OUTPUT->notification(get_string('bounceconfig', 'tool_emailutils', [
         'minbounces' => $minbounces,

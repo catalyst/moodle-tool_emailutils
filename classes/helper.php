@@ -63,24 +63,27 @@ class helper {
     }
 
     /**
-     *
-     * Gets the min bounces, otherwise return the default.
-     * @return int
+     * Gets if bounce handling feature is enabled.
+     * @return bool
      */
-    public static function get_min_bounces(): int {
-        global $CFG;
-        // The core check for using the default uses empty().
-        return empty($CFG->minbounces) ? self::DEFAULT_MIN_BOUNCES : $CFG->minbounces;
+    public static function is_bounce_handling_enabled(): bool {
+        return !empty(get_config('tool_emailutils', 'enable_bounce_handling'));
     }
 
     /**
-     * Gets the bounce rate config, otherwise return the default.
+     * Returns configured minmum bounces
+     * @return int
+     */
+    public static function get_min_bounces(): int {
+        return get_config('tool_emailutils', 'minbounces') ?: self::DEFAULT_MIN_BOUNCES;
+    }
+
+    /**
+     * Returns configured bounce ratio
      * @return float
      */
     public static function get_bounce_ratio(): float {
-        global $CFG;
-        // The core check for using the default uses empty().
-        return empty($CFG->bounceratio) ? self::DEFAULT_BOUNCE_RATIO : $CFG->bounceratio;
+        return get_config('tool_emailutils', 'bounceratio') ?: self::DEFAULT_BOUNCE_RATIO;
     }
 
     /**
@@ -144,9 +147,8 @@ class helper {
      * @return array [handlebounces, minbounces, bounceratio]
      */
     public static function get_bounce_config(): array {
-        global $CFG;
         return [
-            $CFG->handlebounces ?? null,
+            self::is_bounce_handling_enabled(),
             self::get_min_bounces(),
             self::get_bounce_ratio(),
         ];

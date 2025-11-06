@@ -23,6 +23,9 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
+use tool_emailutils\check\bounces;
+use tool_emailutils\helper;
+
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
@@ -69,14 +72,6 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage(
         'tool_emailutils_options',
         new lang_string('settings', 'tool_emailutils')
-    );
-
-    // Enable Endpoint.
-    $settings->add(new admin_setting_configcheckbox(
-        'tool_emailutils/enabled',
-        new lang_string('enabled', 'tool_emailutils'),
-        new lang_string('enabled_help', 'tool_emailutils'),
-        0)
     );
 
     // Add the enable_suppression_list setting.
@@ -136,6 +131,48 @@ if ($hassiteconfig) {
         new lang_string('aws_secret', 'tool_emailutils'),
         new lang_string('aws_secret_desc', 'tool_emailutils'),
         '')
+    );
+
+    // Bounce settings.
+    $settings->add(new admin_setting_heading(
+        'tool_emailutils/bounce_heading',
+        new lang_string('config:bounce', 'tool_emailutils'),
+        '')
+    );
+
+    // Bounce handling on/off.
+    $settings->add(new admin_setting_configcheckbox(
+        'tool_emailutils/enable_bounce_handling',
+        new lang_string('enable_bounce_handling', 'tool_emailutils'),
+        new lang_string('enable_bounce_handling_help', 'tool_emailutils'),
+        0)
+    );
+
+    // Minimum bounces.
+    $settings->add(new admin_setting_configtext(
+        'tool_emailutils/minbounces',
+        new lang_string('config:minbounces', 'tool_emailutils'),
+        new lang_string('config:minbounces:desc', 'tool_emailutils'),
+        helper::DEFAULT_MIN_BOUNCES,
+        PARAM_INT,
+        )
+    );
+
+    // Bounce ratio.
+    $settings->add(new admin_setting_configtext(
+        'tool_emailutils/bounceratio',
+        new lang_string('config:bounceratio', 'tool_emailutils'),
+        new lang_string('config:bounceratio:desc', 'tool_emailutils'),
+        helper::DEFAULT_BOUNCE_RATIO,
+        PARAM_FLOAT,
+        )
+    );
+
+    // Bounce healthcheck.
+    $settings->add(new admin_setting_check(
+        'tool_emailutils/bouncecheck',
+        new bounces(),
+        )
     );
 
     $ADMIN->add('tool_emailutils', $settings);
