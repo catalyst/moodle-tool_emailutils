@@ -39,4 +39,52 @@ class hook_callbacks {
             ));
         }
     }
+
+    /**
+     * Handle emails being sent to users.
+     *
+     * This is used for bounce count blocking of emails.
+     *
+     * @param \core\hook\email\before_email_to_user $hook
+     */
+    public static function before_email_to_user(\core\hook\email\before_email_to_user $hook): void {
+        $user = $hook->email->user;
+        if (self::over_bounce_threshold($user)) {
+            $hook->email->add_block_reason('blockbouncethreshold', 'tool_emailutils');
+        }
+    }
+
+    /**
+     * Check whether the user has exceeded the bounce threshold
+     * This is a copy of the function in moodlelib.php,
+     * with the check for $CFG->handlebounces removed.
+     *
+     * @param stdClass $user A {@link $USER} object
+     * @return bool true => User has exceeded bounce threshold
+     */
+    private static function over_bounce_threshold($user) {
+        global $CFG, $DB;
+
+        if (empty($user->id)) {
+            // No real (DB) user, nothing to do here.
+            return false;
+        }
+
+        // Set sensible defaults.
+        if (empty($CFG->minbounces)) {
+            $CFG->minbounces = 10;
+        }
+        if (empty($CFG->bounceratio)) {
+            $CFG->bounceratio = .20;
+        }
+        $bouncecount = 0;
+        $sendcount = 0;
+        if ($bounce = $DB->get_record('user_preferences', array ('userid' => $user->id, 'name' => 'email_bounce_count'))) {
+            $bouncecount = $bounce->value;
+        }
+        if ($send = $DB->get_record('user_preferences', array('userid' => $user->id, 'name' => 'email_send_count'))) {
+            $sendcount = $send->value;
+        }
+        return ($bouncecount >= $CFG->minbounces && $bouncecount/$sendcount >= $CFG->bounceratio);
+    }
 }

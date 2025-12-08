@@ -149,6 +149,7 @@ class helper {
             $CFG->handlebounces ?? null,
             self::get_min_bounces(),
             self::get_bounce_ratio(),
+            get_config('tool_emailutils', 'block_bouncethreshold') ?? false
         ];
     }
 

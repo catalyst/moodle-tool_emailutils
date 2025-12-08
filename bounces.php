@@ -39,8 +39,9 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('reportbounces', 'tool_emailutils'));
 
 // Render config used for calculating bounce threshold.
-[$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
-if (empty($handlebounces)) {
+[$handlebounces, $minbounces, $bounceratio, $blockbounces] = helper::get_bounce_config();
+// If the hook exists to instrument sending, we handle bounce blocking that way.
+if (empty($handlebounces) && !class_exists('\core\hook\email\before_email_to_user') && !$blockbounces) {
     echo $OUTPUT->notification(get_string('configmissing', 'tool_emailutils'));
 } else {
     echo $OUTPUT->notification(get_string('bounceconfig', 'tool_emailutils', [

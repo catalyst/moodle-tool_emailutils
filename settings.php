@@ -87,6 +87,16 @@ if ($hassiteconfig) {
         0)  // Default to disabled
     );
 
+    $blocksetting = new admin_setting_configcheckbox(
+        'tool_emailutils/block_bouncethreshold',
+        new lang_string('block_bouncethreshold', 'tool_emailutils'),
+        new lang_string('block_bouncethreshold_desc', 'tool_emailutils'),
+        0
+    );
+    if (class_exists('\core\hook\email\before_email_to_user')) {
+        $settings->add($blocksetting);
+    }
+
     // Auth Settings.
     $settings->add(new admin_setting_heading(
         'authorisation',

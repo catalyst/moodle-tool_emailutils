@@ -27,6 +27,7 @@ namespace tool_emailutils\check;
 use \tool_emailutils\helper;
 use core\check\check;
 use core\check\result;
+use core\context\block;
 
 /**
  * User bounces check.
@@ -59,8 +60,10 @@ class bounces extends check {
 
         $details = '';
 
-        [$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
-        if (empty($handlebounces)) {
+        [$handlebounces, $minbounces, $bounceratio, $blockbounces] = helper::get_bounce_config();
+
+        // If the hook exists to instrument sending, we handle bounce blocking that way.
+        if (empty($handlebounces) && !class_exists('\core\hook\email\before_email_to_user') && !$blockbounces) {
             $status = result::OK;
             $summary = get_string('check:bounces:disabled', 'tool_emailutils');
             $details = $summary;
@@ -136,7 +139,8 @@ class bounces extends check {
 
             // Render config used for calculating threshold.
             $details = $OUTPUT->render_from_template('tool_emailutils/bounce_config', [
-                'handlebounces' => $handlebounces,
+                'handlebounces' => $handlebounces ?? false,
+                'blockbounces' => $blockbounces,
                 'minbounces' => $minbounces,
                 'bounceratio' => $bounceratio,
                 'breakdown' => $breakdown,
