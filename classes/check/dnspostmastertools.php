@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * DNS Email post master tools
  *
@@ -36,7 +37,6 @@ use tool_emailutils\dns_util;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class dnspostmastertools extends check {
-
     /**
      * A link to a place to action this
      *
@@ -45,7 +45,8 @@ class dnspostmastertools extends check {
     public function get_action_link(): ?\action_link {
         return new \action_link(
             new \moodle_url('/admin/settings.php?section=tool_emailutils_dns'),
-            get_string('postmastertools', 'tool_emailutils'));
+            get_string('postmastertools', 'tool_emailutils')
+        );
     }
 
     /**
@@ -75,7 +76,7 @@ class dnspostmastertools extends check {
         foreach ($userdomains as $domain) {
             $mxrecords = $dns->get_mx_record($domain->domain);
             $allmxdomains = $dns->format_mx_records($mxrecords);
-            $domainvendors = array_filter($vendors, function($vendor) use ($mxrecords) {
+            $domainvendors = array_filter($vendors, function ($vendor) use ($mxrecords) {
                 foreach ($mxrecords as $mxrecord) {
                     if (strpos($mxrecord['target'], $vendor) !== false) {
                         return true;
@@ -95,7 +96,7 @@ class dnspostmastertools extends check {
         foreach ($vendors as $vendor) {
             $token = get_config('tool_emailutils', 'postmaster' . $vendor . 'token');
             $record = $dns->get_matching_dns_record($noreplydomain, $token);
-            $usevendor = !empty(array_filter($userdomaininfo, function($row) use ($vendor) {
+            $usevendor = !empty(array_filter($userdomaininfo, function ($row) use ($vendor) {
                 return strpos($row->vendors, $vendor) !== false;
             }));
 

@@ -38,7 +38,6 @@ use tool_emailutils\event\bounce_count_reset;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class helper {
-
     /** Default bounce ratio from over_bounce_threshold() */
     const DEFAULT_BOUNCE_RATIO = 0.2;
 
@@ -60,6 +59,19 @@ class helper {
             // Legacy support for 3.9.
             return get_all_user_name_fields(true, $tablealias);
         }
+    }
+
+    /**
+     * Gets whether emailutils bounce blocking is enabled.
+     * @return bool
+     */
+    public static function get_bounce_blockthreshold_enabled(): bool {
+        if (!class_exists('\core\hook\email\before_email_to_user')) {
+            // Bounce blocking requires the email hook, added in MDL-69724.
+            return false;
+        }
+
+        return get_config('tool_emailutils', 'block_bouncethreshold_enabled');
     }
 
     /**
@@ -149,7 +161,7 @@ class helper {
             $CFG->handlebounces ?? null,
             self::get_min_bounces(),
             self::get_bounce_ratio(),
-            get_config('tool_emailutils', 'block_bouncethreshold') ?? false
+            self::get_bounce_blockthreshold_enabled(),
         ];
     }
 
@@ -227,5 +239,39 @@ class helper {
                 self::reset_bounce_count($user);
             }
         }
+    }
+
+    /**
+     * Check whether the user has exceeded the bounce threshold
+     * This is a copy of the function in moodlelib.php,
+     * with the check for $CFG->handlebounces removed.
+     *
+     * @param stdClass $user a user object
+     * @return bool true => User has exceeded bounce threshold
+     */
+    public static function over_bounce_threshold($user) {
+        global $CFG, $DB;
+
+        if (empty($user->id)) {
+            // No real (DB) user, nothing to do here.
+            return false;
+        }
+
+        // Set sensible defaults.
+        if (empty($CFG->minbounces)) {
+            $CFG->minbounces = 10;
+        }
+        if (empty($CFG->bounceratio)) {
+            $CFG->bounceratio = .20;
+        }
+        $bouncecount = 0;
+        $sendcount = 0;
+        if ($bounce = $DB->get_record('user_preferences', ['userid' => $user->id, 'name' => 'email_bounce_count'])) {
+            $bouncecount = $bounce->value;
+        }
+        if ($send = $DB->get_record('user_preferences', ['userid' => $user->id, 'name' => 'email_send_count'])) {
+            $sendcount = $send->value;
+        }
+        return ($bouncecount >= $CFG->minbounces && $bouncecount / $sendcount >= $CFG->bounceratio);
     }
 }

@@ -84,3 +84,10 @@ confirmation” to “Confirmed” after few minutes, if this doesn’t happen s
 went wrong during the set up  process, the most common error is a typo on the
 endpoint, subscription can not be change once created but you can always create
 a new subscription with the right endpoint.
+
+### Handling bounces
+
+The plugin will handle blocking outgoing emails that are over the bounce threshold
+if the block_bouncethreshold setting is enabled. This behaviour relies on the
+`before_email_to_user` hook introduced in MDL-69724. The setting will not be present
+if your Moodle version does not support this hook.

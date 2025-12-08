@@ -25,7 +25,6 @@ namespace tool_emailutils;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
-
     /**
      * This adds a new bulk user action to reset a persons bounce count.
      *
@@ -48,43 +47,13 @@ class hook_callbacks {
      * @param \core\hook\email\before_email_to_user $hook
      */
     public static function before_email_to_user(\core\hook\email\before_email_to_user $hook): void {
+        if (!helper::get_bounce_blockthreshold_enabled()) {
+            return;
+        }
+
         $user = $hook->email->user;
-        if (self::over_bounce_threshold($user)) {
-            $hook->email->add_block_reason('blockbouncethreshold', 'tool_emailutils');
+        if (helper::over_bounce_threshold($user)) {
+            $hook->email->add_block_reason(get_string('blockbouncethreshold', 'tool_emailutils'));
         }
-    }
-
-    /**
-     * Check whether the user has exceeded the bounce threshold
-     * This is a copy of the function in moodlelib.php,
-     * with the check for $CFG->handlebounces removed.
-     *
-     * @param stdClass $user A {@link $USER} object
-     * @return bool true => User has exceeded bounce threshold
-     */
-    private static function over_bounce_threshold($user) {
-        global $CFG, $DB;
-
-        if (empty($user->id)) {
-            // No real (DB) user, nothing to do here.
-            return false;
-        }
-
-        // Set sensible defaults.
-        if (empty($CFG->minbounces)) {
-            $CFG->minbounces = 10;
-        }
-        if (empty($CFG->bounceratio)) {
-            $CFG->bounceratio = .20;
-        }
-        $bouncecount = 0;
-        $sendcount = 0;
-        if ($bounce = $DB->get_record('user_preferences', array ('userid' => $user->id, 'name' => 'email_bounce_count'))) {
-            $bouncecount = $bounce->value;
-        }
-        if ($send = $DB->get_record('user_preferences', array('userid' => $user->id, 'name' => 'email_send_count'))) {
-            $sendcount = $send->value;
-        }
-        return ($bouncecount >= $CFG->minbounces && $bouncecount/$sendcount >= $CFG->bounceratio);
     }
 }

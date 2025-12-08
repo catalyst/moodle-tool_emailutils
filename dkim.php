@@ -36,7 +36,7 @@ $action = optional_param('action', '', PARAM_ALPHA);
 
 if ($action == 'delete') {
     require_sesskey();
-    $domain = required_param('domain',  PARAM_TEXT);
+    $domain = required_param('domain', PARAM_TEXT);
     $selector = required_param('selector', PARAM_TEXT);
     $manager = new dkim_manager($domain, $selector);
     $manager->delete_selector();
@@ -94,14 +94,17 @@ foreach ($domains as $domain) {
         continue;
     }
 
-    $domaincount ++;
+    $domaincount++;
 
     print '<tr><td colspan=2>';
     print '<h3>';
     print html_writer::tag('span', "@$domain ");
     if ($domain == $noreplydomain) {
-        print ' ' . html_writer::tag('span', get_string('domaindefaultnoreply', 'tool_emailutils'),
-            ['class' => 'badge badge-secondary']);
+        print ' ' . html_writer::tag(
+            'span',
+            get_string('domaindefaultnoreply', 'tool_emailutils'),
+            ['class' => 'badge badge-secondary']
+        );
     }
     print '</h3>';
     print '</td>';
@@ -146,10 +149,14 @@ foreach ($domains as $domain) {
         $context = [
             'domain'    => $domain,
             'selector'  => $selector,
-            'dkimurl'   => new moodle_url('https://mxtoolbox.com/SuperTool.aspx',
-                ['action' => "dkim:$domain:$selector", 'run' => 'toolpage']),
-            'dkimrawurl' => new moodle_url('https://mxtoolbox.com/SuperTool.aspx',
-                ['action' => "txt:$selector._domainkey.$domain"]),
+            'dkimurl'   => new moodle_url(
+                'https://mxtoolbox.com/SuperTool.aspx',
+                ['action' => "dkim:$domain:$selector", 'run' => 'toolpage']
+            ),
+            'dkimrawurl' => new moodle_url(
+                'https://mxtoolbox.com/SuperTool.aspx',
+                ['action' => "txt:$selector._domainkey.$domain"]
+            ),
             'dnskey'    => $manager->get_dns_key(),
             'dnsvalue'          => $manager->get_dns_value(),
             'dnsvaluechunked'   => $manager->get_dns_value_chunked(),
@@ -198,10 +205,11 @@ foreach ($domains as $domain) {
                     'action'    => 'deactivate',
                     'sesskey'   => sesskey(),
                 ]),
-                    get_string('selectordeactivate', 'tool_emailutils'),
-                    $confirmation,
-                    ['class' => 'btn btn-sm btn-secondary'],
-                    new pix_icon('i/show', ''));
+                get_string('selectordeactivate', 'tool_emailutils'),
+                $confirmation,
+                ['class' => 'btn btn-sm btn-secondary'],
+                new pix_icon('i/show', '')
+            );
         } else {
             // Only give the option to make it the active select if it is not being used.
             $confirmation = new \confirm_action(
@@ -215,10 +223,11 @@ foreach ($domains as $domain) {
                     'action'    => 'activate',
                     'sesskey'   => sesskey(),
                 ]),
-                    get_string('selectoractivate', 'tool_emailutils'),
-                    $confirmation,
-                    ['class' => 'btn btn-sm btn-primary'],
-                    new pix_icon('t/hide', ''));
+                get_string('selectoractivate', 'tool_emailutils'),
+                $confirmation,
+                ['class' => 'btn btn-sm btn-primary'],
+                new pix_icon('t/hide', '')
+            );
         }
 
         print $OUTPUT->render_from_template('tool_emailutils/dkimselector', $context);
@@ -227,12 +236,14 @@ foreach ($domains as $domain) {
 print "</table>";
 
 if ($domaincount == 0) {
-    echo $OUTPUT->notification(get_string('selectormissing', 'tool_emailutils'),  \core\notification::ERROR);
+    echo $OUTPUT->notification(get_string('selectormissing', 'tool_emailutils'), \core\notification::ERROR);
 }
 
-print html_writer::tag('div',
+print html_writer::tag(
+    'div',
     get_string('dkimmanagerhelp', 'tool_emailutils', ['emailtest' => (new moodle_url('/admin/testoutgoingmailconf.php'))->out()]),
-    ['class' => 'crap', 'style' => 'max-width: 40em']);
+    ['class' => 'crap', 'style' => 'max-width: 40em']
+);
 
 $form->display();
 

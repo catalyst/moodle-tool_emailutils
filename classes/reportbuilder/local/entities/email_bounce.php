@@ -35,7 +35,6 @@ use tool_emailutils\helper;
  *
  */
 class email_bounce extends base {
-
     /**
      * Database tables that this entity uses
      *
@@ -104,7 +103,7 @@ class email_bounce extends base {
             ->set_type(column::TYPE_INTEGER)
             ->add_field($DB->sql_cast_char2int("{$tablealias}.value"), 'bounces')
             ->set_is_sortable(true)
-            ->add_callback(function(int $value): string {
+            ->add_callback(function (int $value): string {
                 if ($value >= helper::get_min_bounces()) {
                     return \html_writer::span($value, 'alert alert-danger p-2');
                 }
@@ -135,7 +134,7 @@ class email_bounce extends base {
             ->add_field("CASE WHEN $sendsql = 0 THEN NULL ELSE $bouncesql / $sendsql END", 'ratio')
             ->set_is_sortable(true)
             ->set_is_available(helper::use_bounce_ratio())
-            ->add_callback(function(?float $value): string {
+            ->add_callback(function (?float $value): string {
                 $float = format_float($value, 2);
                 if ($value > helper::get_bounce_ratio()) {
                     return \html_writer::span($float, 'alert alert-danger p-2');

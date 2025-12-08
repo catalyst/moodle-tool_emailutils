@@ -39,7 +39,6 @@ function xmldb_tool_emailutils_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2024100101) {
-
         // Define table tool_emailutils_suppression to be created.
         $table = new xmldb_table('tool_emailutils_suppression');
 
@@ -64,7 +63,6 @@ function xmldb_tool_emailutils_upgrade($oldversion) {
     }
 
     if ($oldversion < 2024111800) {
-
         // The stored timestamps have lost timezones. These are replaced daily so easier to just remove instead of fix.
         $DB->delete_records('tool_emailutils_suppression');
 
@@ -80,7 +78,6 @@ function xmldb_tool_emailutils_upgrade($oldversion) {
     }
 
     if ($oldversion < 2024112801) {
-
         // Define field subtypes to be added to tool_emailutils_log.
         $table = new xmldb_table('tool_emailutils_log');
         $field = new xmldb_field('subtypes', XMLDB_TYPE_CHAR, '32', null, null, null, null, 'type');

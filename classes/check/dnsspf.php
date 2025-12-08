@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * DNS Email SPF check.
  *
@@ -36,7 +37,6 @@ use tool_emailutils\dns_util;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class dnsspf extends check {
-
     /**
      * A link to a place to action this
      *
@@ -45,7 +45,8 @@ class dnsspf extends check {
     public function get_action_link(): ?\action_link {
         return new \action_link(
             new \moodle_url('/admin/tool/emailutils/dkim.php'),
-            get_string('dkimmanager', 'tool_emailutils'));
+            get_string('dkimmanager', 'tool_emailutils')
+        );
     }
 
     /**

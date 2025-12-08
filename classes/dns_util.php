@@ -36,7 +36,6 @@ namespace tool_emailutils;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class dns_util {
-
     /**
      * Get no reply
      * @return string email
@@ -291,7 +290,7 @@ class dns_util {
      * @return string suffix
      */
     public function get_selector_suffix($domain = '') {
-        GLOBAL $CFG;
+        global $CFG;
 
         if (empty($domain)) {
             $url = new \moodle_url($CFG->wwwroot);
@@ -327,4 +326,3 @@ class dns_util {
         return $suffix;
     }
 }
-

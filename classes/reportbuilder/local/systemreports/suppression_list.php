@@ -31,7 +31,6 @@ use core_reportbuilder\local\entities\user;
  *
  */
 class suppression_list extends system_report {
-
     /**
      * Initialise report, we need to set the main table, load our entities and set columns/filters
      */
@@ -47,8 +46,7 @@ class suppression_list extends system_report {
         $entityuser = new user();
         $entityuseralias = $entityuser->get_table_alias('user');
         $this->add_entity($entityuser
-            ->add_join("LEFT JOIN {user} {$entityuseralias} ON {$entityuseralias}.email = {$entitymainalias}.email")
-        );
+            ->add_join("LEFT JOIN {user} {$entityuseralias} ON {$entityuseralias}.email = {$entitymainalias}.email"));
 
         // Now we can call our helper methods to add the content we want to include in the report.
         $this->add_columns();

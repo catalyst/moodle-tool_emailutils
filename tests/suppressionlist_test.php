@@ -27,7 +27,6 @@ global $CFG;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class suppressionlist_test extends \advanced_testcase {
-
     /**
      * Set up the test environment and return a configured task.
      *
@@ -129,6 +128,7 @@ final class suppressionlist_test extends \advanced_testcase {
      *
      * @return void
      * @throws \dml_exception
+     * @covers \tool_emailutils\task\update_suppression_list::execute
      */
     public function test_suppression_list_update_when_disabled(): void {
         global $DB;

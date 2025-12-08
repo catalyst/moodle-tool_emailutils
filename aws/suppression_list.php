@@ -26,8 +26,8 @@
 use core_reportbuilder\system_report_factory;
 use tool_emailutils\reportbuilder\local\systemreports\suppression_list;
 
-require(__DIR__.'/../../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require(__DIR__ . '/../../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('tool_emailutils_bounces', '', [], '', ['pagelayout' => 'report']);
 
@@ -45,10 +45,16 @@ if (empty(get_config('tool_emailutils', 'enable_suppression_list'))) {
         if (empty($lastrun)) {
             echo $OUTPUT->notification(get_string('aws_suppressionlist_tasknever', 'tool_emailutils'), 'warning');
         } else if ($lastrun < (time() - DAYSECS)) {
-            echo $OUTPUT->notification(get_string('aws_suppressionlist_taskupdated', 'tool_emailutils', format_time(time() - $lastrun)), 'warning');
+            echo $OUTPUT->notification(
+                get_string('aws_suppressionlist_taskupdated', 'tool_emailutils', format_time(time() - $lastrun)),
+                'warning'
+            );
         } else {
             // Always show the last update time as info.
-            echo $OUTPUT->notification(get_string('aws_suppressionlist_taskupdated', 'tool_emailutils', format_time(time() - $lastrun)), 'info');
+            echo $OUTPUT->notification(
+                get_string('aws_suppressionlist_taskupdated', 'tool_emailutils', format_time(time() - $lastrun)),
+                'info'
+            );
         }
     } else {
         echo $OUTPUT->notification(get_string('aws_suppressionlist_taskdisabled', 'tool_emailutils'), 'warning');
@@ -60,4 +66,3 @@ $report = system_report_factory::create(suppression_list::class, context_system:
 echo $report->output();
 
 echo $OUTPUT->footer();
-

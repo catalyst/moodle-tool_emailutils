@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Privacy provider.
  *
@@ -34,10 +35,9 @@ use core_privacy\local\request\{approved_contextlist, approved_userlist, context
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
+    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider {
-
+    \core_privacy\local\request\plugin\provider {
     /**
      * Returns metadata.
      *
@@ -47,11 +47,10 @@ class provider implements
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
             'tool_emailutils_list',
-             [
-                 'userid' => 'privacy:metadata:tool_emailutils_list:userid',
-                 'updatedid' => 'privacy:metadata:tool_emailutils_list:updatedid',
-
-             ],
+            [
+                'userid' => 'privacy:metadata:tool_emailutils_list:userid',
+                'updatedid' => 'privacy:metadata:tool_emailutils_list:updatedid',
+            ],
             'privacy:metadata:tool_emailutils_list'
         );
 

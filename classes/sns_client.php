@@ -48,7 +48,6 @@ use GuzzleHttp\Client;
  * }
  */
 class sns_client {
-
     /** Subscribe */
     const SUBSCRIPTION_TYPE = 'SubscriptionConfirmation';
 
@@ -150,8 +149,10 @@ class sns_client {
             return false;
         } else if (isset($_SERVER['PHP_AUTH_USER'])) {
             // Credentials supplied - check they are valid.
-            if (static::verify_username($this->authorisationusername, $_SERVER['PHP_AUTH_USER']) &&
-                static::verify_password($this->authorisationpassword, $_SERVER['PHP_AUTH_PW'])) {
+            if (
+                static::verify_username($this->authorisationusername, $_SERVER['PHP_AUTH_USER']) &&
+                static::verify_password($this->authorisationpassword, $_SERVER['PHP_AUTH_PW'])
+            ) {
                 // Valid!
                 return true;
             }
@@ -160,7 +161,7 @@ class sns_client {
             $headerusername = null;
             $headerpassword = null;
             if (strpos(strtolower($_SERVER['HTTP_AUTHORIZATION']), 'basic') === 0) {
-                list($headerusername, $headerpassword) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+                [$headerusername, $headerpassword] = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
             }
 
             if (is_null($headerusername)) {
@@ -169,8 +170,10 @@ class sns_client {
                 return false;
             }
 
-            if (static::verify_username($this->authorisationusername, $headerusername) &&
-                static::verify_password($this->authorisationpassword, $headerpassword)) {
+            if (
+                static::verify_username($this->authorisationusername, $headerusername) &&
+                static::verify_password($this->authorisationpassword, $headerpassword)
+            ) {
                 // Valid!
                 return true;
             }

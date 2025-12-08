@@ -27,11 +27,11 @@ global $CFG;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class bounce_threshold_block_test extends \advanced_testcase {
-
     /**
      * Test that emails over the bounce threshold are blocked.
+     * @covers \tool_emailutils\hook_callbacks::before_email_to_user
      */
-    public function test_bounce_threshold_block_test() {
+    public function test_bounce_threshold_block_test(): void {
         global $CFG;
 
         if (!class_exists('\core\hook\email\before_email_to_user')) {

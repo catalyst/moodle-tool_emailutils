@@ -28,7 +28,6 @@ namespace tool_emailutils\event;
  * Event
  */
 class notification_received extends \core\event\base {
-
     /**
      * Initialise required event data properties.
      */
