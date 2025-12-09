@@ -30,7 +30,7 @@ use Aws\Sns\Message;
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class sns_client_test extends \advanced_testcase {
+final class sns_client_test extends \advanced_testcase {
     /**
      * Test email for user in unit test */
     const TEST_EMAIL = 'user@example.com';
@@ -90,7 +90,7 @@ class sns_client_test extends \advanced_testcase {
             "mail" => [
                 "timestamp" => "2012-05-25T14:59:35.605Z",
                 "source" => "sender@example.com",
-                "destination" => [self::TEST_EMAIL]
+                "destination" => [self::TEST_EMAIL],
             ],
         ]);
 
@@ -123,12 +123,12 @@ class sns_client_test extends \advanced_testcase {
                     ],
                 ],
                 "timestamp" => "2012-05-25T14:59:38.605Z",
-                "feedbackId" => "000001378603176d-5a4b5ad9-6f30-4198-a8c3-b1eb0c270a1d-000000"
+                "feedbackId" => "000001378603176d-5a4b5ad9-6f30-4198-a8c3-b1eb0c270a1d-000000",
             ],
             "mail" => [
                 "timestamp" => "2012-05-25T14:59:35.605Z",
                 "source" => "sender@example.com",
-                "destination" => [self::TEST_EMAIL]
+                "destination" => [self::TEST_EMAIL],
             ],
         ]);
 
@@ -142,7 +142,7 @@ class sns_client_test extends \advanced_testcase {
      *
      * @return array
      */
-    public function bounce_processing_provider(): array {
+    public static function bounce_processing_provider(): array {
         // To be tested with minbounces of 3 and bounceratio of -1.
         return [
             'Block immediately' => [
@@ -208,8 +208,14 @@ class sns_client_test extends \advanced_testcase {
      * @param bool $overthreshold expected to be over the threshold
      * @covers \tool_emailutils\sns_notification::process_notification()
      **/
-    public function test_bounce_processing(string $type, string $subtype, int $notifications, int $sendcount,
-            int $expectedbounces, bool $overthreshold): void {
+    public function test_bounce_processing(
+        string $type,
+        string $subtype,
+        int $notifications,
+        int $sendcount,
+        int $expectedbounces,
+        bool $overthreshold
+    ): void {
         global $CFG, $DB;
 
         // Setup config and users.
@@ -235,7 +241,7 @@ class sns_client_test extends \advanced_testcase {
 
         // Confirm bouncecount and over threshold.
         $this->assertEquals($expectedbounces, get_user_preferences('email_bounce_count', 0, $user1));
-        $this->assertSame($overthreshold, over_bounce_threshold($user1));
+        $this->assertSame($overthreshold, helper::over_bounce_threshold($user1));
 
         // There should be one event for each bounce notification plus one threshold event per user over the threshold.
         $bounceevents = 2 * (int) $overthreshold;
@@ -246,7 +252,7 @@ class sns_client_test extends \advanced_testcase {
         $this->assertCount($notifications, $records);
 
         // Confirm that shared email addresses have the same status.
-        $this->assertSame($overthreshold, over_bounce_threshold($user2));
+        $this->assertSame($overthreshold, helper::over_bounce_threshold($user2));
     }
 
     /**
@@ -286,8 +292,8 @@ class sns_client_test extends \advanced_testcase {
         // Confirm both were reset.
         $this->assertEquals(0, get_user_preferences('email_bounce_count', 0, $user1->id));
         $this->assertEquals(0, get_user_preferences('email_bounce_count', 0, $user2->id));
-        $this->assertFalse(over_bounce_threshold($user1));
-        $this->assertFalse(over_bounce_threshold($user2));
+        $this->assertFalse(helper::over_bounce_threshold($user1));
+        $this->assertFalse(helper::over_bounce_threshold($user2));
 
         // There should be one event for each user who had their bounce count reset.
         // This also confirms the third user didn't have their count reset.

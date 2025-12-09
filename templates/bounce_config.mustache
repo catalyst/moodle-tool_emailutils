@@ -25,6 +25,7 @@
     Example context (json):
     {
         "handlebounces": true,
+        "blockbounces": true,
         "minbounces": 10,
         "bounceratio": 0.2,
         "breakdown": [],
@@ -38,10 +39,9 @@
 <h5>{{#str}} configuration {{/str}}</h5>
 <ul>
     <li>handlebounces: {{handlebounces}}</li>
-    {{#handlebounces}}
+    <li>blockbounces: {{blockbounces}}</li>
     <li>minbounces: {{minbounces}}</li>
     <li>bounceratio: {{bounceratio}}</li>
-    {{/handlebounces}}
 </ul>
 
 <h5>{{#str}} bouncebreakdown, tool_emailutils {{/str}}</h5>

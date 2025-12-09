@@ -28,10 +28,10 @@ use core_reportbuilder\system_report_factory;
 use tool_emailutils\helper;
 use tool_emailutils\reportbuilder\local\systemreports\email_bounces;
 
-require(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/'.$CFG->admin.'/user/lib.php');
-require_once($CFG->dirroot.'/'.$CFG->admin.'/user/user_bulk_forms.php');
+require(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/user/lib.php');
+require_once($CFG->dirroot . '/' . $CFG->admin . '/user/user_bulk_forms.php');
 
 admin_externalpage_setup('tool_emailutils_bounces', '', [], '', ['pagelayout' => 'report']);
 
@@ -39,8 +39,9 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('reportbounces', 'tool_emailutils'));
 
 // Render config used for calculating bounce threshold.
-[$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
-if (empty($handlebounces)) {
+[$corehandlebounces, $minbounces, $bounceratio, $blockbounces] = helper::get_bounce_config();
+// If the hook exists to instrument sending, we handle bounce blocking that way.
+if (empty($corehandlebounces) && !$blockbounces) {
     echo $OUTPUT->notification(get_string('configmissing', 'tool_emailutils'));
 } else {
     echo $OUTPUT->notification(get_string('bounceconfig', 'tool_emailutils', [
@@ -55,14 +56,20 @@ echo html_writer::start_div('', ['data-region' => 'report-user-list-wrapper']);
 $actionames = array_keys((new user_bulk_action_form())->get_actions());
 $excludeactions = array_diff($actionames, ['tool_emailutils_reset_bounces']);
 
-$bulkactions = new user_bulk_action_form(new moodle_url('/admin/user/user_bulk.php'),
+$bulkactions = new user_bulk_action_form(
+    new moodle_url('/admin/user/user_bulk.php'),
     ['excludeactions' => $excludeactions, 'passuserids' => true, 'hidesubmit' => true],
-    'post', '',
-    ['id' => 'user-bulk-action-form']);
+    'post',
+    '',
+    ['id' => 'user-bulk-action-form']
+);
 $bulkactions->set_data(['returnurl' => $PAGE->url->out_as_local_url(false)]);
 
-$report = system_report_factory::create(email_bounces::class, context_system::instance(),
-    parameters: ['withcheckboxes' => $bulkactions->has_bulk_actions()]);
+$report = system_report_factory::create(
+    email_bounces::class,
+    context_system::instance(),
+    parameters: ['withcheckboxes' => $bulkactions->has_bulk_actions()]
+);
 
 echo $report->output();
 

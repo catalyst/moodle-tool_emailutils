@@ -39,4 +39,3 @@ function tool_emailutils_security_checks() {
         new \tool_emailutils\check\dnspostmastertools(),
     ];
 }
-

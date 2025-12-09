@@ -25,7 +25,6 @@ namespace tool_emailutils;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
-
     /**
      * This adds a new bulk user action to reset a persons bounce count.
      *
@@ -37,6 +36,24 @@ class hook_callbacks {
                 new \moodle_url('/admin/tool/emailutils/reset_bounces.php'),
                 get_string('resetbounces', 'tool_emailutils')
             ));
+        }
+    }
+
+    /**
+     * Handle emails being sent to users.
+     *
+     * This is used for bounce count blocking of emails.
+     *
+     * @param \core\hook\email\before_email_to_user $hook
+     */
+    public static function before_email_to_user(\core\hook\email\before_email_to_user $hook): void {
+        if (!helper::get_bounce_blockthreshold_enabled()) {
+            return;
+        }
+
+        $user = $hook->email->user;
+        if (helper::over_bounce_threshold($user)) {
+            $hook->email->add_block_reason(get_string('blockbouncethreshold', 'tool_emailutils'));
         }
     }
 }

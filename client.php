@@ -37,8 +37,11 @@ if (!get_config('tool_emailutils', 'enabled')) {
     exit;
 }
 
-$client = new sns_client(get_config('tool_emailutils', 'authorisation_header'),
-    get_config('tool_emailutils', 'authorisation_username'), get_config('tool_emailutils', 'authorisation_password'));
+$client = new sns_client(
+    get_config('tool_emailutils', 'authorisation_header'),
+    get_config('tool_emailutils', 'authorisation_username'),
+    get_config('tool_emailutils', 'authorisation_password')
+);
 
 if (!$client->is_authorised()) {
     exit;

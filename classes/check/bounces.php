@@ -13,6 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * User bounces check.
  *
@@ -24,9 +25,10 @@
  */
 
 namespace tool_emailutils\check;
-use \tool_emailutils\helper;
+use tool_emailutils\helper;
 use core\check\check;
 use core\check\result;
+use core\context\block;
 
 /**
  * User bounces check.
@@ -37,7 +39,6 @@ use core\check\result;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class bounces extends check {
-
     /**
      * A link to a place to action this
      *
@@ -46,7 +47,8 @@ class bounces extends check {
     public function get_action_link(): ?\action_link {
         return new \action_link(
             new \moodle_url('/admin/tool/emailutils/bounces.php'),
-            get_string('reportbounces', 'tool_emailutils'));
+            get_string('reportbounces', 'tool_emailutils')
+        );
     }
 
     /**
@@ -54,13 +56,15 @@ class bounces extends check {
      *
      * @return result
      */
-    public function get_result() : result {
+    public function get_result(): result {
         global $DB, $CFG, $OUTPUT;
 
         $details = '';
 
-        [$handlebounces, $minbounces, $bounceratio] = helper::get_bounce_config();
-        if (empty($handlebounces)) {
+        [$corehandlebounces, $minbounces, $bounceratio, $blockbounces] = helper::get_bounce_config();
+
+        // If the hook exists to instrument sending, we handle bounce blocking that way.
+        if (empty($corehandlebounces) && !$blockbounces) {
             $status = result::OK;
             $summary = get_string('check:bounces:disabled', 'tool_emailutils');
             $details = $summary;
@@ -136,7 +140,8 @@ class bounces extends check {
 
             // Render config used for calculating threshold.
             $details = $OUTPUT->render_from_template('tool_emailutils/bounce_config', [
-                'handlebounces' => $handlebounces,
+                'handlebounces' => $corehandlebounces ?? false,
+                'blockbounces' => $blockbounces,
                 'minbounces' => $minbounces,
                 'bounceratio' => $bounceratio,
                 'breakdown' => $breakdown,
@@ -146,5 +151,4 @@ class bounces extends check {
 
         return new result($status, $summary, $details);
     }
-
 }

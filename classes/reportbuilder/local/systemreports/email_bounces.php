@@ -33,7 +33,6 @@ use core_reportbuilder\local\report\action;
  *
  */
 class email_bounces extends system_report {
-
     /**
      * Initialise report, we need to set the main table, load our entities and set columns/filters
      */
@@ -51,7 +50,7 @@ class email_bounces extends system_report {
 
         if ($this->get_parameter('withcheckboxes', false, PARAM_BOOL)) {
             $canviewfullnames = has_capability('moodle/site:viewfullnames', context_system::instance());
-            $this->set_checkbox_toggleall(static function(\stdClass $row) use ($canviewfullnames): array {
+            $this->set_checkbox_toggleall(static function (\stdClass $row) use ($canviewfullnames): array {
                 return [$row->userid, fullname($row, $canviewfullnames)];
             });
         }
@@ -60,8 +59,7 @@ class email_bounces extends system_report {
         $entityuser = new user();
         $entityuseralias = $entityuser->get_table_alias('user');
         $this->add_entity($entityuser
-            ->add_join("LEFT JOIN {user} {$entityuseralias} ON {$entityuseralias}.id = {$entitymainalias}.userid")
-        );
+            ->add_join("LEFT JOIN {user} {$entityuseralias} ON {$entityuseralias}.id = {$entitymainalias}.userid"));
 
         // Join with the latest entry in the notification log for each user.
         $entitylog = new notification_log();
@@ -75,8 +73,7 @@ class email_bounces extends system_report {
                                 FROM {tool_emailutils_log} l2
                                 WHERE l2.email = l1.email
                             )
-                        ) {$entitylogalias} ON {$entitylogalias}.email = {$entityuseralias}.email")
-        );
+                        ) {$entitylogalias} ON {$entitylogalias}.email = {$entityuseralias}.email"));
 
         // Now we can call our helper methods to add the content we want to include in the report.
         $this->add_columns();

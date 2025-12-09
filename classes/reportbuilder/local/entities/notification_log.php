@@ -37,7 +37,6 @@ use tool_emailutils\sns_notification;
  *
  */
 class notification_log extends base {
-
     /**
      * Database tables that this entity uses
      *
@@ -118,7 +117,7 @@ class notification_log extends base {
             ->set_type(column::TYPE_TEXT)
             ->add_fields("{$tablealias}.subtypes")
             ->set_is_sortable(true)
-            ->add_callback(function(?string $subtypes): string {
+            ->add_callback(function (?string $subtypes): string {
                 if (empty($subtypes)) {
                     return '';
                 } else if (in_array($subtypes, sns_notification::BLOCK_IMMEDIATELY)) {

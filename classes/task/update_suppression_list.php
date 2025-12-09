@@ -25,8 +25,6 @@
 
 namespace tool_emailutils\task;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Scheduled task class for updating the email suppression list.
  *

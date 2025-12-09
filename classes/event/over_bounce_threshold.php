@@ -28,7 +28,6 @@ namespace tool_emailutils\event;
  * Event
  */
 class over_bounce_threshold extends \core\event\base {
-
     /**
      * Initialise required event data properties.
      */

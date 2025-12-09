@@ -31,4 +31,10 @@ $callbacks = [
         'callback' => '\tool_emailutils\hook_callbacks::extend_bulk_user_actions',
         'priority' => 0,
     ],
+    [
+        'hook' => \core\hook\email\before_email_to_user::class,
+        'callback' => '\tool_emailutils\hook_callbacks::before_email_to_user',
+        'priority' => 0,
+    ],
+
 ];

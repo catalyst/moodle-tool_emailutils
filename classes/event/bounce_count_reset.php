@@ -28,7 +28,6 @@ namespace tool_emailutils\event;
  * Event
  */
 class bounce_count_reset extends \core\event\base {
-
     /**
      * Initialise required event data properties.
      */

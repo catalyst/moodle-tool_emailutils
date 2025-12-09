@@ -36,7 +36,6 @@ use core_reportbuilder\local\report\filter;
  *
  */
 class suppressed_email extends base {
-
     /**
      * Database tables that this entity uses
      *

@@ -29,7 +29,6 @@ namespace tool_emailutils;
  * Hashed password formlib form element
  */
 class admin_setting_configpasswordhashed extends \admin_setting {
-
     /** @var Min length of password */
     public $minlength;
 
@@ -127,8 +126,15 @@ class admin_setting_configpasswordhashed extends \admin_setting {
 
         $element = $OUTPUT->render_from_template('tool_emailutils/admin_setting_configpasswordhashed', $context);
 
-        return format_admin_setting($this, $this->visiblename,
+        return format_admin_setting(
+            $this,
+            $this->visiblename,
             $element,
-            $this->description, true, '', $default, $query);
+            $this->description,
+            true,
+            '',
+            $default,
+            $query
+        );
     }
 }

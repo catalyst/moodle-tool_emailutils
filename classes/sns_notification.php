@@ -34,7 +34,6 @@ use tool_emailutils\event\over_bounce_threshold;
  * Parses Amazon SES complaints and bounces contained in SNS Notification messages.
  */
 class sns_notification {
-
     /** Bounce subtypes that should be blocked immediately */
     const BLOCK_IMMEDIATELY = [
         'Permanent:General',
@@ -276,7 +275,7 @@ class sns_notification {
      * @return void
      */
     protected function process_bounce_notification(\stdClass $user): void {
-        if (over_bounce_threshold($user)) {
+        if (helper::over_bounce_threshold($user)) {
             // Can occur if multiple notifications are received close together. No action required.
             return;
         }
@@ -298,7 +297,7 @@ class sns_notification {
             set_user_preference('email_send_count', $bouncecount, $user);
         }
 
-        if (over_bounce_threshold($user)) {
+        if (helper::over_bounce_threshold($user)) {
             $event = over_bounce_threshold::create([
                 'relateduserid' => $user->id,
                 'context'  => \context_system::instance(),

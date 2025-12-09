@@ -44,7 +44,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('resetbounces', 'tool_emailutils'));
 
 if ($confirm && confirm_sesskey()) {
-    list($in, $params) = $DB->get_in_or_equal($users);
+    [$in, $params] = $DB->get_in_or_equal($users);
     $rs = $DB->get_recordset_select('user', "id $in", $params, '', 'id, ' . \tool_emailutils\helper::get_username_fields());
     foreach ($rs as $user) {
         \tool_emailutils\helper::reset_bounce_count($user);
@@ -56,8 +56,8 @@ if ($confirm && confirm_sesskey()) {
     echo html_writer::link($return, get_string('continue'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
 } else {
-    list($in, $params) = $DB->get_in_or_equal($users);
-    $userlist = $DB->get_records_select_menu('user', "id $in", $params, 'fullname', 'id,'.$DB->sql_fullname().' AS fullname');
+    [$in, $params] = $DB->get_in_or_equal($users);
+    $userlist = $DB->get_records_select_menu('user', "id $in", $params, 'fullname', 'id,' . $DB->sql_fullname() . ' AS fullname');
 
     if (empty($userlist)) {
         echo $OUTPUT->notification(get_string('invaliduserid', 'error'));

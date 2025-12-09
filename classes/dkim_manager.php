@@ -32,7 +32,6 @@ namespace tool_emailutils;
  * DKIM manager
  */
 class dkim_manager {
-
     /** @var Domain */
     protected $domain;
 
@@ -192,7 +191,6 @@ class dkim_manager {
         }
 
         return $dnsvalue;
-
     }
 
     /**
@@ -205,7 +203,6 @@ class dkim_manager {
         $value = $this->get_dns_value_chunked();
         $value = str_replace(';', '\;', $value);
         return $value;
-
     }
 
     /**
