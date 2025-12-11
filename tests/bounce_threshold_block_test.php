@@ -41,7 +41,8 @@ final class bounce_threshold_block_test extends \advanced_testcase {
         $this->resetAfterTest();
         $CFG->minbounces = 2;
         $CFG->bounceratio = 0.01;
-        set_config('block_bouncethreshold', 1, 'tool_emailutils');
+        set_config('block_bouncethreshold_enabled', 1, 'tool_emailutils');
+        $this->assertTrue(helper::get_bounce_blockthreshold_enabled());
 
         // Create 2 users for use in bounce threshold testing.
         $user1 = $this->getDataGenerator()->create_user(['email' => '1@example.com']);
@@ -87,5 +88,25 @@ final class bounce_threshold_block_test extends \advanced_testcase {
         $hook2 = new \core\hook\email\before_email_to_user($email2);
         \core\di::get(\core\hook\manager::class)->dispatch($hook2);
         $this->assertFalse($hook2->email->is_blocked());
+
+        // If plugin is not enabled, it's not blocked (user was previously blocked).
+        set_config('block_bouncethreshold_enabled', 0, 'tool_emailutils');
+        $this->assertFalse(helper::get_bounce_blockthreshold_enabled());
+        $email = new \core\email(
+            $user1,
+            get_admin(),
+            'subject',
+            'messagetext',
+            'messagehtml',
+            'attachment',
+            'attachname',
+            true,
+            'replyto',
+            'replytoname',
+            80
+        );
+        $hook = new \core\hook\email\before_email_to_user($email);
+        \core\di::get(\core\hook\manager::class)->dispatch($hook);
+        $this->assertFalse($hook->email->is_blocked());
     }
 }
