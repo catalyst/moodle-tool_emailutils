@@ -1,0 +1,293 @@
+From f996d8c971e25b352725c00094da63c866facb61 Mon Sep 17 00:00:00 2001
+From: Matthew Hilton <matthewhilton@catalyst-au.net>
+Date: Thu, 6 Nov 2025 14:57:48 +1000
+Subject: [PATCH] MDL-69724 email: Add before_email_to_user hook
+
+---
+ .upgradenotes/MDL-69724-2025111105250585.yml  |   9 ++
+ lib/classes/email.php                         | 149 ++++++++++++++++++
+ .../hook/email/before_email_to_user.php       |  41 +++++
+ lib/moodlelib.php                             |  39 +++++
+ 4 files changed, 238 insertions(+)
+ create mode 100644 .upgradenotes/MDL-69724-2025111105250585.yml
+ create mode 100644 lib/classes/email.php
+ create mode 100644 lib/classes/hook/email/before_email_to_user.php
+
+diff --git a/.upgradenotes/MDL-69724-2025111105250585.yml b/.upgradenotes/MDL-69724-2025111105250585.yml
+new file mode 100644
+index 00000000000..8d72db9e8a1
+--- /dev/null
++++ b/.upgradenotes/MDL-69724-2025111105250585.yml
+@@ -0,0 +1,9 @@
++issueNumber: MDL-69724
++notes:
++  core:
++    - message: >-
++        `email_to_user()` now emits a hook `before_email_to_user`. This hook
++        allows any subscriber to modify the email contents, add additional
++        headers, or add reasons to block the email. If any block reasons are
++        added, the email is stopped from being sent and the reasons are output.
++      type: improved
+diff --git a/lib/classes/email.php b/lib/classes/email.php
+new file mode 100644
+index 00000000000..a080a5c0feb
+--- /dev/null
++++ b/lib/classes/email.php
+@@ -0,0 +1,149 @@
++<?php
++// This file is part of Moodle - http://moodle.org/
++//
++// Moodle is free software: you can redistribute it and/or modify
++// it under the terms of the GNU General Public License as published by
++// the Free Software Foundation, either version 3 of the License, or
++// (at your option) any later version.
++//
++// Moodle is distributed in the hope that it will be useful,
++// but WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++// GNU General Public License for more details.
++//
++// You should have received a copy of the GNU General Public License
++// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
++
++namespace core;
++
++use core\exception\coding_exception;
++use stdClass;
++
++/**
++ * Email container class
++ *
++ * @package    core
++ * @copyright  2025 Matthew Hilton <matthewhilton@catalyst-au.net>
++ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
++ */
++class email {
++    /** @var array $blockreasons Reasons for this email being blocked */
++    private array $blockreasons = [];
++
++    /** @var array $additionalheaders Additional email headers */
++    private array $additionalheaders = [];
++
++    /**
++     * Create email instance
++     *
++     * @param stdClass $user A $USER object
++     * @param stdClass $from A $USER object
++     * @param string $subject plain text subject line of the email
++     * @param string $messagetext plain text version of the message
++     * @param string $messagehtml complete html version of the message (optional)
++     * @param string $attachment a file on the filesystem, either relative to $CFG->dataroot or a full path to a file in one of
++     *          the following directories: $CFG->cachedir, $CFG->dataroot, $CFG->dirroot, $CFG->localcachedir, $CFG->tempdir
++     * @param string $attachname the name of the file (extension indicates MIME)
++     * @param bool $usetrueaddress determines whether $from email address should
++     *          be sent out. Will be overruled by user profile setting for maildisplay
++     * @param string $replyto Email address to reply to
++     * @param string $replytoname Name of reply to recipient
++     * @param int $wordwrapwidth custom word wrap width
++     */
++    public function __construct(
++        /** @var stdClass $user A $USER object */
++        public stdClass $user,
++        /** @var stdClass $from A $USER object */
++        public stdClass $from,
++        /** @var string $subject plain text subject line of the email */
++        public string $subject,
++        /** @var string $messagetext plain text version of the message */
++        public string $messagetext,
++        /** @var string $messagehtml complete html version of the message (optional) */
++        public string $messagehtml,
++        /** @var string $attachment a file on the filesystem, either relative to $CFG->dataroot or a full path to a file in one of
++         * the following directories: $CFG->cachedir, $CFG->dataroot, $CFG->dirroot, $CFG->localcachedir, $CFG->tempdir */
++        public string $attachment,
++        /** @var string $attachname the name of the file (extension indicates MIME) */
++        public string $attachname,
++        /** @var bool $usetrueaddress determines whether $from email address should
++         * be sent out. Will be overruled by user profile setting for maildisplay */
++        public bool $usetrueaddress,
++        /** @var string $replyto Email address to reply to */
++        public string $replyto,
++        /** @var string $replytoname Name of reply to recipient */
++        public string $replytoname,
++        /** @var int $wordwrapwidth custom word wrap width */
++        public int $wordwrapwidth,
++    ) {
++        // This is a quirk from email_to_user where the headers are stored in the "from" user.
++        // We break them out of there here for the clarity of hook subscribers.
++        $this->additionalheaders = self::extract_headers_from_from_user($from);
++
++        // Remove them from $from to avoid confusion / to avoid others accidentally updating those.
++        unset($from->customheaders);
++    }
++
++    /**
++     * Extract custom headers from "from" user.
++     * These may be set as a string or an array.
++     *
++     * @param stdClass $from
++     * @return array customheaders
++     */
++    private static function extract_headers_from_from_user(stdClass $from): array {
++        if (!isset($from->customheaders)) {
++            return [];
++        }
++
++        if (is_string($from->customheaders)) {
++            return [$from->customheaders];
++        }
++
++        if (is_array($from->customheaders)) {
++            return $from->customheaders;
++        }
++
++        throw new coding_exception("Unknown custom headers set");
++    }
++
++    /**
++     * Add a reason for blocking this email.
++     * @param string $reason
++     */
++    public function add_block_reason(string $reason) {
++        $this->blockreasons[] = $reason;
++    }
++
++    /**
++     * Return the reasons why this email was blocked
++     * @return array of strings
++     */
++    public function get_block_reasons(): array {
++        return $this->blockreasons;
++    }
++
++    /**
++     * Does this email have any block reasons?
++     * @return bool
++     */
++    public function is_blocked(): bool {
++        return !empty($this->blockreasons);
++    }
++
++    /**
++     * Add additional header to be sent with the email
++     * @param string $name header name
++     */
++    public function add_additional_header(string $name) {
++        $this->additionalheaders[] = $name;
++    }
++
++    /**
++     * Return list of additional headers set
++     * @return array of string values
++     */
++    public function get_additional_headers(): array {
++        return $this->additionalheaders;
++    }
++}
+diff --git a/lib/classes/hook/email/before_email_to_user.php b/lib/classes/hook/email/before_email_to_user.php
+new file mode 100644
+index 00000000000..0dbcb427e1d
+--- /dev/null
++++ b/lib/classes/hook/email/before_email_to_user.php
+@@ -0,0 +1,41 @@
++<?php
++// This file is part of Moodle - http://moodle.org/
++//
++// Moodle is free software: you can redistribute it and/or modify
++// it under the terms of the GNU General Public License as published by
++// the Free Software Foundation, either version 3 of the License, or
++// (at your option) any later version.
++//
++// Moodle is distributed in the hope that it will be useful,
++// but WITHOUT ANY WARRANTY; without even the implied warranty of
++// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++// GNU General Public License for more details.
++//
++// You should have received a copy of the GNU General Public License
++// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
++
++namespace core\hook\email;
++
++use core\email;
++
++/**
++ * Hook to allow subscribers to modify or block sending email.
++ *
++ * @package    core
++ * @copyright  2025 Matthew Hilton <matthewhilton@catalyst-au.net>
++ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
++ */
++#[\core\attribute\tags('email')]
++#[\core\attribute\label('Allows plugins to modify contents or block sending an email')]
++final class before_email_to_user {
++    /**
++     * Hook to allow subscribers to modify or block sending email.
++     *
++     * @param email $email The email message that is attempting to be sent.
++     */
++    public function __construct(
++        /** @var email $email The email message that is attempting to be sent. */
++        public email $email,
++    ) {
++    }
++}
+diff --git a/lib/moodlelib.php b/lib/moodlelib.php
+index b734820bffc..289eef1a74d 100644
+--- a/lib/moodlelib.php
++++ b/lib/moodlelib.php
+@@ -29,7 +29,9 @@
+  */
+ 
+ use core\di;
++use core\email;
+ use core\hook;
++use core\hook\email\before_email_to_user;
+ 
+ defined('MOODLE_INTERNAL') || die();
+ 
+@@ -5580,6 +5582,43 @@ function email_to_user($user, $from, $subject, $messagetext, $messagehtml = '',
+ 
+     global $CFG, $PAGE, $SITE;
+ 
++    // Emit email to hook subscribers, who may modify the email.
++    $email = new email(
++        $user,
++        $from,
++        $subject,
++        $messagetext,
++        $messagehtml,
++        $attachment,
++        $attachname,
++        $usetrueaddress,
++        $replyto,
++        $replytoname,
++        $wordwrapwidth
++    );
++    $hook = new before_email_to_user($email);
++    \core\di::get(\core\hook\manager::class)->dispatch($hook);
++
++    // Read back out the data from the hook, as it may have been modified by a hook callback.
++    $user = $hook->email->user;
++    $from = $hook->email->from;
++    $from->customheaders = $hook->email->get_additional_headers();
++    $subject = $hook->email->subject;
++    $messagetext = $hook->email->messagetext;
++    $messagehtml = $hook->email->messagehtml;
++    $attachment = $hook->email->attachment;
++    $attachname = $hook->email->attachname;
++    $usetrueaddress = $hook->email->usetrueaddress;
++    $replyto = $hook->email->replyto;
++    $replytoname = $hook->email->replytoname;
++    $wordwrapwidth = $hook->email->wordwrapwidth;
++
++    // Allow plugins to block this email - if blocked log why.
++    if ($hook->email->is_blocked()) {
++        debugging("email_to_user: blocked by hook subscriber: " . implode(', ', $hook->email->get_block_reasons()));
++        return false;
++    }
++
+     if (empty($user) or empty($user->id)) {
+         debugging('Can not send email to null user', DEBUG_DEVELOPER);
+         return false;
+-- 
+2.43.0
+
