@@ -27,28 +27,10 @@ defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
     $ADMIN->add(
-        'tools',
+        'email',
         new admin_category(
             'tool_emailutils',
             new lang_string('pluginname', 'tool_emailutils')
-        )
-    );
-
-    $ADMIN->add(
-        'email',
-        new admin_externalpage(
-            'tool_emailutils_dkim',
-            new lang_string('dkimmanager', 'tool_emailutils'),
-            new moodle_url('/admin/tool/emailutils/dkim.php')
-        )
-    );
-
-    $ADMIN->add(
-        'email',
-        new admin_externalpage(
-            'tool_emailutils_bounces',
-            get_string('reportbounces', 'tool_emailutils'),
-            new moodle_url('/admin/tool/emailutils/bounces.php')
         )
     );
 
@@ -79,6 +61,15 @@ if ($hassiteconfig) {
     );
 
     $ADMIN->add('tool_emailutils', $settings);
+
+    $ADMIN->add(
+        'tool_emailutils',
+        new admin_externalpage(
+            'tool_emailutils_dkim',
+            new lang_string('dkimmanager', 'tool_emailutils'),
+            new moodle_url('/admin/tool/emailutils/dkim.php')
+        )
+    );
 
     // Plugin Settings Page.
     $settings = new admin_settingpage(
@@ -183,6 +174,15 @@ if ($hassiteconfig) {
     );
 
     $ADMIN->add('tool_emailutils', $settings);
+
+    $ADMIN->add(
+        'tool_emailutils',
+        new admin_externalpage(
+            'tool_emailutils_bounces',
+            get_string('reportbounces', 'tool_emailutils'),
+            new moodle_url('/admin/tool/emailutils/bounces.php')
+        )
+    );
 
     if (get_config('tool_emailutils', 'enable_suppression_list')) {
         $ADMIN->add(
