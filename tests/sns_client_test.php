@@ -21,6 +21,8 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/../lib/aws-sns-message-validator/src/Message.php');
 
 use Aws\Sns\Message;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for SNS client.
@@ -30,6 +32,10 @@ use Aws\Sns\Message;
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[
+    CoversMethod(sns_client::class, '__construct'),
+    CoversMethod(sns_notification::class, 'process_notification'),
+]
 final class sns_client_test extends \advanced_testcase {
     /**
      * Test email for user in unit test */
@@ -37,8 +43,6 @@ final class sns_client_test extends \advanced_testcase {
 
     /**
      * Test required libs are installed.
-     *
-     * @covers \tool_emailutils\sns_client::__construct
      */
     public function test_lib(): void {
         // Use process message to ensure no errors from missing libs are produced.
@@ -199,15 +203,14 @@ final class sns_client_test extends \advanced_testcase {
     /**
      * Tests the email bounce thresholds
      *
-     * @dataProvider bounce_processing_provider
      * @param string $type bounce type
      * @param string $subtype bounce subtype
      * @param int $notifications the number of notifications to process
      * @param int $sendcount the email send count
      * @param int $expectedbounces expected bounce conut
      * @param bool $overthreshold expected to be over the threshold
-     * @covers \tool_emailutils\sns_notification::process_notification()
      **/
+    #[DataProvider('bounce_processing_provider')]
     public function test_bounce_processing(
         string $type,
         string $subtype,
@@ -257,8 +260,6 @@ final class sns_client_test extends \advanced_testcase {
 
     /**
      * Tests the email delivery processing
-     *
-     * @covers \tool_emailutils\sns_notification::process_notification()
      **/
     public function test_delivery_processing(): void {
         global $CFG, $DB;

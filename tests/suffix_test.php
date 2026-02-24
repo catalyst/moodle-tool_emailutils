@@ -16,6 +16,9 @@
 
 namespace tool_emailutils;
 
+use PHPUnit\Framework\Attributes\CoversMethod;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Tests for DKIM default suffix.
  *
@@ -24,6 +27,11 @@ namespace tool_emailutils;
  * @copyright  Catalyst IT 2024
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[
+    CoversMethod(dns_util::class, 'get_selector_suffix'),
+    CoversMethod(dns_util::class, 'get_primary_domain'),
+    CoversMethod(dns_util::class, 'get_noreply_domain'),
+]
 final class suffix_test extends \advanced_testcase {
     /**
      * Test suffix.
@@ -32,15 +40,12 @@ final class suffix_test extends \advanced_testcase {
      * @param string $noreplydomain noreply domain
      * @param string $primarydomain primary domain
      * @param string $selectorsuffix selector suffix
-     * @dataProvider dns_comparisons
-     * @covers \tool_emailutils\dns_util::get_selector_suffix
-     * @covers \tool_emailutils\dns_util::get_primary_domain
-     * @covers \tool_emailutils\dns_util::get_noreply_domain
      */
+    #[DataProvider('dns_comparisons')]
     public function test_suffix(string $lmsdomain, string $noreplydomain, string $primarydomain, string $selectorsuffix): void {
         $this->resetAfterTest();
         $mock = $this->getMockBuilder('\tool_emailutils\dns_util')
-            ->setMethods(['get_primary_domain', 'get_noreply_domain'])
+            ->onlyMethods(['get_primary_domain', 'get_noreply_domain'])
             ->getMock();
 
         $mock->expects($this->any())

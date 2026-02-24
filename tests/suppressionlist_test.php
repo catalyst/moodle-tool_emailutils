@@ -15,6 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tool_emailutils;
+use PHPUnit\Framework\Attributes\CoversMethod;
+use tool_emailutils\task\update_suppression_list;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -26,6 +29,7 @@ global $CFG;
  * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversMethod(update_suppression_list::class, 'execute')]
 final class suppressionlist_test extends \advanced_testcase {
     /**
      * Set up the test environment and return a configured task.
@@ -81,8 +85,6 @@ final class suppressionlist_test extends \advanced_testcase {
      * 3. Each record has the correct email and reason as per the mock data.
      * 4. A CSV file is generated with the correct headers and content matching the database.
      *
-     * @covers \tool_emailutils\task\update_suppression_list::execute
-     *
      * @return void
      * @throws \dml_exception
      */
@@ -128,7 +130,6 @@ final class suppressionlist_test extends \advanced_testcase {
      *
      * @return void
      * @throws \dml_exception
-     * @covers \tool_emailutils\task\update_suppression_list::execute
      */
     public function test_suppression_list_update_when_disabled(): void {
         global $DB;
