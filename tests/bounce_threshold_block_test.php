@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tool_emailutils;
+use PHPUnit\Framework\Attributes\CoversMethod;
+
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -26,10 +28,10 @@ global $CFG;
  * @copyright  2024 onwards Catalyst IT {@link http://www.catalyst-eu.net/}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[CoversMethod(hook_callbacks::class, 'before_email_to_user')]
 final class bounce_threshold_block_test extends \advanced_testcase {
     /**
      * Test that emails over the bounce threshold are blocked.
-     * @covers \tool_emailutils\hook_callbacks::before_email_to_user
      */
     public function test_bounce_threshold_block_test(): void {
         global $CFG;
