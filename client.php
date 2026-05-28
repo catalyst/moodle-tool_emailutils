@@ -34,6 +34,8 @@ define('NO_MOODLE_COOKIES', true);
 require_once(__DIR__ . '/../../../config.php');
 
 if (!get_config('tool_emailutils', 'enabled')) {
+    header('HTTP/1.1 403 Forbidden');
+    echo "Not enabled\n";
     exit;
 }
 
@@ -44,6 +46,8 @@ $client = new sns_client(
 );
 
 if (!$client->is_authorised()) {
+    header('HTTP/1.1 403 Forbidden');
+    echo "Not authorised\n";
     exit;
 }
 
