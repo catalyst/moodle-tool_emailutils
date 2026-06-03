@@ -40,7 +40,7 @@ final class suffix_test extends \advanced_testcase {
     public function test_suffix(string $lmsdomain, string $noreplydomain, string $primarydomain, string $selectorsuffix): void {
         $this->resetAfterTest();
         $mock = $this->getMockBuilder('\tool_emailutils\dns_util')
-            ->setMethods(['get_primary_domain', 'get_noreply_domain'])
+            ->onlyMethods(['get_primary_domain', 'get_noreply_domain'])
             ->getMock();
 
         $mock->expects($this->any())
