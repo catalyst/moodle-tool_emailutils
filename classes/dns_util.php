@@ -223,7 +223,7 @@ class dns_util {
                 return [
                     $dmarcdomain,
                     $record,
-                    $matches[1],
+                    $matches[1] ?? '',
                 ];
             }
 
