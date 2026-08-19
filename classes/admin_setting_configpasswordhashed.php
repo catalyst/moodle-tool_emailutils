@@ -28,8 +28,7 @@ namespace tool_emailutils;
 /**
  * Hashed password formlib form element
  */
-class admin_setting_configpasswordhashed extends \admin_setting {
-
+class admin_setting_configpasswordhashed extends \core\setting\setting_base {
     /** @var Min length of password */
     public $minlength;
 

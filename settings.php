@@ -23,99 +23,109 @@
  * @author     Harry Barnard <harry.barnard@catalyst-eu.net>
  */
 
+use core\setting\heading;
+use core\setting\page\externalpage;
+use core\setting\part\category;
+use core\setting\part\page;
+use core\setting\type\checkbox;
+use core\setting\type\password_unmask;
+use core\setting\type\text;
+
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-    $ADMIN->add('tools', new admin_category(
+    $ADMIN->add('tools', new category(
         'tool_emailutils',
         new lang_string('pluginname', 'tool_emailutils')
     ));
 
-    $ADMIN->add('email', new admin_externalpage(
+    $ADMIN->add('email', new externalpage(
         'tool_emailutils_dkim',
         new lang_string('dkimmanager', 'tool_emailutils'),
         new moodle_url('/admin/tool/emailutils/dkim.php')
     ));
 
-    $ADMIN->add('tool_emailutils', new admin_externalpage(
+    $ADMIN->add('tool_emailutils', new externalpage(
         'tool_emailutils_list',
         new lang_string('list', 'tool_emailutils'),
         new moodle_url('/admin/tool/emailutils/index.php')
     ));
 
     // DNS check settings.
-    $settings = new admin_settingpage(
+    $settings = new page(
         'tool_emailutils_dns',
         new lang_string('dnssettings', 'tool_emailutils')
     );
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/dnsspfinclude',
         new lang_string('dnsspfinclude', 'tool_emailutils'),
         new lang_string('dnsspfinclude_help', 'tool_emailutils'),
-        '')
-    );
+        ''
+    ));
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/postmastergoogletoken',
         new lang_string('postmastergoogletoken', 'tool_emailutils'),
         new lang_string('postmastergoogletoken_help', 'tool_emailutils'),
-        '', PARAM_RAW, 70)
-    );
+        '',
+        PARAM_RAW,
+        70
+    ));
 
     $ADMIN->add('tool_emailutils', $settings);
 
     // Plugin Settings Page.
-    $settings = new admin_settingpage(
+    $settings = new page(
         'tool_emailutils_options',
         new lang_string('settings', 'tool_emailutils')
     );
 
     // Enable Endpoint.
-    $settings->add(new admin_setting_configcheckbox(
+    $settings->add(new checkbox(
         'tool_emailutils/enabled',
         new lang_string('enabled', 'tool_emailutils'),
         new lang_string('enabled_help', 'tool_emailutils'),
-        0)
-    );
+        0
+    ));
 
     // Add the enable_suppression_list setting.
-    $settings->add(new admin_setting_configcheckbox(
+    $settings->add(new checkbox(
         'tool_emailutils/enable_suppression_list',
         new lang_string('enable_suppression_list', 'tool_emailutils'),
         new lang_string('enable_suppression_list_desc', 'tool_emailutils'),
-        0)  // Default to disabled
-    );
+        0 // Default to disabled.
+    ));
 
     // Auth Settings.
-    $settings->add(new admin_setting_heading(
+    $settings->add(new heading(
         'authorisation',
         new lang_string('authorisationcategory', 'tool_emailutils'),
-        '')
-    );
+        ''
+    ));
     // Auth Header.
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/authorisation_header',
         new lang_string('header', 'tool_emailutils'),
         new lang_string('header_help', 'tool_emailutils'),
-        'WWW-Authenticate: Basic realm="SNS Client"')
-    );
+        'WWW-Authenticate: Basic realm="SNS Client"'
+    ));
     // Auth Username.
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/authorisation_username',
         new lang_string('username', 'tool_emailutils'),
         new lang_string('username_help', 'tool_emailutils'),
-        '')
-    );
+        ''
+    ));
     // Auth Password.
     $settings->add(new \tool_emailutils\admin_setting_configpasswordhashed(
         'tool_emailutils/authorisation_password',
         new lang_string('password', 'tool_emailutils'),
         new lang_string('password_help', 'tool_emailutils'),
-        '')
-    );
+        ''
+    ));
 
-    $ADMIN->add('tool_emailutils', new admin_externalpage(
+    $ADMIN->add('tool_emailutils', new externalpage(
         'toolemailutilssuppressionlist',
         new lang_string('suppressionlist', 'tool_emailutils'),
         new moodle_url('/admin/tool/emailutils/suppression_list.php')
@@ -123,26 +133,28 @@ if ($hassiteconfig) {
 
     // Add AWS credentials settings.
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/aws_region',
         new lang_string('aws_region', 'tool_emailutils'),
         new lang_string('aws_region_desc', 'tool_emailutils'),
-        '', PARAM_TEXT)
-    );
+        '',
+        PARAM_TEXT
+    ));
 
-    $settings->add(new admin_setting_configtext(
+    $settings->add(new text(
         'tool_emailutils/aws_key',
         new lang_string('aws_key', 'tool_emailutils'),
         new lang_string('aws_key_desc', 'tool_emailutils'),
-        '', PARAM_TEXT)
-    );
+        '',
+        PARAM_TEXT
+    ));
 
-    $settings->add(new admin_setting_configpasswordunmask(
+    $settings->add(new password_unmask(
         'tool_emailutils/aws_secret',
         new lang_string('aws_secret', 'tool_emailutils'),
         new lang_string('aws_secret_desc', 'tool_emailutils'),
-        '')
-    );
+        ''
+    ));
 
     $ADMIN->add('tool_emailutils', $settings);
 }
