@@ -25,9 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2024112902;
-$plugin->release  = 2024112902;
+$plugin->version  = 2024112903;
+$plugin->release  = 2024112903;
 $plugin->requires = 2024042200;
 $plugin->component = 'tool_emailutils';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->supported = [404, 405];
+$plugin->supported = [404, 503];
